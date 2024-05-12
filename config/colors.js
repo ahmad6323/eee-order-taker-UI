@@ -1,0 +1,15 @@
+export default {
+  primary: "#006ffd",
+  primary_dark: "#e14951",
+  primary_op: (opacity = 1) => `rgba(252, 92, 101, ${opacity})`,
+  secondary: "#4ecdc4",
+  black: "#000",
+  warning: "#ffe66d",
+  yellow: "#fef3c7",
+  purple: "#a7abfa",
+  white: "#fff",
+  medium: "#6e6969",
+  light: "#f8f4f4",
+  dark: "#0c0c0c",
+  danger: "#ff5252",
+};
