@@ -1,82 +1,61 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, ScrollView, Alert } from "react-native";
+import { StyleSheet, View, ScrollView, TouchableOpacity, Text} from "react-native";
 import colors from "../config/colors";
 import AppText from "../components/AppText";
 import SafeScreen from "../components/SafeScreen";
 import AppTextInput from "../components/AppTextInput";
 import AppButton from "../components/AppButton";
-import { saveCategory, getCat } from "../utilty/catUtility";
+import { saveCategory, getSubCategories } from "../utilty/catUtility";
 
 function SelectCategory({ navigation, route }) {
-  const [level1Category, setLevel1Category] = useState("");
-  const [level2Category, setLevel2Category] = useState("");
-  const [isEmptyError, setIsEmptyError] = useState(false);
-  const [category, setCategory] = useState(null); // State to store category
 
-  const { subcat } = route?.params;
+  const [isEmptyError, setIsEmptyError] = useState(false);
+
+  const [disableMain, setDisableMain] = useState(false);
+  const [category, setCategory] = useState(null);
+  const [subCategories, setSubcategories] = useState([""]);
+
+  const { category_id } = route?.params; 
 
   useEffect(() => {
-    const fetchCategory = async () => {
-      try {
-        if (subcat) {
-          const response = await getCat(subcat);
-          setCategory(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching category:", error);
-      }
-    };
 
-    fetchCategory();
-  }, [subcat]);
+    if(category_id !== null && category_id !== undefined){
+      setDisableMain(true);
+      getSubs();
+    }else{
+      setDisableMain(false);
+      setCategory(null);
+      setSubcategories([]);
+    }
+  }, []);
+
+  const addSubCategoryValue = (text) => {
+
+  }
+
+  const getSubs = async () => {
+    try {
+      const response = await getSubCategories(category_id);
+      setCategory(response.data);
+      setSubcategories(response.data.subCategories);
+    } catch (error) {
+      console.error("Error fetching sub category:", error);
+    }
+  };
 
   const handleSubmit = async () => {
-    if (category) {
-      const upcat = {
-        mainCategory: category.mainCategory,
-        subCategory: category.subCategory,
-        _id: category._id,
-      };
-      try {
-        await saveCategory(upcat);
-        // If successful, navigate to another screen or perform other actions
-        Alert.alert("Success", "Category saved successfully!");
-        navigation.navigate("categories");
-      } catch (error) {
-        if (error && error.response && error.response.status === 400) {
-          // Display the error message from the backend
-          Alert.alert("Error", error.response.data);
-        } else {
-          // Handle other types of errors
-          Alert.alert("Error", "Failed to save category. Please try again.");
-          console.error("Error saving category:", error);
-        }
+    console.log(category);
+    console.log(subCategories);
+  };
+
+  const removeSubCategory = (subcategoryName) => {
+    setSubcategories(prevSubCategories => {
+      if (!subcategoryName) {
+        return prevSubCategories.slice(0, -1);
+      } else {
+        return prevSubCategories.filter(subcategory => subcategory !== subcategoryName);
       }
-    } else if (level1Category && level2Category) {
-      const newCategory = {
-        mainCategory: level1Category,
-        subCategory: level2Category,
-      };
-      console.log(newCategory);
-      try {
-        await saveCategory(newCategory);
-        // If successful, navigate to another screen or perform other actions
-        Alert.alert("Success", "Category saved successfully!");
-        navigation.navigate("categories");
-      } catch (error) {
-        if (error && error.response && error.response.status === 400) {
-          // Display the error message from the backend
-          Alert.alert("Error", error.response.data);
-        } else {
-          // Handle other types of errors
-          Alert.alert("Error", "Failed to save category. Please try again.");
-          console.error("Error saving category:", error);
-        }
-      }
-    } else {
-      setIsEmptyError(true);
-      Alert.alert("Error", "Please fill in both category fields.");
-    }
+    });
   };
 
   return (
@@ -92,51 +71,39 @@ function SelectCategory({ navigation, route }) {
           <View style={{ marginVertical: 8 }}>
             <AppText style={{ fontSize: 18 }}>Category No. 1</AppText>
             <AppTextInput
-              placeholder={"Level 1 Category"}
+              placeholder={"Main Category"}
+              editable={!disableMain}
               onChangeText={(text) => {
-                if (category) {
-                  setCategory((prevCategory) => ({
-                    ...prevCategory,
-                    mainCategory: text,
-                  }));
-                } else {
-                  setLevel1Category(text);
-                }
-                setIsEmptyError(false);
+                setCategory(text);
               }}
-              value={category ? category.mainCategory : level1Category} // Set value based on category state
+              value={category && category.name}
             />
           </View>
           <View style={{ marginVertical: 8 }}>
-            <AppText style={{ fontSize: 18 }}>Category No. 2</AppText>
-            <AppTextInput
-              placeholder={"Level 2 Category"}
-              onChangeText={(text) => {
-                if (category) {
-                  setCategory((prevCategory) => ({
-                    ...prevCategory,
-                    subCategory: text,
-                  }));
-                } else {
-                  setLevel2Category(text);
-                }
-                setIsEmptyError(false);
-              }}
-              value={category ? category.subCategory : level2Category} // Set value based on category state
-            />
+            <AppText style={{ fontSize: 18 }}>Sub Categories</AppText>
+            {subCategories.map((subCategory, index) => (
+              <AppTextInput
+                key={index}
+                placeholder={`Sub Category ${index + 1}`}
+                onChangeText={(text) => {
+                  const updatedSubCategories = [...subCategories];
+                  updatedSubCategories[index] = text;
+                  setSubcategories(updatedSubCategories);
+                }}
+                value={subCategory.name}
+                showDeleteIcon={true}
+                onDelete={()=>{removeSubCategory(subCategory)}}
+              />
+            ))}
+            <TouchableOpacity onPress={() => setSubcategories([...subCategories, {name: ""}])}>
+              <Text>Add Sub Category</Text>
+            </TouchableOpacity>
           </View>
         </View>
         {isEmptyError && (
           <AppText style={styles.errorText}>
             Please fill in both fields.
           </AppText>
-        )}
-        {category && (
-          <View style={styles.categoryContainer}>
-            <AppText style={{ color: colors.black }}>
-              Category already exists: {category.mainCategory}
-            </AppText>
-          </View>
         )}
         <AppButton
           style={{ width: "80%" }}

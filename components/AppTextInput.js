@@ -1,13 +1,13 @@
 import React from "react";
-import { TextInput, View, StyleSheet } from "react-native";
+import { TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import defaultStyles from "../config/styles";
 import colors from "../config/colors";
 
-function AppTextInput({ icon, width = "100%", ...otherProps }) {
+function AppTextInput({ icon, editable = true, showDeleteIcon = false, onDelete, width = "100%", ...otherProps }) {
   return (
-    <View style={[styles.container, { width: width }]}>
+    <View style={[styles.container, { width: width, flexDirection: 'row', alignItems: 'center' }]}>
       {icon && (
         <MaterialCommunityIcons
           name={icon}
@@ -17,10 +17,21 @@ function AppTextInput({ icon, width = "100%", ...otherProps }) {
         />
       )}
       <TextInput
+        editable={editable}
         placeholderTextColor={defaultStyles.colors.medium}
-        style={[defaultStyles.text, { width: "100%" }]}
+        style={[defaultStyles.text, { flex: 1 }]}
         {...otherProps}
       />
+      {showDeleteIcon && (
+        <TouchableOpacity onPress={onDelete}>
+          <MaterialCommunityIcons
+            name="delete"
+            size={20}
+            color={defaultStyles.colors.medium}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

@@ -5,24 +5,28 @@ import AppText from "../components/AppText";
 import SafeScreen from "../components/SafeScreen";
 import { AntDesign } from "@expo/vector-icons";
 import { getCategories } from "../utilty/catUtility";
+import { useIsFocused } from "@react-navigation/native";
 
 function Category({ navigation }) {
   const [categories, setCategories] = useState([]);
   const [expandedCategories, setExpandedCategories] = useState({});
 
-  useEffect(() => {
-    // Fetch categories from the backend when the component mounts
-    const fetchCategories = async () => {
-      try {
-        const result = await getCategories();
-        setCategories(result.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+  const isFocused = useIsFocused();
 
-    fetchCategories();
-  }, []);
+  useEffect(() => {
+    if(isFocused){
+      fetchCategories();
+    }
+  }, [isFocused]);
+
+  const fetchCategories = async () => {
+    try {
+      const result = await getCategories();
+      setCategories(result.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   // Function to toggle the expansion of a main category
   const toggleCategoryExpansion = (mainCategory) => {
@@ -30,18 +34,6 @@ function Category({ navigation }) {
       ...prev,
       [mainCategory]: !prev[mainCategory],
     }));
-  };
-
-  // Function to group categories by their main category
-  const groupCategoriesByMainCategory = () => {
-    const groupedCategories = {};
-    categories.forEach((category) => {
-      if (!groupedCategories[category.mainCategory]) {
-        groupedCategories[category.mainCategory] = [];
-      }
-      groupedCategories[category.mainCategory].push(category);
-    });
-    return groupedCategories;
   };
 
   return (
@@ -56,7 +48,7 @@ function Category({ navigation }) {
           </View>
         </View>
         <TouchableOpacity
-          onPress={() => navigation.navigate("addcat", { subcat: null })}
+          onPress={() => navigation.navigate("addcat", { category_id: null })}
           style={styles.category}
         >
           <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -80,13 +72,23 @@ function Category({ navigation }) {
             Added Categories
           </AppText>
         </View>
-        {Object.entries(groupCategoriesByMainCategory()).map(
-          ([mainCategory, subcategories], index) => (
-            <View key={index} style={styles.categorySection}>
-              <TouchableOpacity
-                onPress={() => toggleCategoryExpansion(mainCategory)}
-                style={styles.categoryHeader}
+        {categories.length > 0 && 
+          categories.map((category, index) => (
+          <View key={index} style={styles.categorySection}>
+            <TouchableOpacity
+              onPress={() => toggleCategoryExpansion(category.name)}
+              style={styles.categoryHeader}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
               >
+                <AppText style={styles.categoryHeaderText}>
+                  {category.name}
+                </AppText>
                 <View
                   style={{
                     flexDirection: "row",
@@ -94,35 +96,36 @@ function Category({ navigation }) {
                     justifyContent: "space-between",
                   }}
                 >
-                  <AppText style={styles.categoryHeaderText}>
-                    {mainCategory}
-                  </AppText>
+                  <AntDesign
+                    name={"arrowright"}
+                    size={22}
+                    color="white"
+                    onPress={() => navigation.navigate("addcat", { category_id: category._id })}
+                  />
                   <AntDesign
                     name={
-                      expandedCategories[mainCategory] ? "arrowup" : "arrowdown"
+                      expandedCategories[category.name] ? "arrowup" : "arrowdown"
                     }
                     size={22}
                     color="white"
                   />
                 </View>
-              </TouchableOpacity>
-              {expandedCategories[mainCategory] &&
-                subcategories.map((subcategory, subIndex) => (
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate("addcat", {
-                        subcat: subcategory.subCategory,
-                      })
-                    }
+              </View>
+            </TouchableOpacity>
+            {expandedCategories[category.name] && (
+              <View>
+                {category.subCategories.map((subcategory, subIndex) => (
+                  <View
                     style={styles.categoryContainer}
                     key={subIndex}
                   >
-                    <AppText>{subcategory.subCategory}</AppText>
-                  </TouchableOpacity>
+                    <AppText>{subcategory.name}</AppText>
+                  </View>
                 ))}
-            </View>
-          )
-        )}
+              </View>
+            )}
+          </View>
+        ))}
       </ScrollView>
     </SafeScreen>
   );

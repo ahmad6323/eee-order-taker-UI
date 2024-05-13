@@ -31,3 +31,7 @@ export function getCat(id) {
 export function getCategory(categoryId) {
   return httpService.get(apiEndpoint + `/${categoryId}`);
 }
+
+export function getSubCategories(categoryId) {
+  return httpService.get(apiEndpoint + `/get_subs/${categoryId}`);
+}
