@@ -26,7 +26,6 @@ function AddProduct({ navigation }) {
 
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
-  const [colorFields, setColorFields] = useState([{ name: "", sizes: {} }]);
   const [categories, setCategories] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [sizes, setSizes] = useState([]);
@@ -96,14 +95,14 @@ function AddProduct({ navigation }) {
       formData.append('category', transformedData.category);
       formData.append('department', transformedData.department);
       formData.append('price', transformedData.price);
-      formData.append('colors', JSON.stringify(transformedData.colors));
-      formData.append('sizes', JSON.stringify(transformedData.sizes));
+      formData.append('colors', transformedData.colors);
+      formData.append('sizes', transformedData.sizes);
       formData.append('description', transformedData.description);
 
       await saveProduct(formData);
       navigation.navigate("profiles");
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
     }
   };
 
@@ -141,7 +140,7 @@ function AddProduct({ navigation }) {
                 />
                 <AppFormPicker
                   items={categories.map((cat) => ({
-                    label: `${cat.mainCategory} / ${cat.subCategory}`,
+                    label: `${cat.name} / ${cat.parent_id.name}`,
                     value: cat._id,
                   }))}
                   name="category"
@@ -154,7 +153,7 @@ function AddProduct({ navigation }) {
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
-                  search
+                  search={true}
                   data={departments.map((dept) => ({
                     label: dept.name,
                     value: dept._id,
@@ -183,7 +182,7 @@ function AddProduct({ navigation }) {
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
-                  search
+                  search={true}
                   data={colors.map((color) => ({
                     label: color.color,
                     value: color._id,

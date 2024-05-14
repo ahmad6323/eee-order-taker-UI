@@ -8,11 +8,6 @@ function categoryUrl(id) {
 }
 
 export function saveCategory(category) {
-  if (category._id) {
-    const body = { ...category };
-    delete body._id;
-    return httpService.put(categoryUrl(category._id), body);
-  }
   return httpService.post(apiEndpoint, category);
 }
 
@@ -34,4 +29,8 @@ export function getCategory(categoryId) {
 
 export function getSubCategories(categoryId) {
   return httpService.get(apiEndpoint + `/get_subs/${categoryId}`);
+}
+
+export function updateCategory(categoryId,data) {
+  return httpService.put(categoryUrl(categoryId), data);
 }

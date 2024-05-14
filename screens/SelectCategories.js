@@ -5,7 +5,7 @@ import AppText from "../components/AppText";
 import SafeScreen from "../components/SafeScreen";
 import AppTextInput from "../components/AppTextInput";
 import AppButton from "../components/AppButton";
-import { saveCategory, getSubCategories } from "../utilty/catUtility";
+import { saveCategory, getSubCategories, updateCategory } from "../utilty/catUtility";
 
 function SelectCategory({ navigation, route }) {
 
@@ -18,7 +18,6 @@ function SelectCategory({ navigation, route }) {
   const { category_id } = route?.params; 
 
   useEffect(() => {
-
     if(category_id !== null && category_id !== undefined){
       setDisableMain(true);
       getSubs();
@@ -28,10 +27,6 @@ function SelectCategory({ navigation, route }) {
       setSubcategories([]);
     }
   }, []);
-
-  const addSubCategoryValue = (text) => {
-
-  }
 
   const getSubs = async () => {
     try {
@@ -44,10 +39,6 @@ function SelectCategory({ navigation, route }) {
   };
 
   const handleSubmit = async () => {
-    if(category_id !== null){
-      console.log("Updating");
-    }
-
     let formData = {
       mainCategory: category.name,
       subCategory: subCategories.map((subCat)=>{
@@ -58,7 +49,19 @@ function SelectCategory({ navigation, route }) {
       })
     };
 
-    console.log(formData);
+    try{  
+      if(category_id){
+        // update
+        await updateCategory(category_id,formData);
+      }else{
+        // save
+        await saveCategory(formData);
+      }
+
+      navigation.navigate("categories");
+    }catch(ex){
+      console.error("Error :", ex);
+    }
   };
 
   const removeSubCategory = (subcategoryName) => {
@@ -82,12 +85,12 @@ function SelectCategory({ navigation, route }) {
             </AppText>
           </View>
           <View style={{ marginVertical: 8 }}>
-            <AppText style={{ fontSize: 18 }}>Category No. 1</AppText>
+            <AppText style={{ fontSize: 18 }}>Category</AppText>
             <AppTextInput
               placeholder={"Main Category"}
               editable={!disableMain}
               onChangeText={(text) => {
-                setCategory(text);
+                setCategory({name: text});
               }}
               value={category && category.name}
             />
