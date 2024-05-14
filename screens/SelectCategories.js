@@ -44,8 +44,21 @@ function SelectCategory({ navigation, route }) {
   };
 
   const handleSubmit = async () => {
-    console.log(category);
-    console.log(subCategories);
+    if(category_id !== null){
+      console.log("Updating");
+    }
+
+    let formData = {
+      mainCategory: category.name,
+      subCategory: subCategories.map((subCat)=>{
+        return {
+          name: subCat.name,
+          _id: subCat._id
+        }
+      })
+    };
+
+    console.log(formData);
   };
 
   const removeSubCategory = (subcategoryName) => {
@@ -87,7 +100,7 @@ function SelectCategory({ navigation, route }) {
                 placeholder={`Sub Category ${index + 1}`}
                 onChangeText={(text) => {
                   const updatedSubCategories = [...subCategories];
-                  updatedSubCategories[index] = text;
+                  updatedSubCategories[index].name = text;
                   setSubcategories(updatedSubCategories);
                 }}
                 value={subCategory.name}
@@ -95,7 +108,7 @@ function SelectCategory({ navigation, route }) {
                 onDelete={()=>{removeSubCategory(subCategory)}}
               />
             ))}
-            <TouchableOpacity onPress={() => setSubcategories([...subCategories, {name: ""}])}>
+            <TouchableOpacity onPress={() => setSubcategories([...subCategories, {_id: null, name: ""}])}>
               <Text>Add Sub Category</Text>
             </TouchableOpacity>
           </View>

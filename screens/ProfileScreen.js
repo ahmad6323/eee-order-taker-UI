@@ -127,7 +127,7 @@ const ProfileScreen = ({ navigation }) => {
                     }}
                   >
                     <Text style={styles.text1}>Manage Products</Text>
-                    <AntDesign name="arrowright" size={20} color="white" />
+                    <AntDesign name="arrowright" size={25} color="white" />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.row}>
@@ -142,11 +142,10 @@ const ProfileScreen = ({ navigation }) => {
                       justifyContent: "space-between",
                       alignItems: "flex-end",
                       width: 150,
-
                     }}
                   >
                     <Text style={styles.text1}>Manage Salesman</Text>
-                    <AntDesign name="arrowright" size={20} color="white" />
+                    <AntDesign name="arrowright" size={25} color="white" />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -159,7 +158,7 @@ const ProfileScreen = ({ navigation }) => {
                   navigation.navigate("addsaleman", { salesman: {} })
                 }
                 style={{
-                  width: 130,
+                  width: 110,
                   height: 100,
                   alignItems: "center",
                   marginVertical: 10,
@@ -177,7 +176,7 @@ const ProfileScreen = ({ navigation }) => {
                   navigation.navigate("addproduct", { product: {} })
                 }
                 style={{
-                  width: 130,
+                  width: 110,
                   height: 100,
                   alignItems: "center",
                   marginVertical: 10,
@@ -197,7 +196,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("allocation")}
                 style={{
-                  width: 130,
+                  width: 110,
                   height: 100,
                   alignItems: "center",
                   marginVertical: 10,
@@ -208,7 +207,7 @@ const ProfileScreen = ({ navigation }) => {
                 }}
               >
                 <MaterialIcons name="category" size={40} color="#fc5c65" />
-                <Text>Manage Allocation</Text>
+                <Text style={{textAlign: "center"}}>Manage Allocation</Text>
               </TouchableOpacity>
             </View>
             <Text
@@ -222,7 +221,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("department")}
                 style={{
-                  width: 120,
+                  width: 110,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -238,7 +237,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("history")}
                 style={{
-                  width: 120,
+                  width: 110,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -254,7 +253,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("categories")}
                 style={{
-                  width: 120,
+                  width: 110,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -274,7 +273,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("sizes")}
                 style={{
-                  width: 120,
+                  width: 110,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -294,7 +293,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("colors")}
                 style={{
-                  width: 120,
+                  width: 110,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -313,7 +312,7 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={{
-                  width: 120,
+                  width: 110,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -333,7 +332,7 @@ const ProfileScreen = ({ navigation }) => {
                   adminAuth.removeToken();
                 }}
                 style={{
-                  width: 120,
+                  width: 70,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
