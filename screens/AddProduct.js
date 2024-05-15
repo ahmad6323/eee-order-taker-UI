@@ -4,7 +4,6 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import * as Yup from "yup";
 import AppFormField from "../components/forms/AppFormField";
 import SubmitButton from "../components/forms/SubmitButton";
 import AppForm from "../components/forms/AppForm";
@@ -78,28 +77,7 @@ function AddProduct({ navigation }) {
         imageUrl: productData.imageUrl,
       };
 
-      // Create a new FormData object
-      let formData = new FormData();
-
-      // Loop through the imageUrl array and append each image
-      transformedData.imageUrl.forEach((imagePath, index) => {
-        // Read the image file as a stream
-        const imageStream = fs.createReadStream(imagePath);
-
-        // Append the image to the formData object
-        formData.append(`images[${index}]`, imageStream);
-      });
-
-      // Append other fields to the formData object
-      formData.append('name', transformedData.name);
-      formData.append('category', transformedData.category);
-      formData.append('department', transformedData.department);
-      formData.append('price', transformedData.price);
-      formData.append('colors', transformedData.colors);
-      formData.append('sizes', transformedData.sizes);
-      formData.append('description', transformedData.description);
-
-      await saveProduct(formData);
+      await saveProduct(transformedData);
       navigation.navigate("profiles");
     } catch (error) {
       console.log(error);

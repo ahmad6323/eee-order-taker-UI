@@ -88,7 +88,7 @@ const AddedProducts = ({ navigation }) => {
             filteredProducts.map((product, index) => (
               <View style={styles.listItemContainer} key={index}>
                 <Image
-                  source={{ uri: product.imageUrl[0] }}
+                  source={require("../assets/noimage.jpg")}
                   style={styles.listItemImage}
                   resizeMode="cover"
                   defaultSource={require("../assets/noimage.jpg")}
@@ -119,29 +119,19 @@ const AddedProducts = ({ navigation }) => {
                 key={index}
               >
                 <Image
-                  source={{ uri: product.imageUrl[0] }}
+                  source={require("../assets/noimage.jpg")}
                   style={styles.image}
                   resizeMode="cover"
                 />
                 <View style={styles.card}>
                   <View style={styles.detailsContainer}>
                     <Text style={styles.name}>{product.name}</Text>
-                    {product.colors.map((color, colorIndex) => (
-                      <View key={colorIndex}>
-                        <Text style={styles.color}>{color.name}: </Text>
-                        <View style={styles.sizeContainer}>
-                          {Object.keys(color.sizes).map((size, sizeIndex) => (
-                            <Text key={sizeIndex} style={styles.sizeText}>
-                              {size}:{" "}
-                              <Text style={styles.bold}>
-                                {color.sizes[size] || 0}
-                              </Text>
-                            </Text>
-                          ))}
-                        </View>
+                    <Text style={styles.variationHeading}>Variations</Text>
+                    {product.variations.map((variation, variationIndex) => (
+                      <View key={variationIndex}>
+                        <Text style={styles.color}>{variation.color.color + " - " + variation.size.size + " " + variation.SKU}</Text>
                       </View>
                     ))}
-
                     <Text style={styles.description}>
                       {product.description}
                     </Text>
@@ -227,6 +217,12 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: colors.dark,
+  },
+  variationHeading: {
+    fontSize: 17,
     fontWeight: "bold",
     marginBottom: 5,
     color: colors.dark,
