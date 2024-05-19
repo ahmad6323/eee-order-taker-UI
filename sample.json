@@ -1,26 +1,20 @@
-{
-    "category": "663e705124143fb43a1078b0",
-    "colors": [
-        "663f89e93ea7474e2ad2d9bc",
-        "663f89e93ea7474e2ad2d9c0",
-        "663f89733ea7474e2ad2d9ab",
-        "663f89733ea7474e2ad2d9a9"
-    ],
-    "department": [
-        "663e703624143fb43a1078a4",
-        "663e702e24143fb43a1078a0"
-    ],
-    "description": "pack of 3 nice shirts",
-    "imageUrl": [
-        "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fordertracking-8a76e4d4-32b2-4d73-a5a0-9ff75c842f4a/ImagePicker/2b806ede-2130-442a-87fd-822e13919e50.jpeg",
-        "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fordertracking-8a76e4d4-32b2-4d73-a5a0-9ff75c842f4a/ImagePicker/6997168c-aa3e-4ada-b267-077c4c163349.jpeg"
-    ],
-    "name": "Shirt",
-    "price": "999",
-    "sizes": [
-        "663e701024143fb43a107893",
-        "663e700a24143fb43a10788b",
-        "663e700d24143fb43a10788f",
-        "663e702224143fb43a10789b"
-    ]
-} 
+[
+    {
+        "__v": 0,
+        "_id": "6644d564859da87064fa92f3",
+        "department": [
+            "6643b2f1b6a78ee82acd786b"
+        ],
+        "description": "Batman Printed shirt for teens",
+        "name": "Batman Shirt",
+        "price": 990,
+        "variations": [
+            "6644d564859da87064fa92f8",
+            "6644d564859da87064fa92fb",
+            "6644d564859da87064fa92fe",
+            "6644d564859da87064fa9302",
+            "6644d564859da87064fa9305",
+            "6644d564859da87064fa9308"
+        ]
+    }
+]

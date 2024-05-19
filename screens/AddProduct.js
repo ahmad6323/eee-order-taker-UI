@@ -15,11 +15,13 @@ import AppFormImagePicker from "../components/forms/AppFormImagePicker";
 import SafeScreen from "../components/SafeScreen";
 import { saveProduct } from "../utilty/ProductUtility";
 import { getDepartments } from "../utilty/deptUtility";
-import { getCategories } from "../utilty/catUtility";
+import { getAllSubCategories } from "../utilty/catUtility";
 import { getSizes } from "../utilty/sizeUtility";
 import { getColors } from "../utilty/colorUtility";
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import * as FileSystem from "expo-file-system";
+
 
 function AddProduct({ navigation }) {
 
@@ -51,7 +53,7 @@ function AddProduct({ navigation }) {
 
     const fetchCategoriesAndDepartments = async () => {
       try {
-        const categoriesData = await getCategories();
+        const categoriesData = await getAllSubCategories();
         const departmentsData = await getDepartments();
         setCategories(categoriesData.data);
         setDepartments(departmentsData.data);
@@ -66,24 +68,55 @@ function AddProduct({ navigation }) {
 
   const handleSubmit = async (productData) => {
     try {
-      const transformedData = {
-        name: productData.name,
-        category: productData.category.value,
-        department: selected,
-        price: productData.price,
-        colors: selectedColors,
-        sizes: selectedSizes,
-        description: productData.description,
-        imageUrl: productData.imageUrl,
-      };
 
-      await saveProduct(transformedData);
-      navigation.navigate("profiles");
+      let formData = new FormData();
+
+      formData.append('name', productData.name);
+      formData.append('category',productData.category.value);
+      formData.append('price', productData.price);
+      formData.append('description', productData.description);
+      formData.append('department', JSON.stringify(selected));
+      formData.append('colors', JSON.stringify(selectedColors));
+      formData.append('sizes', JSON.stringify(selectedSizes));
+
+      await Promise.all(productData.imageUrl.map(async (uri) => {
+        const base64String = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        return base64String;
+      })).then(async (base64Array)=>{
+        formData.append("imageUrl",base64Array);
+
+        let data = getFormDataContent(formData);
+  
+        let parsedData = {
+          ...data,
+          colors: JSON.parse(data.colors),
+          department: JSON.parse(data.department),
+          sizes: JSON.parse(data.sizes)
+        };
+  
+        await saveProduct(parsedData);
+        navigation.navigate("profiles");
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
+  function getFormDataContent(formData) {
+    const data = {};
+    formData._parts.forEach(part => {
+      const [key, value] = part;
+      if (data[key]) {
+        data[key] = [].concat(data[key], value);
+      } else {
+        data[key] = value;
+      }
+    });
+    return data;
+  }
+  
   return (
     <ScrollView>
       <SafeScreen>
@@ -131,7 +164,6 @@ function AddProduct({ navigation }) {
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
-                  search={true}
                   data={departments.map((dept) => ({
                     label: dept.name,
                     value: dept._id,
@@ -152,7 +184,6 @@ function AddProduct({ navigation }) {
                       size={20}
                     />
                   )}
-                  selectedStyle={styles.selectedStyle}
                 />
                 <MultiSelect
                   style={styles.dropdown}
@@ -160,7 +191,6 @@ function AddProduct({ navigation }) {
                   selectedTextStyle={styles.selectedTextStyle}
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
-                  search={true}
                   data={colors.map((color) => ({
                     label: color.color,
                     value: color._id,
@@ -181,7 +211,6 @@ function AddProduct({ navigation }) {
                       size={20}
                     />
                   )}
-                  selectedStyle={styles.selectedStyle}
                 />
                 <MultiSelect
                   style={styles.dropdown}
@@ -209,7 +238,6 @@ function AddProduct({ navigation }) {
                       size={20}
                     />
                   )}
-                  selectedStyle={styles.selectedStyle}
                 />
                 <AppFormField
                   name="price"
@@ -251,7 +279,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderTopColor: "gray",
-
   },
   icon: {
     marginRight: 5,

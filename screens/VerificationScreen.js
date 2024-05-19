@@ -45,7 +45,7 @@ const EmailVerificationInput = ({ route, navigation }) => {
         setErrorVisible(true);
       }
     } finally {
-      setIsLoading(false); // Stop showing activity indicator
+      setIsLoading(false);
     }
   };
 

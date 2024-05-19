@@ -8,12 +8,13 @@ function salesmanUrl(id) {
 }
 
 export function saveSalesman(salesman) {
-  if (salesman._id) {
-    const body = { ...salesman };
-    delete body._id;
-    return httpService.put(salesmanUrl(salesman._id), body);
-  }
   return httpService.post(apiEnd, salesman);
+}
+
+export function updateSalesMan(salemanData,id){
+  const body = { ...salemanData };
+  delete body._id;
+  return httpService.put(salesmanUrl(id), body);
 }
 
 export function verification(code) {
@@ -42,6 +43,10 @@ export const updatePassword = async (email, password) => {
 
 export function deleteSalesman(id) {
   return httpService.delete(salesmanUrl(id));
+}
+
+export function getSalesmanById(id) {
+  return httpService.get(salesmanUrl(id));
 }
 
 export function getSaleman(salesmanId) {

@@ -155,7 +155,7 @@ const ProfileScreen = ({ navigation }) => {
             >
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate("addsaleman", { salesman: {} })
+                  navigation.navigate("addsaleman", { new: true })
                 }
                 style={{
                   width: 110,

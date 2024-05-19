@@ -49,11 +49,13 @@ const UserHomeScreen = ({ navigation }) => {
         const filteredOrders = allOrders.data.filter(
           (order) => order.salesman === user._id
         );
+
         setOrders(filteredOrders);
         const totalSales = filteredOrders.reduce(
           (acc, order) => acc + order.price,
           0
         );
+        
         setSales(totalSales);
       } catch (error) {
         console.error("Error fetching orders:", error);

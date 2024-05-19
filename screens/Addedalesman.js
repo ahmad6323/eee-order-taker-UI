@@ -31,7 +31,6 @@ const AddedSalesman = ({ navigation }) => {
   const handleDelete = async (salesmanId) => {
     try {
       await deleteSalesman(salesmanId);
-      // Remove the deleted salesman from the list
       setSalesmanList((prevSalesmanList) =>
         prevSalesmanList.filter((salesman) => salesman._id !== salesmanId)
       );
@@ -59,7 +58,7 @@ const AddedSalesman = ({ navigation }) => {
           <View style={styles.salesmanList}>
             {salesmanList.map((salesman) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("addsaleman", { salesman })}
+                onPress={() => navigation.navigate("addsaleman", { new: false, salesman: salesman })}
                 style={styles.salesmanItem}
                 key={salesman._id}
               >

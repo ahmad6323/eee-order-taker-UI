@@ -3,30 +3,33 @@ import { StyleSheet, View, TouchableOpacity } from "react-native";
 import * as Yup from "yup";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppFormField from "../components/forms/AppFormField";
-import AppFormPicker from "../components/forms/AppFormPicker";
 import SubmitButton from "../components/forms/SubmitButton";
 import AppForm from "../components/forms/AppForm";
 import AppErrorMessage from "../components/forms/AppErrorMessage";
 import colors from "../config/colors";
 import AppText from "../components/AppText";
-import { saveSalesman } from "../utilty/salesmanUtility";
+import { saveSalesman, updateSalesMan } from "../utilty/salesmanUtility";
 import { getDepartments } from "../utilty/deptUtility";
+import { MultiSelect } from 'react-native-element-dropdown';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
-const validationSchema = Yup.object().shape({
-  name: Yup.string().required().label("Name"),
-  phone: Yup.string().required().label("Phone"),
-  email: Yup.string().required().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
-  department: Yup.object().required().label("Department"),
-});
 
 function AddSalesman({ navigation, route }) {
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [departments, setDepartments] = useState([]);
-
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
   const { salesman } = route.params;
+
+  let values = {
+    _id: route.params.new === false  ? route.params.salesman._id : "",
+    name: route.params.new === false ? route.params.salesman.name : "",
+    email: route.params.new === false ? route.params.salesman.email : "",
+    phone: route.params.new === false ? route.params.salesman.phone : "",
+    department: route.params.new === false ? route.params.salesman.department.map(dep=>{return dep._id}) : [],
+    password: "",
+  };
 
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -37,27 +40,36 @@ function AddSalesman({ navigation, route }) {
         console.error("Error fetching departments:", error);
       }
     };
-
     fetchDepartments();
+    if(salesman){
+      setSelectedDepartments(salesman.department.map(dep=>{
+        return dep._id;
+      }));
+    }
   }, []);
 
   const handleSubmit = async (info) => {
-    try {
-      if (salesman) {
-        // Include _id only if salesman exists
-        info._id = salesman._id;
-      }
-      info.department = info.department.value;
-      await saveSalesman(info);
-      if (info._id) {
-        navigation.navigate("addedsalesman");
-      } else {
+    if(route.params.new){
+      try {
+        info.department = selectedDepartments;
+        await saveSalesman(info);
         navigation.navigate("verification", { email: info.email });
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          setError(error.response.data);
+          setErrorVisible(true);
+        }
       }
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setError(error.response.data);
-        setErrorVisible(true);
+    }else{
+      try {
+        info.department = selectedDepartments;
+        await updateSalesMan(info,route.params.salesman._id);
+        navigation.navigate("addedsalesman");
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          setError(error.response.data);
+          setErrorVisible(true);
+        }
       }
     }
   };
@@ -73,15 +85,8 @@ function AddSalesman({ navigation, route }) {
         </View>
         <View style={styles.formContainer}>
           <AppForm
-            initialValues={{
-              name: salesman ? salesman.name : "",
-              phone: salesman ? salesman.phone : "",
-              email: salesman ? salesman.email : "",
-              password: salesman ? salesman.password : "",
-              department: null,
-            }}
-            onSubmit={handleSubmit} // Make sure handleSubmit is passed here
-            validationSchema={validationSchema}
+            initialValues={values}
+            onSubmit={handleSubmit}
           >
             <AppErrorMessage error={error} visible={errorVisible} />
             <AppFormField
@@ -124,13 +129,31 @@ function AddSalesman({ navigation, route }) {
                 />
               </TouchableOpacity>
             </View>
-            <AppFormPicker
-              items={departments.map((dept) => ({
+            <MultiSelect
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={departments.map((dept) => ({
                 label: dept.name,
                 value: dept._id,
               }))}
-              name={"department"} // Change the name to match the field name
-              placeholder={"Select Department"}
+              labelField="label"
+              valueField="value"
+              placeholder="Select departments"
+              value={selectedDepartments}
+              onChange={item => {
+                setSelectedDepartments(item);
+              }}
+              renderLeftIcon={() => (
+                <AntDesign
+                  style={styles.icon}
+                  color="black"
+                  name="home"
+                  size={20}
+                />
+              )}
             />
             <SubmitButton title={"Done"} />
           </AppForm>
@@ -145,6 +168,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  dropdown: {
+    marginTop: 5,
+    marginBottom: 5,
+    padding: 10,
+    height: 65,
+    backgroundColor: 'white',
+    borderBottomColor: 'gray',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderTopColor: "gray",
   },
   innerContainer: {
     width: "80%",

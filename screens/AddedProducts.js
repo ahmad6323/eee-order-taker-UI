@@ -13,6 +13,10 @@ import { getProducts, deleteProduct } from "../utilty/ProductUtility";
 import SafeScreen from "../components/SafeScreen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppText from "../components/AppText";
+import ImageSlider from "../components/ImageSlider";
+import config from "../config.json";
+
+const pictureEndpoint = config.pictureUrl + "public/products";
 
 const AddedProducts = ({ navigation }) => {
   const [products, setProducts] = useState([]);
@@ -88,7 +92,7 @@ const AddedProducts = ({ navigation }) => {
             filteredProducts.map((product, index) => (
               <View style={styles.listItemContainer} key={index}>
                 <Image
-                  source={require("../assets/noimage.jpg")}
+                  source={{uri: `${pictureEndpoint}\\${product.imageUrl[0]}`}}
                   style={styles.listItemImage}
                   resizeMode="cover"
                   defaultSource={require("../assets/noimage.jpg")}
@@ -98,59 +102,61 @@ const AddedProducts = ({ navigation }) => {
                   <Text style={styles.listItemDescription}>
                     {product.description}
                   </Text>
-
                   <Text style={styles.listItemPrice}>Rs. {product.price}</Text>
-                  <TouchableOpacity onPress={() => handleDelete(product._id)}>
+                  <View style={{flexDirection: "row", alignSelf: "flex-end"}}>
                     <MaterialCommunityIcons
                       name="delete"
-                      size={24}
+                      size={25}
                       color={colors.primary}
-                      style={{ alignSelf: "flex-end" }}
+                      onPress={() => handleDelete(product._id)}
                     />
-                  </TouchableOpacity>
+                    <MaterialCommunityIcons
+                      name="pencil"
+                      size={25}
+                      color={colors.primary}
+                    />
+                  </View>
                 </View>
               </View>
             ))
           ) : (
             filteredProducts.map((product, index) => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("addproduct", { product })}
+              <View
                 style={styles.productContainer}
                 key={index}
               >
-                <Image
-                  source={require("../assets/noimage.jpg")}
-                  style={styles.image}
-                  resizeMode="cover"
-                />
+                <ImageSlider images={product.imageUrl} style={styles.image}/>
                 <View style={styles.card}>
                   <View style={styles.detailsContainer}>
                     <Text style={styles.name}>{product.name}</Text>
                     <Text style={styles.variationHeading}>Variations</Text>
-                    {product.variations.map((variation, variationIndex) => (
+                    {/* {product.variations.map((variation, variationIndex) => (
                       <View key={variationIndex}>
                         <Text style={styles.color}>{variation.color.color + " - " + variation.size.size + " " + variation.SKU}</Text>
                       </View>
-                    ))}
+                    ))} */}
                     <Text style={styles.description}>
                       {product.description}
                     </Text>
-                  </View>
-                  <View style={styles.actionsContainer}>
-                    <TouchableOpacity
-                      onPress={() => handleDelete(product._id)}
-                      style={{ alignSelf: "flex-end" }}
-                    >
-                      <MaterialCommunityIcons
-                        name="delete"
-                        size={24}
-                        color={colors.primary}
-                      />
-                    </TouchableOpacity>
                     <Text style={styles.price}>Rs. {product.price}</Text>
                   </View>
+                  <View style={styles.actionsContainer}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+                      <MaterialCommunityIcons
+                        name="delete"
+                        size={25}
+                        color={colors.primary}
+                        onPress={() => handleDelete(product._id)}
+                      />
+                      <MaterialCommunityIcons
+                        name="pencil"
+                        size={25}
+                        color={colors.primary}
+                      />
+                    </View>
+                  </View>
                 </View>
-              </TouchableOpacity>
+              </View>
             ))
           )}
         </View>

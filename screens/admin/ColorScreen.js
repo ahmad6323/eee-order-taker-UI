@@ -28,7 +28,6 @@ function ColorScreen({ navigation }) {
   const fetchColors = async () => {
     try {
       const fetchedSizes = await getColors();
-      console.log(fetchedSizes.data);
       setSavedColors(fetchedSizes.data);
     } catch (error) {
       console.error("Error fetching sizes:", error);

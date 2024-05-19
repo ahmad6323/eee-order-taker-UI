@@ -15,6 +15,10 @@ export function getCategories() {
   return httpService.get(apiEndpoint);
 }
 
+export function getAllSubCategories() {
+  return httpService.get(categoryUrl("sub_cats"));
+}
+
 export function deleteCategory(id) {
   return httpService.delete(categoryUrl(id));
 }

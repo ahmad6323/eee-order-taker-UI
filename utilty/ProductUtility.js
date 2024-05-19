@@ -13,11 +13,11 @@ export function getProducts() {
   return httpService.get(apiEndpoint);
 }
 
-export function saveProduct(product) {
+export async function saveProduct(product) {
   return httpService.post(apiEndpoint,product,{
     headers:{
-      Accept : "application/json",
       'Content-Type': 'multipart/form-data',
+      Accept : "application/json"
     }
   });
 }
