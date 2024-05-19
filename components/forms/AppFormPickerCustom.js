@@ -4,22 +4,20 @@ import React from "react";
 import AppPicker from "../AppPicker";
 import AppErrorMessage from "./AppErrorMessage";
 
-function AppFormPicker({
+function AppFormPickerCustom({
   items,
   name,
   placeholder,
   width,
   PickerItemComponent,
   numColumns,
-  onSelectItem
+  onSelectItem,
+  value
 }) {
-  const { touched, setFieldValue, values, errors } = useFormikContext();
+  const { touched, errors } = useFormikContext();
 
   const handleSelectItem = (item) => {
-    setFieldValue(name, item);
-    if (onSelectItem) {
-      onSelectItem(item); 
-    }
+    onSelectItem(item); 
   };
 
   return (
@@ -32,11 +30,11 @@ function AppFormPicker({
         numColumns={numColumns}
         PickerItemComponent={PickerItemComponent}
         onSelectedItem={handleSelectItem}
-        selectedItem={values[name]}
+        selectedItem={value !== undefined ? value : placeholder}
       ></AppPicker>
       <AppErrorMessage error={errors[name]} visible={touched[name]} />
     </>
   );
 }
 
-export default AppFormPicker;
+export default AppFormPickerCustom;

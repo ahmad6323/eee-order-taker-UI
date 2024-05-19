@@ -8,26 +8,12 @@ import AppErrorMessage from "../components/forms/AppErrorMessage";
 import AppFormPicker from "../components/forms/AppFormPicker";
 import { getSalesmans } from "../utilty/salesmanUtility";
 import { getProducts } from "../utilty/ProductUtility";
-import { allocate } from "../utilty/allocationUtility";
-import { getSizes } from "../utilty/sizeUtility";
+import { allocate, getProductsForSalesman } from "../utilty/allocationUtility";
 import colors from "../config/colors";
-
-const validationSchema = Yup.object().shape({
-  salesmanId: Yup.object().required().label("Salesman ID"),
-  productId: Yup.object().required().label("Product ID"),
-  colors: Yup.array().of(
-    Yup.object().shape({
-      name: Yup.string().min(1).max(15).required().label("Color"),
-      sizes: Yup.object().shape({
-        xs: Yup.number().min(0).required().default(0).label("XS"),
-        s: Yup.number().min(0).required().default(0).label("S"),
-        m: Yup.number().min(0).required().default(0).label("M"),
-        l: Yup.number().min(0).required().default(0).label("L"),
-        xl: Yup.number().min(0).required().default(0).label("XL"),
-      }),
-    })
-  ),
-});
+import AppText from "../components/AppText";
+import { ScrollView } from "react-native-gesture-handler";
+import AppFormFieldCustom from "../components/forms/AppFormFieldCustom";
+import AppFormPickerCustom from "../components/forms/AppFormPickerCustom";
 
 function AllocateForm({ navigation }) {
   const [error, setError] = useState();
@@ -37,15 +23,17 @@ function AllocateForm({ navigation }) {
   const [sizes, setSizes] = useState([]);
   const [colorFields, setColorFields] = useState([{ name: "", sizes: {} }]);
 
+  const [allocations, setAllocations] = useState([]);
+
+  const values = {
+    salesmanId: "",
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data: salesmenData } = await getSalesmans();
-        const { data: productsData } = await getProducts();
-        const { data: sizesData } = await getSizes();
         setSalesmen(salesmenData);
-        setProducts(productsData);
-        setSizes(sizesData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -54,132 +42,132 @@ function AllocateForm({ navigation }) {
     fetchData();
   }, []);
 
-  const handleAddColorField = () => {
-    setColorFields([...colorFields, { name: "", sizes: {} }]);
-  };
-
-  const handleColorChange = (index, name) => {
-    const updatedColorFields = [...colorFields];
-    updatedColorFields[index].name = name;
-    updatedColorFields[index].sizes = sizes.reduce((acc, size) => {
-      acc[size.size] = updatedColorFields[index].sizes[size.size] || 0;
-      return acc;
-    }, {});
-    setColorFields(updatedColorFields);
-  };
-
-  const handleSizeChange = (colorIndex, sizeKey, value) => {
-    setColorFields((prevColorFields) => {
-      const updatedColorFields = [...prevColorFields];
-      updatedColorFields[colorIndex].sizes[sizeKey] = parseInt(value, 10) || 0;
-      return updatedColorFields;
-    });
-  };
-
-  const handleRemoveColorField = (index) => {
-    const updatedColorFields = [...colorFields];
-    updatedColorFields.splice(index, 1);
-    setColorFields(updatedColorFields);
-  };
   const handleSubmit = async (info) => {
-    const { salesmanId, productId } = info;
-    const productAllocationData = {
-      salesmanId: salesmanId.value,
-      productId: productId.value,
-      allocations: colorFields,
-    };
-    try {
-      console.log("Product allocation data:", productAllocationData);
-      const response = await allocate(productAllocationData);
-      console.log("Allocation successful:", response.data);
-      navigation.navigate("allocation");
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setError(error.response.data);
-        setErrorVisible(true);
-      }
+    console.log(info);
+    console.log(allocations);
+    // const { salesmanId, productId } = info;
+    // const productAllocationData = {
+    //   salesmanId: salesmanId.value,
+    //   productId: productId.value,
+    //   allocations: colorFields,
+    // };
+    // try {
+    //   console.log("Product allocation data:", productAllocationData);
+    //   const response = await allocate(productAllocationData);
+    //   console.log("Allocation successful:", response.data);
+    //   navigation.navigate("allocation");
+    // } catch (error) {
+    //   if (error.response && error.response.status === 400) {
+    //     setError(error.response.data);
+    //     setErrorVisible(true);
+    //   }
+    // }
+  };
+
+  const productsForSalesman = async (salesman)=>{
+    if(salesman.value.length > 0){
+      const { data } = await getProductsForSalesman(salesman.value);
+      setProducts(data);
+      setAllocations([]);
+      setAllocations([...allocations, {productId: {}, quantity: 0}]);
     }
+  }
+
+  const handleRemoveAllocation = (index) => {
+    const newAllocations = allocations.filter((_, i) => i !== index);
+    setAllocations(newAllocations);
+  };
+
+  const handleProductIdChange = (index, productId) => {
+    const updatedAllocations = [...allocations];
+    updatedAllocations[index].productId = productId;
+    setAllocations(updatedAllocations);
+  };
+
+  const handleQuantityChange = (index, quantity) => {
+    const updatedAllocations = [...allocations];
+    updatedAllocations[index].quantity = quantity;
+    setAllocations(updatedAllocations);
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.innerContainer}>
-        <AppForm
-          initialValues={{
-            salesmanId: "",
-            productId: "",
-            colors: colorFields,
-          }}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          <AppErrorMessage error={error} visible={errorVisible} />
-          <AppFormPicker
-            items={salesmen.map((salesman) => ({
-              label: salesman.name,
-              value: salesman._id,
-            }))}
-            name="salesmanId"
-            placeholder="Select Salesman"
-            width="98%"
-          />
-          <AppFormPicker
-            items={products.map((product) => ({
-              label: product.name,
-              value: product._id,
-            }))}
-            name="productId"
-            placeholder="Select Product"
-            width="98%"
-          />
-          {colorFields.map((colorField, index) => (
-            <View key={index}>
-              <AppFormField
-                name={`colors[${index}].name`}
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholder="Color"
-                value={colorField.name}
-                onChangeText={(name) => handleColorChange(index, name)}
-              />
-              <View style={styles.sizeInputContainer}>
-                {sizes?.map((size) => (
-                  <AppFormField
-                    width={"30%"}
-                    key={size?.size}
-                    name={`colors[${index}].sizes.${size.size}`}
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.innerContainer}>
+          <AppForm
+            initialValues={values}
+            onSubmit={handleSubmit}
+          >
+            <AppText>
+              Allocate Products to Salesman
+            </AppText>
+            <AppErrorMessage error={error} visible={errorVisible} />
+            <AppFormPicker
+              items={salesmen.map((salesman) => ({
+                label: salesman.name,
+                value: salesman._id,
+              }))}
+              name="salesmanId"
+              placeholder="Select Salesman"
+              width="98%"
+              onSelectItem={productsForSalesman}
+            />
+            {
+              allocations.map((allocation,index) => {
+                return <View>
+                  <AppFormPickerCustom
+                    items={products.map((product) => ({
+                      label: `${product.productId.name} - ${product.size.size} - ${product.color.color}`,
+                      value: product._id,
+                    }))}
+                    placeholder="Select Product"
+                    width="98%"
+                    onSelectItem={(value)=>{
+                      handleProductIdChange(index,value);
+                    }}
+                    value={allocation.productId}
+                  />
+                  <AppFormFieldCustom
                     autoCapitalize="none"
                     autoCorrect={false}
-                    placeholder={`${size.size}`}
-                    keyboardType="numeric"
-                    onChangeText={(value) =>
-                      handleSizeChange(index, size.size, value)
-                    }
+                    placeholder="Quantity for this Product"
+                    value={allocation.quantity}
+                    onChangeText={(value) => handleQuantityChange(index, value)}
                   />
-                ))}
-              </View>
-              <TouchableOpacity onPress={() => handleRemoveColorField(index)}>
-                <Text style={{ color: colors.danger }}>Remove Color</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-          <TouchableOpacity onPress={handleAddColorField}>
-            <Text style={{ color: colors.secondary, marginBottom: 5 }}>
-              Add Color
-            </Text>
-          </TouchableOpacity>
-          <SubmitButton title="Allocate" />
-        </AppForm>
+                  <TouchableOpacity onPress={()=>{
+                      handleRemoveAllocation(index);
+                    }} 
+                      disabled={allocations.length === 1}
+                    >
+                      <Text style={{ color: colors.danger, marginBottom: 5 }}>
+                        Remove Allocation
+                      </Text>
+                    </TouchableOpacity>
+                </View>
+              })
+            }
+            <TouchableOpacity onPress={()=>{
+              setAllocations([...allocations, {productId: {}, quantity: 0}]);
+            }} 
+              disabled={products.length === 0}
+            >
+              <Text style={{ color: colors.secondary, marginBottom: 5 }}>
+                Add Allocation
+              </Text>
+            </TouchableOpacity>
+            <SubmitButton title="Allocate" />
+          </AppForm>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
+    marginTop: "20%"
   },
   innerContainer: {
     width: "80%",

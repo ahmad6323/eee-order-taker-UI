@@ -12,6 +12,11 @@ export function getAllocations() {
   return httpService.get(apiEndpoint);
 }
 
+export function getProductsForSalesman(salesmanId) {
+  const apiEnd = `${apiEndpoint}/variations/${salesmanId}`;
+  return httpService.get(apiEnd);
+}
+
 export function deleteAlloation(id) {
   return httpService.delete(`${apiEndpoint}/${id}`, id);
 }
