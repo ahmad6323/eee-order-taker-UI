@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.white,
     textTransform: "uppercase",
-    marginRight: 10, // Add spacing between text and icon
+    marginRight: 10,
+    fontFamily: "Poppins"
   },
 });
 

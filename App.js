@@ -11,8 +11,15 @@ import React, { useCallback, useEffect, useState } from "react";
 import salesmanAuthService from "./utilty/salesmanAuthService";
 import { UserContext } from "./UserContext";
 import OfflineNotice from "./components/OfflineNotice";
+import { useFonts } from 'expo-font';
+import ActivityIndicator from "./components/ActivityIndicator";
 
 export default function App() {
+
+  const [fontsLoaded] = useFonts({
+    'Poppins': require('./assets/fonts/poppins/Poppins-Regular.ttf'),
+  });
+
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
 
@@ -41,6 +48,10 @@ export default function App() {
   }, [isReady]);
 
   if (!isReady) return null;
+
+  if(!fontsLoaded){
+    return <ActivityIndicator visible={true}/>
+  }
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

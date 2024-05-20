@@ -169,7 +169,7 @@ const ProfileScreen = ({ navigation }) => {
                 }}
               >
                 <MaterialIcons name="man" size={40} color="#fc5c65" />
-                <Text>Add Salesman</Text>
+                <Text style={styles.buttonHeadings} >Add Salesman</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
@@ -191,7 +191,7 @@ const ProfileScreen = ({ navigation }) => {
                   size={40}
                   color="#fc5c65"
                 />
-                <Text>Add Product</Text>
+                <Text style={styles.buttonHeadings}>Add Product</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => navigation.navigate("allocation")}
@@ -207,7 +207,7 @@ const ProfileScreen = ({ navigation }) => {
                 }}
               >
                 <MaterialIcons name="category" size={40} color="#fc5c65" />
-                <Text style={{textAlign: "center"}}>Manage Allocation</Text>
+                <Text style={styles.buttonHeadings}>Manage Allocation</Text>
               </TouchableOpacity>
             </View>
             <Text
@@ -232,7 +232,7 @@ const ProfileScreen = ({ navigation }) => {
                 }}
               >
                 <MaterialIcons name="add-business" size={35} color="black" />
-                <Text>Departments</Text>
+                <Text style={styles.buttonHeadings}>Departments</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => navigation.navigate("history")}
@@ -248,7 +248,7 @@ const ProfileScreen = ({ navigation }) => {
                 }}
               >
                 <MaterialIcons name="history" size={35} color="black" />
-                <Text>Order History</Text>
+                <Text style={styles.buttonHeadings}>Order History</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => navigation.navigate("categories")}
@@ -264,7 +264,7 @@ const ProfileScreen = ({ navigation }) => {
                 }}
               >
                 <Entypo name="menu" size={35} color="black" />
-                <Text>Categories</Text>
+                <Text style={styles.buttonHeadings}>Categories</Text>
               </TouchableOpacity>
             </View>
             <View
@@ -288,7 +288,7 @@ const ProfileScreen = ({ navigation }) => {
                   size={35}
                   color="black"
                 />
-                <Text>Sizes</Text>
+                <Text style={styles.buttonHeadings}>Sizes</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => navigation.navigate("colors")}
@@ -308,7 +308,7 @@ const ProfileScreen = ({ navigation }) => {
                   size={35}
                   color="black"
                 />
-                <Text>Colors</Text>
+                <Text style={styles.buttonHeadings}>Colors</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{
@@ -345,7 +345,7 @@ const ProfileScreen = ({ navigation }) => {
                   size={25}
                   color="red"
                 />
-                <Text>Logout</Text>
+                <Text style={styles.buttonHeadings}>Logout</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -369,11 +369,13 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily: "Poppins"
   },
   text2: {
     color: "white",
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "bold",
+    fontFamily: "Poppins"
   },
   innerContainer: {
     width: "100%",
@@ -395,6 +397,11 @@ const styles = StyleSheet.create({
   column: {
     justifyContent: "space-between",
   },
+  buttonHeadings: {
+    fontSize: 14,
+    fontFamily: "Poppins",
+    textAlign: "center"
+  }
 });
 
 export default ProfileScreen;

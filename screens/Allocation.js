@@ -42,20 +42,14 @@ const AllocationScreen = ({ navigation }) => {
     <View style={styles.allocationItem}>
       <View>
         <Text style={styles.text}>{`Salesman: ${item.salesmanId.name}`}</Text>
-        <Text style={styles.text}>{`Product: ${item.productId.name}`}</Text>
-        <Text style={styles.heading}>Allocated Quantities</Text>
-        {item.allocations.map((allocation, index) => (
+        <Text style={styles.heading}>Allocations</Text>
+        {item.products.map((allocation, index) => (
           <View key={index}>
-            <Text style={styles.color}>{`Color: ${allocation.name}`}</Text>
+            <Text style={styles.color}>{`Variation: ${allocation.variation.productId.name} - ${allocation.variation.color.color} / ${allocation.variation.size.size}`}</Text>
             <View style={styles.sizeContainer}>
-              {Object.keys(allocation.sizes).map((size, sizeIndex) => (
-                <View key={sizeIndex} style={styles.sizeItem}>
-                  <Text style={styles.sizeLabel}>{`${size}:`}</Text>
-                  <Text style={styles.sizeQuantity}>
-                    {allocation.sizes[size]}
-                  </Text>
-                </View>
-              ))}
+              <Text style={styles.sizeQuantity}>
+                Quantity: {allocation.quantity}
+              </Text>
             </View>
           </View>
         ))}
@@ -171,8 +165,8 @@ const styles = StyleSheet.create({
   },
   sizeQuantity: {
     fontSize: 16,
-    fontWeight: "bold",
     color: colors.dark,
+    marginBottom: 15
   },
 });
 

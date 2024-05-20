@@ -8,8 +8,9 @@ export function allocate(allocation) {
   return httpService.post(apiEndpoint, allocation);
 }
 
-export function getAllocations() {
-  return httpService.get(apiEndpoint);
+export function getAllocations(salesmanId) {
+  const endPoint = apiEndpoint + `/${salesmanId}`
+  return httpService.get(endPoint);
 }
 
 export function getProductsForSalesman(salesmanId) {

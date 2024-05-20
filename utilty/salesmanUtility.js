@@ -8,6 +8,7 @@ function salesmanUrl(id) {
 }
 
 export function saveSalesman(salesman) {
+  delete salesman._id;
   return httpService.post(apiEnd, salesman);
 }
 

@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   colors,
   text: {
     fontSize: 20,
-    fontFamily: Platform.OS === "ios" ? "Avenir" : "Roboto",
+    fontFamily: Platform.OS === "ios" ? "Avenir" : "Poppins",
     color: colors.dark,
   },
   parameters: {

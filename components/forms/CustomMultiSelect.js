@@ -16,7 +16,7 @@ const CustomMultiSelect = ({ data, onSelectedItemsChange }) => {
   return (
     <View style={{ marginBottom: 20 }}>
       <TouchableOpacity onPress={toggleDropdown}>
-        <Text style={{ fontSize: 16, padding: 10, borderWidth: 1 }}>
+        <Text style={{ fontSize: 16, padding: 10, borderWidth: 1, fontFamily: "Poppins" }}>
           {isOpen ? 'Close Dropdown' : 'Open Dropdown'}
         </Text>
       </TouchableOpacity>

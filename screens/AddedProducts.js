@@ -92,7 +92,7 @@ const AddedProducts = ({ navigation }) => {
             filteredProducts.map((product, index) => (
               <View style={styles.listItemContainer} key={index}>
                 <Image
-                  source={{uri: `${pictureEndpoint}\\${product.imageUrl[0]}`}}
+                  source={{uri: `${pictureEndpoint}/${product.imageUrl[0]}`}}
                   style={styles.listItemImage}
                   resizeMode="cover"
                   defaultSource={require("../assets/noimage.jpg")}
@@ -177,10 +177,12 @@ const styles = StyleSheet.create({
     color: colors.dark,
     fontSize: 25,
     fontWeight: "bold",
+    fontFamily: "Poppins"
   },
   subText: {
     color: colors.medium,
     fontSize: 16,
+    fontFamily: "Poppins"
   },
   iconContainer: {
     flexDirection: "row",
@@ -226,12 +228,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
     color: colors.dark,
+    fontFamily: "Poppins"
   },
   variationHeading: {
     fontSize: 17,
     fontWeight: "bold",
     marginBottom: 5,
     color: colors.dark,
+    fontFamily: "Poppins"
   },
   bold: {
     fontWeight: "bold",
@@ -255,6 +259,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.danger,
     marginLeft: 10,
+    fontFamily: "Poppins"
   },
   listItemContainer: {
     flexDirection: "row",
@@ -276,6 +281,7 @@ const styles = StyleSheet.create({
   },
   listItemName: {
     fontSize: 18,
+    fontFamily: "Poppins",
     fontWeight: "bold",
     color: colors.dark,
     marginBottom: 5,
@@ -287,6 +293,7 @@ const styles = StyleSheet.create({
   },
   listItemPrice: {
     fontSize: 16,
+    fontFamily: "Poppins",
     fontWeight: "bold",
     color: colors.danger,
     marginBottom: 5,

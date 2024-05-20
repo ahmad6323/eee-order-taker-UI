@@ -35,11 +35,12 @@ const EmailVerificationInput = ({ route, navigation }) => {
 
     try {
       const response = await verification(code);
+      console.log(response);
       if (response.data) {
         navigation.navigate("profiles");
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response.status);
       if (error.response && error.response.status === 400) {
         setError(error.response.data);
         setErrorVisible(true);

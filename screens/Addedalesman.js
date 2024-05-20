@@ -128,10 +128,12 @@ const styles = StyleSheet.create({
     color: colors.dark,
     fontSize: 35,
     fontWeight: "bold",
+    fontFamily: "Poppins"
   },
   subText: {
     color: colors.medium,
     fontSize: 16,
+    fontFamily: "Poppins"
   },
   salesmanList: {
     width: "80%",
@@ -158,10 +160,10 @@ const styles = StyleSheet.create({
   },
   salesmanName: {
     fontSize: 20,
-    fontWeight: "bold",
   },
   salesmanPhone: {
-    fontSize: 17,
+    fontSize: 16,
+    fontFamily: "Poppins",
     color: colors.medium,
   },
   iconContainer: {

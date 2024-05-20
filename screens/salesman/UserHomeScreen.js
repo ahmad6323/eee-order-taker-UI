@@ -64,13 +64,9 @@ const UserHomeScreen = ({ navigation }) => {
 
     const fetchAllocations = async () => {
       try {
-        const allAllocations = await getAllocations();
-
-        const filteredAllocations = allAllocations.data.filter(
-          (allocation) => allocation.salesmanId._id === user._id
-        );
-
-        setAllocations(filteredAllocations);
+        const allAllocations = await getAllocations(user._id);
+        console.log(allAllocations.data);
+        setAllocations(allAllocations.data);
       } catch (error) {
         console.error("Error fetching allocations:", error);
       }
@@ -100,13 +96,12 @@ const UserHomeScreen = ({ navigation }) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.settingsButton}
-        // onPress={handleSettingsPress}
         onPress={() => {
           setUser(null);
           salesmanAuthService.removeToken();
         }}
       >
-        <MaterialIcons name="settings" size={24} color="black" />
+        <MaterialIcons name="settings" size={30} color="black" />
       </TouchableOpacity>
 
       <View
@@ -118,7 +113,8 @@ const UserHomeScreen = ({ navigation }) => {
           alignItems: "flex-start",
           padding: 10,
           justifyContent: "space-between",
-          elevation: 6,
+          elevation: 9,
+          marginTop: 25
         }}
       >
         <View>
@@ -183,9 +179,9 @@ const UserHomeScreen = ({ navigation }) => {
               Assigned Products
             </AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
+              style={{ color: colors.black, fontWeight: "bold",fontSize: 24 }}
             >
-              {allocations.length}
+              {allocations.products.length}
             </AppText>
           </View>
           <Entypo

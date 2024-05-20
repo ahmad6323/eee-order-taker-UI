@@ -43,25 +43,30 @@ function AllocateForm({ navigation }) {
   }, []);
 
   const handleSubmit = async (info) => {
-    console.log(info);
-    console.log(allocations);
-    // const { salesmanId, productId } = info;
-    // const productAllocationData = {
-    //   salesmanId: salesmanId.value,
-    //   productId: productId.value,
-    //   allocations: colorFields,
-    // };
-    // try {
-    //   console.log("Product allocation data:", productAllocationData);
-    //   const response = await allocate(productAllocationData);
-    //   console.log("Allocation successful:", response.data);
-    //   navigation.navigate("allocation");
-    // } catch (error) {
-    //   if (error.response && error.response.status === 400) {
-    //     setError(error.response.data);
-    //     setErrorVisible(true);
-    //   }
-    // }
+    // Clean the allocations and extract only the value from productId
+    const cleanedAllocations = allocations.map(allocation => {
+      return {
+        productId: allocation.productId.value,
+        quantity: allocation.quantity
+      };
+    });
+
+    // Combine the cleaned allocations with the values object
+    const result = {
+      ...info,
+      allocations: cleanedAllocations
+    };
+
+    try {
+      const response = await allocate(result);
+      console.log("Allocation successful: ", response.data);
+      navigation.navigate("allocation");
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setError(error.response.data);
+        setErrorVisible(true);
+      }
+    }
   };
 
   const productsForSalesman = async (salesman)=>{
@@ -116,6 +121,7 @@ function AllocateForm({ navigation }) {
               allocations.map((allocation,index) => {
                 return <View>
                   <AppFormPickerCustom
+                    key={index}
                     items={products.map((product) => ({
                       label: `${product.productId.name} - ${product.size.size} - ${product.color.color}`,
                       value: product._id,
