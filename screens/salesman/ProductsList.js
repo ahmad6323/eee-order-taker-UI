@@ -10,44 +10,24 @@ import {
   TextInput, // Add this import
 } from "react-native";
 import colors from "../../config/colors";
-import { getProducts, deleteProduct } from "../../utilty/ProductUtility";
 import SafeScreen from "../../components/SafeScreen";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppText from "../../components/AppText";
-import { getAllocations } from "../../utilty/allocationUtility";
+import { getAllocationsForSalesman } from "../../utilty/allocationUtility";
 import { UserContext } from "../../UserContext";
+import config from "../../config.json";
+
+const pictureEndpoint = config.pictureUrl + "public/products";
 
 const ProductsList = ({ navigation }) => {
   const { user } = useContext(UserContext);
-  const [products, setProducts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [allocations, setAllocations] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); 
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await getProducts();
-        const allProducts = response.data; // Assuming response.data is an array of products
-
-        // Fetch allocations for the current user
-        const allocationsResponse = await getAllocations(user._id);
-        const allocations = allocationsResponse.data;
-
-        // Filter products based on allocations
-        const filteredProducts = allProducts.filter((product) => {
-          // Check if there are allocations for this product
-          const allocation = allocations.find(
-            (allocation) => allocation.productId._id === product._id
-          );
-
-          if (!allocation) {
-            return false; // Exclude products without allocations
-          }
-
-          // Check if the salesmanId in allocations matches the user's _id
-          return allocation.salesmanId._id === user._id;
-        });
-
-        setProducts(filteredProducts);
+        const allocationsResponse = await getAllocationsForSalesman(user._id);
+        setAllocations(allocationsResponse.data.products);
       } catch (error) {
         console.error(error);
       }
@@ -59,11 +39,6 @@ const ProductsList = ({ navigation }) => {
   const handleProductPress = (product) => {
     navigation.navigate("listdetail", { product });
   };
-
-  // Filter products based on search query
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <SafeScreen>
@@ -84,60 +59,40 @@ const ProductsList = ({ navigation }) => {
               onChangeText={setSearchQuery}
             />
           </View>
-          {/* Render filtered products */}
-          {filteredProducts.length === 0 ? (
-            <View style={styles.loadingContainer}>
-              <Text>No Products!</Text>
-            </View>
-          ) : (
-            filteredProducts.map((product, index) => (
+          {
+            allocations && allocations.map((allocation, index) => (
               <TouchableOpacity
-                onPress={() => handleProductPress(product)}
+                onPress={() => handleProductPress(allocation)}
                 style={styles.productContainer}
                 key={index}
               >
                 <Image
-                  source={{ uri: product.imageUrl[0] }}
+                  source={{ uri: `${pictureEndpoint}/${allocation.variation.productId.imageUrl[0]}` }}
                   style={styles.image}
                   resizeMode="cover"
                 />
                 <View style={styles.card}>
                   <View style={styles.detailsContainer}>
-                    <Text style={styles.name}>{product.name}</Text>
-
-                    {/* {product.colors.map((color, colorIndex) => (
-                      <View key={colorIndex}>
-                        <Text style={styles.color}>{color.name}</Text>
-                        <View style={styles.sizeContainer}>
-                          {Object.entries(color.sizes).map(
-                            ([sizeKey, sizeValue]) => (
-                              <Text key={sizeKey} style={styles.size}>
-                                {sizeKey}: {sizeValue}
-                              </Text>
-                            )
-                          )}
-                        </View>
-                      </View>
-                    ))} */}
-
+                    <Text style={styles.name}>{allocation.variation.productId.name + " - " +  allocation.variation.size.size + " - " + allocation.variation.color.color}</Text>
+                    <Text style={styles.sku}>
+                      {allocation.variation.SKU}
+                    </Text>
                     <Text style={styles.description}>
-                      {product.description}
+                      {allocation.variation.productId.description}
                     </Text>
                   </View>
                   <View style={styles.actionsContainer}>
-                    <Text style={styles.price}>${product.price}</Text>
+                    <Text style={styles.price}>{allocation.variation.productId.price} PKR </Text>
                   </View>
                 </View>
               </TouchableOpacity>
             ))
-          )}
+          }
         </View>
       </ScrollView>
     </SafeScreen>
   );
 };
-
-// Styles...
 
 const styles = StyleSheet.create({
   container: {
@@ -208,6 +163,13 @@ const styles = StyleSheet.create({
     color: colors.medium,
   },
   description: {
+    marginBottom: 5,
+    color: colors.medium,
+    fontSize: 14
+  },
+  sku: {
+    fontSize: 16,
+    fontWeight: "bold",
     marginBottom: 5,
     color: colors.medium,
   },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,16 +7,20 @@ import {
   TouchableOpacity,
 } from "react-native";
 import colors from "../config/colors";
-import { getAllocations, deleteAlloation } from "../utilty/allocationUtility"; // Fix the import name here
+import { deleteAlloation, getAllocationsForSalesman } from "../utilty/allocationUtility"; // Fix the import name here
 import { MaterialIcons } from "@expo/vector-icons";
+import { UserContext } from "../UserContext";
 
 const AllocationScreen = ({ navigation }) => {
+
+  const { user } = useContext(UserContext);
+
   const [allocations, setAllocations] = useState([]);
 
   useEffect(() => {
     const fetchAllocations = async () => {
       try {
-        const { data } = await getAllocations();
+        const { data } = await getAllocationsForSalesman(user._id);
         setAllocations(data);
       } catch (error) {
         console.error("Error fetching allocations data:", error);
@@ -28,8 +32,7 @@ const AllocationScreen = ({ navigation }) => {
 
   const handleDeleteAllocation = async (id) => {
     try {
-      await deleteAlloation(id); // Corrected function name here
-      // Remove the deleted allocation from the state
+      await deleteAlloation(id); 
       setAllocations((prevAllocations) =>
         prevAllocations.filter((allocation) => allocation._id !== id)
       );

@@ -134,6 +134,7 @@ function AllocateForm({ navigation }) {
                     value={allocation.productId}
                   />
                   <AppFormFieldCustom
+                    key={index+1000}
                     autoCapitalize="none"
                     autoCorrect={false}
                     placeholder="Quantity for this Product"

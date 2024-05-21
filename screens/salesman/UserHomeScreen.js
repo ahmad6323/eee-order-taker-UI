@@ -15,7 +15,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { UserContext } from "../../UserContext";
 import salesmanAuthService from "../../utilty/salesmanAuthService";
 import { getOrders } from "../../utilty/orderUtility";
-import { getAllocations } from "../../utilty/allocationUtility";
+import { getAllocationsForSalesman } from "../../utilty/allocationUtility";
 
 const chartConfig = {
   backgroundGradientFrom: colors.danger,
@@ -64,8 +64,7 @@ const UserHomeScreen = ({ navigation }) => {
 
     const fetchAllocations = async () => {
       try {
-        const allAllocations = await getAllocations(user._id);
-        console.log(allAllocations.data);
+        const allAllocations = await getAllocationsForSalesman(user._id);
         setAllocations(allAllocations.data);
       } catch (error) {
         console.error("Error fetching allocations:", error);
@@ -80,6 +79,7 @@ const UserHomeScreen = ({ navigation }) => {
     // Handle settings press logic here
     navigation.navigate("profile");
   };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -179,9 +179,10 @@ const UserHomeScreen = ({ navigation }) => {
               Assigned Products
             </AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "bold",fontSize: 24 }}
+              style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
             >
-              {allocations.products.length}
+              5
+              {/* {allocations.products.length} */}
             </AppText>
           </View>
           <Entypo

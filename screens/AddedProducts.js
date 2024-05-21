@@ -130,11 +130,11 @@ const AddedProducts = ({ navigation }) => {
                   <View style={styles.detailsContainer}>
                     <Text style={styles.name}>{product.name}</Text>
                     <Text style={styles.variationHeading}>Variations</Text>
-                    {/* {product.variations.map((variation, variationIndex) => (
+                    {product.variations.map((variation, variationIndex) => (
                       <View key={variationIndex}>
-                        <Text style={styles.color}>{variation.color.color + " - " + variation.size.size + " " + variation.SKU}</Text>
+                        <Text style={styles.color}>{variation.color.color.trim() + " - " + variation.size.size.trim() + " - " + variation.SKU.trim()}</Text>
                       </View>
-                    ))} */}
+                    ))}
                     <Text style={styles.description}>
                       {product.description}
                     </Text>
