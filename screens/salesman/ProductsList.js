@@ -14,20 +14,20 @@ import SafeScreen from "../../components/SafeScreen";
 import AppText from "../../components/AppText";
 import { getAllocationsForSalesman } from "../../utilty/allocationUtility";
 import { UserContext } from "../../UserContext";
-import config from "../../config.json";
-
-const pictureEndpoint = config.pictureUrl + "public/products";
+import ImageSlider from "../../components/ImageSlider";
+import config from "../../config.json"
+const pictureEndpoint = config.pictureUrl;
 
 const ProductsList = ({ navigation }) => {
   const { user } = useContext(UserContext);
+  const [searchQuery, setSearchQuery] = useState("");
   const [allocations, setAllocations] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); 
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const allocationsResponse = await getAllocationsForSalesman(user._id);
-        setAllocations(allocationsResponse.data.products);
+        setAllocations(allocationsResponse.data);
       } catch (error) {
         console.error(error);
       }
@@ -59,35 +59,32 @@ const ProductsList = ({ navigation }) => {
               onChangeText={setSearchQuery}
             />
           </View>
-          {
-            allocations && allocations.map((allocation, index) => (
-              <TouchableOpacity
-                onPress={() => handleProductPress(allocation)}
-                style={styles.productContainer}
-                key={index}
-              >
-                <Image
-                  source={{ uri: `${pictureEndpoint}/${allocation.variation.productId.imageUrl[0]}` }}
-                  style={styles.image}
-                  resizeMode="cover"
-                />
-                <View style={styles.card}>
-                  <View style={styles.detailsContainer}>
-                    <Text style={styles.name}>{allocation.variation.productId.name + " - " +  allocation.variation.size.size + " - " + allocation.variation.color.color}</Text>
-                    <Text style={styles.sku}>
-                      {allocation.variation.SKU}
-                    </Text>
-                    <Text style={styles.description}>
-                      {allocation.variation.productId.description}
-                    </Text>
-                  </View>
-                  <View style={styles.actionsContainer}>
-                    <Text style={styles.price}>{allocation.variation.productId.price} PKR </Text>
-                  </View>
+          {allocations && allocations.map((allocation, index) => (
+            <TouchableOpacity
+              onPress={() => handleProductPress(allocation)}
+              style={styles.productContainer}
+              key={index}
+            >
+              {/* <Image
+                source={{ uri: `${pictureEndpoint}/public/products/${allocation.productDetails.imageUrl[0]}` }}
+                style={styles.image}
+                resizeMode="cover"
+              /> */}
+              <ImageSlider images={allocation.productDetails.imageUrl} style={styles.image}/>
+              <View style={styles.card}>
+                <View style={styles.detailsContainer}>
+                  <Text style={styles.name}>{allocation.productDetails.name}</Text>
+                  <Text style={styles.description}>{allocation.productDetails.description}</Text>
                 </View>
-              </TouchableOpacity>
-            ))
-          }
+                <View style={styles.actionsContainer}>
+                  <Text style={styles.price}>{allocation.productDetails.price} PKR</Text>
+                  <Text style={styles.variationIds}>
+                    {allocation.variations.map(variation => variation._id).join(', ')}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
       </ScrollView>
     </SafeScreen>
@@ -100,6 +97,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.white,
     padding: 20,
+  },
+  image: {
+    width: "100%",
+    aspectRatio: 1,
   },
   header: {
     marginBottom: 20,
@@ -122,10 +123,6 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     marginBottom: 20,
-  },
-  image: {
-    width: "100%",
-    aspectRatio: 1,
   },
   card: {
     backgroundColor: colors.light,
@@ -163,13 +160,6 @@ const styles = StyleSheet.create({
     color: colors.medium,
   },
   description: {
-    marginBottom: 5,
-    color: colors.medium,
-    fontSize: 14
-  },
-  sku: {
-    fontSize: 16,
-    fontWeight: "bold",
     marginBottom: 5,
     color: colors.medium,
   },

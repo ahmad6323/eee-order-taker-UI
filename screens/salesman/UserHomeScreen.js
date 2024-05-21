@@ -14,8 +14,6 @@ const screenWidth = Dimensions.get("window").width * 0.8;
 import { FontAwesome5 } from "@expo/vector-icons";
 import { UserContext } from "../../UserContext";
 import salesmanAuthService from "../../utilty/salesmanAuthService";
-import { getOrders } from "../../utilty/orderUtility";
-import { getAllocationsForSalesman } from "../../utilty/allocationUtility";
 
 const chartConfig = {
   backgroundGradientFrom: colors.danger,
@@ -27,6 +25,7 @@ const chartConfig = {
   barPercentage: 0.5,
   useShadowColorFromDataset: false, // optional
 };
+
 const data = {
   labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
   datasets: [
@@ -38,41 +37,15 @@ const data = {
 
 const UserHomeScreen = ({ navigation }) => {
   const { user, setUser } = useContext(UserContext);
-  const [orders, setOrders] = useState([]);
-  const [allocations, setAllocations] = useState([]);
   const [sales, setSales] = useState(0);
+  const [dashboardItems, setDashboardItems] = useState(null);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const allOrders = await getOrders();
-        const filteredOrders = allOrders.data.filter(
-          (order) => order.salesman === user._id
-        );
 
-        setOrders(filteredOrders);
-        const totalSales = filteredOrders.reduce(
-          (acc, order) => acc + order.price,
-          0
-        );
-        
-        setSales(totalSales);
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      }
-    };
+    const fetchDashboardContentSalesman = ()=>{
+    }
 
-    const fetchAllocations = async () => {
-      try {
-        const allAllocations = await getAllocationsForSalesman(user._id);
-        setAllocations(allAllocations.data);
-      } catch (error) {
-        console.error("Error fetching allocations:", error);
-      }
-    };
-
-    fetchOrders();
-    fetchAllocations();
+    fetchDashboardContentSalesman();
   }, [user._id]);
 
   const handleSettingsPress = () => {
@@ -146,7 +119,8 @@ const UserHomeScreen = ({ navigation }) => {
             <AppText
               style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
             >
-              {orders.length}
+              5
+              {/* {orders.length} */}
             </AppText>
           </View>
           <Fontisto
@@ -197,7 +171,7 @@ const UserHomeScreen = ({ navigation }) => {
         style={{ flexDirection: "row", marginVertical: 10, marginBottom: 18 }}
       >
         <TouchableOpacity
-          onPress={() => navigation.navigate("history", orders)}
+          onPress={() => navigation.navigate("history", {})}
           style={{
             backgroundColor: colors.white,
             width: "40%",

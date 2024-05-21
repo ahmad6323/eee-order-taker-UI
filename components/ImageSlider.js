@@ -7,6 +7,7 @@ import colors from '../config/colors';
 const pictureEndpoint = config.pictureUrl + "public/products";
 
 const ImageSlider = ({ images, style }) => {
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToNext = () => {
@@ -22,7 +23,7 @@ const ImageSlider = ({ images, style }) => {
   return (
     <View style={style }>
       <Image
-        source={{ uri: `${pictureEndpoint}\\${images[currentIndex]}` }}
+        source={{ uri: `${pictureEndpoint}/${images[currentIndex]}` }}
         style={styles.image}
         resizeMode="cover"
       />
