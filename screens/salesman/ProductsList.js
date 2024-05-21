@@ -36,8 +36,8 @@ const ProductsList = ({ navigation }) => {
     fetchProducts();
   }, []);
 
-  const handleProductPress = (product) => {
-    navigation.navigate("listdetail", { product });
+  const handleProductPress = (id) => {
+    navigation.navigate("listdetail", { product_id: id });
   };
 
   return (
@@ -50,7 +50,6 @@ const ProductsList = ({ navigation }) => {
               List of all industry products
             </AppText>
           </View>
-          {/* Search input */}
           <View style={styles.searchContainer}>
             <TextInput
               style={styles.searchInput}
@@ -61,26 +60,22 @@ const ProductsList = ({ navigation }) => {
           </View>
           {allocations && allocations.map((allocation, index) => (
             <TouchableOpacity
-              onPress={() => handleProductPress(allocation)}
+              onPress={() => handleProductPress(allocation.productDetails._id)}
               style={styles.productContainer}
               key={index}
             >
-              {/* <Image
-                source={{ uri: `${pictureEndpoint}/public/products/${allocation.productDetails.imageUrl[0]}` }}
-                style={styles.image}
-                resizeMode="cover"
-              /> */}
               <ImageSlider images={allocation.productDetails.imageUrl} style={styles.image}/>
               <View style={styles.card}>
                 <View style={styles.detailsContainer}>
                   <Text style={styles.name}>{allocation.productDetails.name}</Text>
                   <Text style={styles.description}>{allocation.productDetails.description}</Text>
+                  <Text style={styles.variantTitle}>Variants & Quantity Allocated</Text>
+                  <Text style={styles.variationIds}>
+                    {allocation.variations.map(variation => `${variation._id} - ${variation.quantity}`).join(' ')}
+                  </Text>
                 </View>
                 <View style={styles.actionsContainer}>
                   <Text style={styles.price}>{allocation.productDetails.price} PKR</Text>
-                  <Text style={styles.variationIds}>
-                    {allocation.variations.map(variation => variation._id).join(', ')}
-                  </Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -137,7 +132,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Poppins",
     marginBottom: 5,
     color: colors.dark,
   },
@@ -147,7 +142,7 @@ const styles = StyleSheet.create({
   color: {
     marginBottom: 5,
     color: colors.medium,
-    fontWeight: "bold",
+    fontFamily: "Poppins"
   },
   sizeContainer: {
     flexDirection: "row",
@@ -162,6 +157,13 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: 5,
     color: colors.medium,
+    fontFamily: "Poppins"
+  },
+  variantTitle: {
+    marginBottom: 5,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: colors.dark,
   },
   actionsContainer: {
     alignItems: "center",
@@ -182,13 +184,16 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     borderWidth: 1,
-
     borderColor: colors.medium,
     borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 5,
     backgroundColor: colors.white,
   },
+  variationIds: {
+    fontSize: 14,
+    fontFamily: "Poppins"
+  }
 });
 
 export default ProductsList;

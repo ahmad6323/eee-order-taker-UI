@@ -6,197 +6,141 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import { Slider } from "react-native-elements";
 import colors from "../../config/colors";
-import Icon from "react-native-vector-icons/Ionicons"; // Import Ionicons
 import { useCart } from "../../CartContext";
 import { UserContext } from "../../UserContext";
-import { getSizes } from "../../utilty/sizeUtility";
-import { getAllocations } from "../../utilty/allocationUtility";
+import { getAllocationByProductId } from "../../utilty/allocationUtility";
+import ImageSlider from "../../components/ImageSlider";
+import AppErrorMessage from "../../components/forms/AppErrorMessage";
 
 const ProductListDetail = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
-  const { product } = route.params;
-
+  
   const { addToCart, cartItems } = useCart();
-  const [sizes, setSizes] = useState({});
-  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
-  const [selectedColor, setSelectedColor] = useState("");
-  const [quantity, setQuantity] = useState(1);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  console.log(selectedSizeIndex);
+  const [product, setProduct] = useState(null);
+  const [orderFromThisPage, setOrderFromThisPage] = useState({});
+  const [error, setError] = useState(false);
+  const [errorVisible, setErrorVisible] = useState(false);
+
+  
+  const { product_id } = route.params;
 
   useEffect(() => {
-    const fetchSizes = async () => {
-      try {
-        const allocationsResponse = await getAllocations(user._id);
-        const allocations = allocationsResponse.data;
+    const fetchProductById = async (id)=>{
+      try{
+        const respProduct = await getAllocationByProductId(id,user._id);
+        setProduct(respProduct.data);
 
-        // Extract all available sizes from allocations where sizes are not 0
-        const availableSizes = allocations.reduce((acc, curr) => {
-          curr.allocations.forEach((allocation) => {
-            if (allocation.sizes.length !== 0) {
-              acc = { ...acc, ...allocation.sizes }; // Merge sizes object
-            }
-          });
-          return acc;
-        }, {});
+        setOrderFromThisPage({
+          productId: respProduct.data.productId,
+          pricePerUnit: respProduct.data.price,
+          variations: respProduct.data.variations.map(variation => ({
+            variationId: variation.variationId,
+            quantity: 0,
+            maxQuantity: variation.quantity
+          }))
+        });
 
-        setSizes(availableSizes);
-      } catch (error) {
-        console.error("Error fetching sizes:", error);
+      }catch(ex){
+        console.log(ex);
       }
-    };
+    }
 
-    fetchSizes();
+    fetchProductById(product_id);
   }, []);
-  console.log(sizes);
-  if (!product) {
+
+  if (!product_id) {
     return <Text>Loading...</Text>;
   }
 
-  const handleSizeSelect = (index) => {
-    setSelectedSizeIndex(index);
-  };
+  const handleQuantityChange = (index, increment) => {
+    setErrorVisible(false);
+    setOrderFromThisPage(prevOrder => {
+      const newVariations = [...prevOrder.variations];
+      const newQuantity = newVariations[index].quantity + increment;
+      
+      // restrict user to add mre quantity than assigned
+      if (newQuantity >= 0 && newQuantity <= newVariations[index].maxQuantity) {
+        newVariations[index].quantity = newQuantity;
+        setError(false);
+        setErrorVisible(false); 
+      } else {
+        setError(`Quantity for this vairation cannot exceed ${newVariations[index].maxQuantity}`);
+        setErrorVisible(true);
+      }
 
-  const handleColorSelect = (color) => {
-    setSelectedColor(color);
-  };
-
-  const handleQuantityIncrement = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const handleQuantityDecrement = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
+      return { ...prevOrder, variations: newVariations };
+    });
   };
 
   const handleAddToCart = () => {
+    console.log(orderFromThisPage);
     addToCart({
       salesman: user._id,
-      pname: product._id,
-      pdepartment: product.department,
-      pcategory: product.category,
-      size: Object.keys(sizes)[selectedSizeIndex], // Use fetched sizes
-      color: selectedColor,
-      quantity,
-      pimage: product.imageUrl,
-      price: product.price * quantity,
+      ...orderFromThisPage
     });
     alert("Your Item added to cart successfully!");
     navigation.navigate("list");
   };
 
-  const navigateNextImage = () => {
-    if (currentImageIndex < product.imageUrl.length - 1) {
-      setCurrentImageIndex(currentImageIndex + 1);
-    }
-  };
+  if(product === null){
+    return (
+      <ActivityIndicator color={"orange"}/>
+    );
+  }
 
-  const navigatePrevImage = () => {
-    if (currentImageIndex > 0) {
-      setCurrentImageIndex(currentImageIndex - 1);
-    }
-  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.imageContainer}>
-        <Image
-          source={{ uri: product.imageUrl[currentImageIndex] }}
-          style={styles.productImage}
-          resizeMode="cover"
-        />
-        <View style={styles.imageNavContainer}>
-          <TouchableOpacity onPress={navigatePrevImage}>
-            <Icon name="arrow-back" size={24} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={navigateNextImage}>
-            <Icon name="arrow-forward" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
+        <ImageSlider style={styles.productImage} images={product && product.imageUrl} />
       </View>
       <View style={styles.detailsContainer}>
+        <AppErrorMessage error={error} visible={errorVisible} />
         <Text style={styles.name}>{product.name}</Text>
-        <Text style={styles.price}>Price {product.price} (pkr)</Text>
+        <Text style={styles.price}>Price {product.price}/- PKR</Text>
         <Text style={styles.description}>{product.description}</Text>
         <View style={styles.sizesContainer}>
-          <Text style={styles.sizesLabel}>Available Sizes:</Text>
-          <ScrollView horizontal>
-            {Object.entries(sizes).map(
-              ([size, value], index) =>
-                // Check if the size value is greater than 0
-                value > 0 && (
+          <Text style={styles.sizesLabel}>Variations Allocated</Text>
+          <Text style={styles.sizesLabel}>{product.variations.length}</Text>
+          {
+            product.variations && orderFromThisPage && orderFromThisPage.variations && product.variations.map((variation,index)=>{
+              return <View 
+                key={variation._id}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center"
+                }}
+              >
+                <Text style={styles.sizesLabel}>{variation.color.color.trim() + " - " + variation.size.size.trim() + " - " + variation.quantity + " max"}</Text>
+                <View style={styles.quantityContainer}>
                   <TouchableOpacity
-                    key={index}
-                    style={[
-                      styles.sizeButton,
-                      selectedSizeIndex === index && {
-                        backgroundColor: colors.primary,
-                      },
-                    ]}
-                    onPress={() => handleSizeSelect(index)}
+                    disabled={orderFromThisPage.variations[index].quantity === 0}
+                    style={styles.quantityButton}
+                    onPress={()=>{
+                      handleQuantityChange(index,-1)
+                    }}
                   >
-                    <Text
-                      style={[
-                        styles.sizeButtonText,
-                        selectedSizeIndex === index && {
-                          color: colors.light,
-                        },
-                      ]}
-                    >
-                      {size}
-                    </Text>
+                    <Text style={styles.quantityButtonText}>-</Text>
                   </TouchableOpacity>
-                )
-            )}
-          </ScrollView>
-        </View>
-
-        <View style={styles.colorsContainer}>
-          <Text style={styles.colorsLabel}>Available Colors:</Text>
-          <ScrollView horizontal>
-            {product.colors &&
-              product.colors.map((color, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    styles.colorButton,
-                    selectedColor === color.name && {
-                      backgroundColor: colors.primary,
-                    },
-                  ]}
-                  onPress={() => handleColorSelect(color.name)}
-                >
-                  <Text
-                    style={[
-                      styles.colorButtonText,
-                      selectedColor === color.name && { color: colors.light },
-                    ]}
-                  >
-                    {color.name}
+                  <Text style={styles.quantity}>
+                    {orderFromThisPage.variations[index].quantity}
                   </Text>
-                </TouchableOpacity>
-              ))}
-          </ScrollView>
-        </View>
-        <View style={styles.quantityContainer}>
-          <TouchableOpacity
-            style={styles.quantityButton}
-            onPress={handleQuantityDecrement}
-          >
-            <Text style={styles.quantityButtonText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.quantity}>{quantity}</Text>
-          <TouchableOpacity
-            style={styles.quantityButton}
-            onPress={handleQuantityIncrement}
-          >
-            <Text style={styles.quantityButtonText}>+</Text>
-          </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.quantityButton}
+                    onPress={()=>{
+                      handleQuantityChange(index,1)
+                    }}
+                  >
+                    <Text style={styles.quantityButtonText}>+</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            })
+          }
         </View>
         <TouchableOpacity
           style={styles.addToCartButton}
@@ -212,17 +156,19 @@ const ProductListDetail = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 10,
+    paddingVertical: 50,
+    width: "100%"
   },
   imageContainer: {
     alignItems: "center",
     marginBottom: 20,
     position: "relative",
+    width: "100%",
+    height: "43%"
   },
   productImage: {
-    width: 300,
-    height: 300,
+    width: "75%",
+    height: "100%",
     borderRadius: 10,
   },
   imageNavContainer: {
@@ -296,12 +242,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
     borderRadius: 20,
     width: 40,
-    height: 40,
+    height: 30,
     alignItems: "center",
     justifyContent: "center",
   },
   quantityButtonText: {
-    fontSize: 24,
+    fontSize: 20,
     color: colors.dark,
   },
   quantity: {

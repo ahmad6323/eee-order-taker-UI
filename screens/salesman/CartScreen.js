@@ -126,7 +126,7 @@ const CartScreen = ({ navigation }) => {
       const orders = existingOrders ? JSON.parse(existingOrders) : [];
       orders.push(orderData);
       await AsyncStorage.setItem("offlineOrders", JSON.stringify(orders));
-      console.log("Stored offline order:", orderData); // Add this log statement
+      console.log("Stored offline order:", orderData); 
     } catch (error) {
       console.error("Error storing offline order:", error);
     }
@@ -135,7 +135,7 @@ const CartScreen = ({ navigation }) => {
   const placeOfflineOrders = async () => {
     try {
       const existingOrders = await AsyncStorage.getItem("offlineOrders");
-      console.log("Existing offline orders:", existingOrders); // Add this log statement
+      console.log("Existing offline orders:", existingOrders); 
       if (existingOrders) {
         const orders = JSON.parse(existingOrders);
         for (const order of orders) {
@@ -152,6 +152,10 @@ const CartScreen = ({ navigation }) => {
       navigation.navigate("fail");
     }
   };
+
+  if(cartItems){
+    console.log(cartItems);
+  }
 
   return (
     <View style={styles.container}>

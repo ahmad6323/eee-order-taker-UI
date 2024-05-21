@@ -25,3 +25,10 @@ export function getProductsForSalesman(salesmanId) {
 export function deleteAlloation(id) {
   return httpService.delete(`${apiEndpoint}/${id}`, id);
 }
+
+export function getAllocationByProductId(id,userId) {
+  const endpoint = `${apiEndpoint}/${id}/${userId}`;
+  return httpService.get(endpoint);
+}
+
+

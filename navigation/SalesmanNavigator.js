@@ -1,7 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 const Stack = createStackNavigator();
 import React from "react";
-import UserHomeScreen from "../screens/salesman/UserHomeScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ProductsList from "../screens/salesman/ProductsList";
 import ProductListDetail from "../screens/salesman/ProductListDetail";
@@ -9,6 +8,8 @@ import CartScreen from "../screens/salesman/CartScreen";
 import History from "../screens/salesman/history";
 import OrderPlaced from "../screens/salesman/OrderPlaced";
 import OrderNotPlaced from "../screens/salesman/OrderNotPlaced";
+import Dashboard from "../screens/salesman/Dashboard";
+import UserHomeScreen from "../screens/salesman/UserHomeScreen";
 
 const SalesmanNavigator = () => {
   return (
