@@ -19,7 +19,7 @@ const OrderDetailsScreen = ({ navigation, route }) => {
   useEffect(() => {
     const fetchSalesman = async () => {
       try {
-        const salesmanDetails = await getSaleman(order.salesman);
+        const salesmanDetails = await getSaleman(order.salesmanName);
         setSalesman(salesmanDetails.data);
       } catch (error) {
         console.log(error);
@@ -32,7 +32,7 @@ const OrderDetailsScreen = ({ navigation, route }) => {
     const fetchLocationName = async () => {
       try {
         const response = await axios.get(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${order.latitude}&lon=${order.longitude}`
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${order.location.longitude}&lon=${order.location.latitude}`
         );
         setLocationName(response.data.display_name);
       } catch (error) {
@@ -48,29 +48,28 @@ const OrderDetailsScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Order Details</Text>
       <Text style={styles.locationInfo}>{`${locationName}`}</Text>
-
       {/* Smaller Map */}
       <View style={styles.mapContainer}>
         <MapView
           provider={PROVIDER_GOOGLE}
           onPress={() =>
             navigation.navigate("orderdetailmap", {
-              long: order.longitude,
-              lat: order.latitude,
+              long: order.location.longitude,
+              lat: order.location.latitude,
             })
           }
           style={styles.map}
           initialRegion={{
-            latitude: parseFloat(order.latitude),
-            longitude: parseFloat(order.longitude),
+            latitude: parseFloat(order.location.longitude),
+            longitude: parseFloat(order.location.latitude),
             latitudeDelta: 0.01,
             longitudeDelta: 0.01,
           }}
         >
           <Marker
             coordinate={{
-              latitude: parseFloat(order.latitude),
-              longitude: parseFloat(order.longitude),
+              latitude: parseFloat(order.location.longitude),
+              longitude: parseFloat(order.location.latitude),
             }}
             anchor={{ x: 0.5, y: 0.5 }}
             title="Order Location"
@@ -80,23 +79,19 @@ const OrderDetailsScreen = ({ navigation, route }) => {
 
       {/* Image Carousel */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {order.pimage.map((imgUrl, index) => (
-          <Image
-            key={index}
-            source={{ uri: imgUrl }}
-            style={styles.image}
-            defaultSource={require("../../assets/noimage.jpg")}
-          />
-        ))}
+        <Image
+          style={styles.image}
+          defaultSource={require("../../assets/noimage.jpg")}
+        />
       </ScrollView>
 
       <View style={styles.productInfo}>
         <Text style={styles.title}>{order.pname}</Text>
         <Text>SKU: 000-000-000</Text>
-        <Text style={styles.heading}>{`RS: ${order.price}`}</Text>
-        <Text style={styles.heading}>{`Quantity: ${order.quantity}`}</Text>
-        <Text>{`${order.color} / ${order.size}`}</Text>
-        <Text>{`${order.pcategory.mainCategory} / ${order.pcategory.subCategory}`}</Text>
+        <Text style={styles.heading}>{`RS: ${order.totalBill}`}</Text>
+        {/* <Text style={styles.heading}>{`Quantity: ${order.quantity}`}</Text> */}
+        {/* <Text>{`${order.color} / ${order.size}`}</Text> */}
+        {/* <Text>{`${order.pcategory.mainCategory} / ${order.pcategory.subCategory}`}</Text> */}
       </View>
 
       <View style={styles.contactInfo}>
