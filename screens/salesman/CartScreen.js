@@ -16,6 +16,7 @@ import { saveOrder } from "../../utilty/orderUtility";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { getProduct } from "../../utilty/ProductUtility";
+import config from "../../config.json";
 
 const CartScreen = ({ navigation }) => {
   const { cartItems, removeFromCart, setCartItems } = useCart();
@@ -23,6 +24,7 @@ const CartScreen = ({ navigation }) => {
   const [isPlaceOrderEnabled, setIsPlaceOrderEnabled] = useState(false);
   const [isFetchingLocation, setIsFetchingLocation] = useState(true);
   const [offlineOrders, setOfflineOrders] = useState([]);
+  const [totalBill, setTotalBill] = useState(0);
 
   useEffect(() => {
     const fetchLocation = async () => {
@@ -46,6 +48,19 @@ const CartScreen = ({ navigation }) => {
       }
     };
 
+    if(cartItems){
+      let finalBill = 0;
+      cartItems.map((item)=>{
+        const totalOfVariant = parseInt(getBillForVariation(item.variations,item.pricePerUnit));
+        finalBill += totalOfVariant;
+      });
+      const formattedTotal = finalBill.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'PKR',
+      });
+      setTotalBill(formattedTotal);
+    }
+
     fetchLocation();
   }, []);
 
@@ -65,24 +80,64 @@ const CartScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <Image
-        source={{ uri: item.imageUrl }}
+        source={{ uri: `${config.pictureUrl}public/products/${item.image}` }}
         style={styles.itemImage}
         resizeMode="cover"
       />
       <View style={styles.itemDetailsContainer}>
-        <Text style={styles.itemName}>{item.pname}</Text>
-        <Text>Size: {item.size}</Text>
-        <Text>Color: {item.color}</Text>
-        <Text>Quantity: {item.quantity}</Text>
-        <TouchableOpacity
-          style={{ alignSelf: "flex-end" }}
-          onPress={() => removeFromCart(item._id)}
-        >
-          <Icon name="trash" size={20} color={colors.danger} />
-        </TouchableOpacity>
+        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={styles.itemPrice}>Price Per Unit: {item.pricePerUnit} PKR</Text>
+        <Text style={{
+          fontSize: 16,
+        }}>Variation SKU & Quantity</Text>
+        {
+          item.variations.map((variation,index)=>{
+            return <Text key={index}>{variation.sku + " - " + variation.quantity}</Text>
+          })
+        }
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between"
+          }}
+        > 
+          <Text
+            style={{
+              fontSize: 16,
+              marginTop: 5
+            }}
+          >
+            Price: {calculateTotal(item.variations,item.pricePerUnit)} /-
+          </Text>
+          <TouchableOpacity
+            style={{ alignSelf: "flex-end" }}
+            onPress={() => removeFromCart(item._id)}
+          >
+            <Icon name="trash" size={20} color={colors.danger} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
+
+  function calculateTotal(variations, fixedPrice) {
+    if (!Array.isArray(variations) || typeof fixedPrice !== 'number') {
+      throw new TypeError('Invalid arguments: variations must be an array and fixedPrice must be a number');
+    }
+    const total = variations.reduce((total, variation) => total + (variation.quantity * fixedPrice), 0);
+    const formattedTotal = total.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'PKR',
+    });
+    return formattedTotal;
+  }
+
+  function getBillForVariation(variations, fixedPrice) {
+    if (!Array.isArray(variations) || typeof fixedPrice !== 'number') {
+      throw new TypeError('Invalid arguments: variations must be an array and fixedPrice must be a number');
+    }
+    return variations.reduce((total, variation) => total + (variation.quantity * fixedPrice), 0);
+  }
 
   const handlePlaceOrder = async () => {
     try {
@@ -94,11 +149,12 @@ const CartScreen = ({ navigation }) => {
         return;
       }
 
-      const orderData = cartItems.map((item) => ({
-        ...item,
+      const orderData = {
+        items: cartItems,
+        totalPrice: totalBill,
         longitude: location.coords.longitude,
         latitude: location.coords.latitude,
-      }));
+      };
 
       const isConnected = await NetInfo.fetch().then(
         (state) => state.isConnected
@@ -116,6 +172,7 @@ const CartScreen = ({ navigation }) => {
         );
       }
     } catch (error) {
+      console.log(error);
       navigation.navigate("fail", error.response?.data);
     }
   };
@@ -153,10 +210,6 @@ const CartScreen = ({ navigation }) => {
     }
   };
 
-  if(cartItems){
-    console.log(cartItems);
-  }
-
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>
@@ -190,7 +243,7 @@ const CartScreen = ({ navigation }) => {
           disabled={cartItems.length === 0 || !isPlaceOrderEnabled}
           onPress={handlePlaceOrder}
         >
-          <Text style={styles.placeOrderText}>Place Order</Text>
+          <Text style={styles.placeOrderText}>Place Order - {totalBill}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -213,15 +266,16 @@ const styles = StyleSheet.create({
   itemContainer: {
     flexDirection: "row",
     backgroundColor: colors.light,
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 15,
+    borderRadius: 5,
+    padding: 5,
+    marginBottom: 10,
   },
   itemImage: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 150,
     borderRadius: 10,
-    marginRight: 15,
+    marginRight: 10,
+    resizeMode: "contain"
   },
   itemDetailsContainer: {
     flex: 1,
@@ -229,6 +283,10 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 18,
     fontWeight: "bold",
+    marginBottom: 10,
+  },
+  itemPrice: {
+    fontSize: 16,
     marginBottom: 10,
   },
   buttonContainer: {

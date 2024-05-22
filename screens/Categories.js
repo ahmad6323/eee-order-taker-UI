@@ -87,7 +87,7 @@ function Category({ navigation }) {
                 }}
               >
                 <AppText style={styles.categoryHeaderText}>
-                  {category.name}
+                  {category.name} - {category.sku}
                 </AppText>
                 <View
                   style={{
@@ -119,7 +119,7 @@ function Category({ navigation }) {
                     style={styles.categoryContainer}
                     key={subIndex}
                   >
-                    <AppText>{subcategory.name}</AppText>
+                    <AppText>{subcategory.name} - {subcategory.sku}</AppText>
                   </View>
                 ))}
               </View>
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   categoryContainer: {
     backgroundColor: colors.white,
-    width: "60%",
+    width: "80%",
     height: 50,
     borderRadius: 10,
     alignItems: "center",

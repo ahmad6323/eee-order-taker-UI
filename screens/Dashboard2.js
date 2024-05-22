@@ -4,7 +4,6 @@ import colors from "../config/colors";
 import AppText from "../components/AppText";
 import { MaterialIcons } from "@expo/vector-icons";
 import Svg, { Path } from "react-native-svg";
-// import { LinearGradient } from "expo-linear-gradient";
 
 function Dashboards({ navigation }) {
   return (
@@ -32,11 +31,6 @@ function Dashboards({ navigation }) {
             elevation: 6,
           }}
         >
-          {/* <LinearGradient
-            // Background Linear Gradient
-            colors={["rgba(252,185,69,87)", "transparent"]}
-            style={styles.background}
-          /> */}
           <View style={{ alignItems: "center" }}>
             <AppText style={{ color: colors.medium }}>Total Orders</AppText>
             <AppText
@@ -88,11 +82,6 @@ function Dashboards({ navigation }) {
             elevation: 6,
           }}
         >
-          {/* <LinearGradient
-            // Background Linear Gradient
-            colors={["rgba(253,104,29,100)", "transparent"]}
-            style={styles.background}
-          /> */}
           <View style={{ alignItems: "center" }}>
             <AppText
               style={{

@@ -32,12 +32,14 @@ const ProductListDetail = ({ route, navigation }) => {
       try{
         const respProduct = await getAllocationByProductId(id,user._id);
         setProduct(respProduct.data);
-
         setOrderFromThisPage({
           productId: respProduct.data.productId,
+          name: respProduct.data.name,
+          image: respProduct.data.imageUrl[0],
           pricePerUnit: respProduct.data.price,
           variations: respProduct.data.variations.map(variation => ({
             variationId: variation.variationId,
+            sku: variation.sku,
             quantity: 0,
             maxQuantity: variation.quantity
           }))
@@ -104,11 +106,10 @@ const ProductListDetail = ({ route, navigation }) => {
         <Text style={styles.description}>{product.description}</Text>
         <View style={styles.sizesContainer}>
           <Text style={styles.sizesLabel}>Variations Allocated</Text>
-          <Text style={styles.sizesLabel}>{product.variations.length}</Text>
           {
             product.variations && orderFromThisPage && orderFromThisPage.variations && product.variations.map((variation,index)=>{
               return <View 
-                key={variation._id}
+                key={index}
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",

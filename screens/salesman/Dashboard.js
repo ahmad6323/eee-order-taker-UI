@@ -1,21 +1,48 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
-import Svg, { Path } from "react-native-svg";
 import AppText from "../../components/AppText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserContext } from "../../UserContext";
 import salesmanAuthService from "../../utilty/salesmanAuthService";
 
+import { Ionicons } from '@expo/vector-icons';
+import Animated, { Easing, useSharedValue, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated';
+
+const AnimatedIcon = Animated.createAnimatedComponent(Ionicons);
+
+
 const Dashboard = ({ navigation }) => {
 
-
   const { user, setUser } = useContext(UserContext);
+
+  const scale = useSharedValue(1);
+
+  useEffect(() => {
+    scale.value = withRepeat(
+      withTiming(1.2, {
+        duration: 500,
+        easing: Easing.linear,
+      }),
+      -1,
+      true,
+    );
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: scale.value,
+        },
+      ],
+    };
+  });
 
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <View style={styles.logoContainer}>
-          <AppText style={styles.logo}>Salesman Name</AppText>
+          <AppText style={styles.logo}>{user.name}</AppText>
           <AppText style={styles.subText}>Department : Apparel</AppText>
         </View>
       </View>
@@ -45,32 +72,11 @@ const Dashboard = ({ navigation }) => {
             999999999
           </AppText>
         </View>
-        <Svg
+        <View
           style={{ alignSelf: "flex-end" }}
-          width="50"
-          height="50"
-          viewBox="0 0 60 60"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
         >
-          <Path
-            opacity="0.21"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M0 30V37C0 49.7025 10.2975 60 23 60H30H37C49.7025 60 60 49.7025 60 37V30V23C60 10.2975 49.7025 0 37 0H30H23C10.2975 0 0 10.2975 0 23V30Z"
-            fill="#4AD991"
-          />
-          <Path
-            d="M19.1111 40.8889H42.4444C43.3036 40.8889 44 41.5853 44 42.4444C44 43.3036 43.3036 44 42.4444 44H17.5556C16.6964 44 16 43.3036 16 42.4444V17.5556C16 16.6964 16.6964 16 17.5556 16C18.4147 16 19.1111 16.6964 19.1111 17.5556V40.8889Z"
-            fill="#4AD991"
-          />
-          <Path
-            opacity="0.5"
-            d="M24.9126 34.175C24.325 34.8018 23.3406 34.8335 22.7138 34.246C22.0871 33.6584 22.0553 32.674 22.6429 32.0472L28.4762 25.825C29.0445 25.2189 29.9888 25.1663 30.6208 25.7056L35.2248 29.6344L41.2235 22.0361C41.7558 21.3618 42.734 21.2467 43.4083 21.7791C44.0826 22.3114 44.1977 23.2896 43.6653 23.9639L36.6653 32.8306C36.1186 33.5231 35.1059 33.6227 34.4347 33.05L29.7306 29.0358L24.9126 34.175Z"
-            fill="#4AD991"
-          />
-        </Svg>
-        {/* </View> */}
+          <AnimatedIcon name="stats-chart" size={30} color="blue" style={animatedStyle}/>
+        </View>
       </View>
       <View
         style={{ flexDirection: "row", marginVertical: 10, paddingLeft: 10, width: "90%" }}
@@ -87,11 +93,10 @@ const Dashboard = ({ navigation }) => {
               width: "100%",
               height: 160,
               borderRadius: 12,
-              alignItems: "center",
               padding: 10,
-              justifyContent: "space-evenly",
               elevation: 6,
               marginBottom: 10,
+              justifyContent: "space-between",
             }}
           >
             <View style={{ alignItems: "flex-start" }}>
@@ -102,35 +107,11 @@ const Dashboard = ({ navigation }) => {
                 10000
               </AppText>
             </View>
-            <Svg
+            <View
               style={{ alignSelf: "flex-end" }}
-              width="50"
-              height="50"
-              viewBox="0 0 60 60"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
             >
-              <Path
-                opacity="0.21"
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M0 30V37C0 49.7025 10.2975 60 23 60H30H37C49.7025 60 60 49.7025 60 37V30V23C60 10.2975 49.7025 0 37 0H30H23C10.2975 0 0 10.2975 0 23V30Z"
-                fill="#F9B466"
-              />
-              <Path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M15 24.3164L27.9005 31.7645C28.0394 31.8447 28.1851 31.9026 28.3333 31.9394V46.3846L15.9201 39.0385C15.3498 38.701 15 38.0875 15 37.4248V24.3164ZM45 24.1184V37.4248C45 38.0875 44.6502 38.701 44.0799 39.0385L31.6667 46.3846V31.8129C31.6969 31.7978 31.7269 31.7816 31.7566 31.7645L45 24.1184Z"
-                fill="#F9B466"
-              />
-              <Path
-                opacity="0.499209"
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M15.4052 20.7014C15.5628 20.5024 15.7617 20.3343 15.9936 20.2108L29.1186 13.2201C29.6695 12.9266 30.3304 12.9266 30.8814 13.2201L44.0064 20.2108C44.1852 20.306 44.3443 20.4277 44.48 20.5697L30.0899 28.8778C29.9953 28.9325 29.908 28.995 29.8285 29.064C29.749 28.995 29.6618 28.9325 29.5671 28.8778L15.4052 20.7014Z"
-                fill="#F9B466"
-              />
-            </Svg>
+              <AnimatedIcon name="layers" size={30} color="orange" style={animatedStyle}/>
+            </View>
           </View>
         </View>
         <View
@@ -170,9 +151,7 @@ const Dashboard = ({ navigation }) => {
                   fontSize: 15,
                 }}
               >
-                <svg width="100" height="100" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10 6l6 6-6 6" fill="none" stroke="black" stroke-width="2"/>
-                </svg>
+                <AnimatedIcon name="arrow-forward" size={30} color="black" style={animatedStyle}/>
               </AppText>
             </View>
           </TouchableOpacity>
@@ -205,9 +184,7 @@ const Dashboard = ({ navigation }) => {
                   fontSize: 15,
                 }}
               >
-                <svg width="100" height="100" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10 6l6 6-6 6" fill="none" stroke="black" stroke-width="2"/>
-                </svg>
+                <AnimatedIcon name="arrow-forward" size={30} color="black" style={animatedStyle}/>
               </AppText>
             </View>
           </TouchableOpacity>
@@ -233,38 +210,21 @@ const Dashboard = ({ navigation }) => {
             elevation: 6,
           }}
         >
-          <View style={{ alignItems: "flex-start" }}>
-            <AppText style={{ color: "black", fontSize: 19 }}>Cart</AppText>
+          <TouchableOpacity  onPress={() => navigation.navigate("cart")} >
+            <View style={{ alignItems: "flex-start" }}>
+              <AppText style={{ color: "black", fontSize: 19 }}>Cart</AppText>
+            </View>
+          </TouchableOpacity>
+          <View style={{ alignItems: "flex-end" }}>
+            <AppText
+              style={{
+                color: "black",
+                fontSize: 15,
+              }}
+            >
+              <AnimatedIcon name="cart" size={30} color="red" style={animatedStyle}/>
+            </AppText>
           </View>
-          <Svg
-            style={{ alignSelf: "flex-end" }}
-            width="50"
-            height="50"
-            viewBox="0 0 60 60"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <Path
-              opacity="0.21"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M0 30V37C0 49.7025 10.2975 60 23 60H30H37C49.7025 60 60 49.7025 60 37V30V23C60 10.2975 49.7025 0 37 0H30H23C10.2975 0 0 10.2975 0 23V30Z"
-              fill="#8280FF"
-            />
-            <Path
-              opacity="0.587821"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M20.6667 23.3333C20.6667 26.2789 23.0545 28.6667 26 28.6667C28.9455 28.6667 31.3334 26.2789 31.3334 23.3333C31.3334 20.3878 28.9455 18 26 18C23.0545 18 20.6667 20.3878 20.6667 23.3333ZM34 28.6667C34 30.8758 35.7909 32.6667 38 32.6667C40.2092 32.6667 42 30.8758 42 28.6667C42 26.4575 40.2092 24.6667 38 24.6667C35.7909 24.6667 34 26.4575 34 28.6667Z"
-              fill="#8280FF"
-            />
-            <Path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M25.9778 31.3333C19.6826 31.3333 14.5177 34.5687 14.0009 40.9323C13.9727 41.2789 14.6356 42 14.97 42H36.9956C37.9972 42 38.0128 41.1939 37.9972 40.9333C37.6065 34.3909 32.3616 31.3333 25.9778 31.3333ZM45.2746 42L40.1333 42C40.1333 38.9987 39.1417 36.2291 37.4683 34.0008C42.0103 34.0505 45.7189 36.3468 45.998 41.2C46.0092 41.3955 45.998 42 45.2746 42Z"
-              fill="#8280FF"
-            />
-          </Svg>
         </View>
         <View
           style={{
@@ -272,53 +232,34 @@ const Dashboard = ({ navigation }) => {
             width: "40%",
             height: 130,
             borderRadius: 13,
-            alignItems: "center",
             padding: 10,
             justifyContent: "space-between",
             elevation: 6,
             marginHorizontal: 17,
           }}
         >
-          <View style={{ alignItems: "center" }}>
-            <AppText style={{ color: "black", fontSize: 19 }}>Settings</AppText>
+          <TouchableOpacity>
+            <View style={{ alignItems: "flex-start" }}>
+              <AppText style={{ color: "black", fontSize: 19 }}>Settings</AppText>
+            </View>
+          </TouchableOpacity>
+          <View style={{ alignItems: "flex-end" }}>
+            <AnimatedIcon name="cog" size={30} color="red" style={animatedStyle}/>
           </View>
-          <Svg
-            style={{ alignSelf: "flex-end" }}
-            width="50"
-            height="50"
-            viewBox="0 0 60 60"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <Path
-              opacity="0.21"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M0 30V37C0 49.7025 10.2975 60 23 60H30H37C49.7025 60 60 49.7025 60 37V30V23C60 10.2975 49.7025 0 37 0H30H23C10.2975 0 0 10.2975 0 23V30Z"
-              fill="#8280FF"
-            />
-            <Path
-              opacity="0.587821"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M20.6667 23.3333C20.6667 26.2789 23.0545 28.6667 26 28.6667C28.9455 28.6667 31.3334 26.2789 31.3334 23.3333C31.3334 20.3878 28.9455 18 26 18C23.0545 18 20.6667 20.3878 20.6667 23.3333ZM34 28.6667C34 30.8758 35.7909 32.6667 38 32.6667C40.2092 32.6667 42 30.8758 42 28.6667C42 26.4575 40.2092 24.6667 38 24.6667C35.7909 24.6667 34 26.4575 34 28.6667Z"
-              fill="#8280FF"
-            />
-            <Path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M25.9778 31.3333C19.6826 31.3333 14.5177 34.5687 14.0009 40.9323C13.9727 41.2789 14.6356 42 14.97 42H36.9956C37.9972 42 38.0128 41.1939 37.9972 40.9333C37.6065 34.3909 32.3616 31.3333 25.9778 31.3333ZM45.2746 42L40.1333 42C40.1333 38.9987 39.1417 36.2291 37.4683 34.0008C42.0103 34.0505 45.7189 36.3468 45.998 41.2C46.0092 41.3955 45.998 42 45.2746 42Z"
-              fill="#8280FF"
-            />
-          </Svg>
         </View>
       </View>
       <TouchableOpacity
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          width: "25%"
+        }}
         onPress={()=>{
           setUser(null);
           salesmanAuthService.removeToken();
         }}
       >
+        <AnimatedIcon name="cog" size={30} color="red" style={animatedStyle}/>
         <AppText style={{ color: "black", fontSize: 19 }}>
           Logout
         </AppText>

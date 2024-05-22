@@ -121,7 +121,7 @@ function AllocateForm({ navigation }) {
               allocations.map((allocation,index) => {
                 return <View>
                   <AppFormPickerCustom
-                    key={index}
+                    key={index+500}
                     items={products.map((product) => ({
                       label: `${product.productId.name} - ${product.size.size} - ${product.color.color}`,
                       value: product._id,

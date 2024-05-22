@@ -7,20 +7,17 @@ import {
   TouchableOpacity,
 } from "react-native";
 import colors from "../config/colors";
-import { deleteAlloation, getAllocationsForSalesman } from "../utilty/allocationUtility"; // Fix the import name here
+import { deleteAlloation, getAllocations,  } from "../utilty/allocationUtility"; // Fix the import name here
 import { MaterialIcons } from "@expo/vector-icons";
-import { UserContext } from "../UserContext";
 
 const AllocationScreen = ({ navigation }) => {
-
-  const { user } = useContext(UserContext);
 
   const [allocations, setAllocations] = useState([]);
 
   useEffect(() => {
     const fetchAllocations = async () => {
       try {
-        const { data } = await getAllocationsForSalesman(user._id);
+        const { data } = await getAllocations();
         setAllocations(data);
       } catch (error) {
         console.error("Error fetching allocations data:", error);
@@ -45,18 +42,29 @@ const AllocationScreen = ({ navigation }) => {
     <View style={styles.allocationItem}>
       <View>
         <Text style={styles.text}>{`Salesman: ${item.salesmanId.name}`}</Text>
-        <Text style={styles.heading}>Allocations</Text>
-        {item.products.map((allocation, index) => (
-          <View key={index}>
-            <Text style={styles.color}>{`Variation: ${allocation.variation.productId.name} - ${allocation.variation.color.color} / ${allocation.variation.size.size}`}</Text>
-            <View style={styles.sizeContainer}>
-              <Text style={styles.sizeQuantity}>
-                Quantity: {allocation.quantity}
-              </Text>
+        <Text style={styles.heading}>Products Allocations</Text>
+        {
+          item.products.map((product,index)=>(
+            <View key={index}>
+              <Text style={styles.heading}>{product.name}</Text>
+              {
+                product.variations.map((variation,index)=>(
+                <View key={index}>
+                  <Text style={styles.color}>{`Variation: ${variation.SKU} / ${variation.color} - ${variation.size}`}</Text>
+                  <View style={styles.sizeContainer}>
+                    <Text style={styles.sizeQuantity}>
+                      Quantity: {variation.quantity}
+                    </Text>
+                  </View>
+                </View>
+                ))
+              }
             </View>
-          </View>
-        ))}
-        <TouchableOpacity onPress={() => handleDeleteAllocation(item._id)}>
+          ))
+        }
+        <TouchableOpacity 
+          // onPress={() => handleDeleteAllocation(item._id)}
+        >
           <MaterialIcons
             style={{ alignSelf: "flex-end" }}
             name="delete-outline"

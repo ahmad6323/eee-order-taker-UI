@@ -95,7 +95,7 @@ const ProfileScreen = ({ navigation }) => {
                 </View>
                 <View>
                   <Text style={styles.text1}>Total Saless</Text>
-                  <Text style={styles.text2}>{sales.toFixed(2)}</Text>
+                  <Text style={styles.text2}>0.00</Text>
                 </View>
                 <View
                   style={{

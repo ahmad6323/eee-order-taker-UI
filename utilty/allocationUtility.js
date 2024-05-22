@@ -27,7 +27,7 @@ export function deleteAlloation(id) {
 }
 
 export function getAllocationByProductId(id,userId) {
-  const endpoint = `${apiEndpoint}/${id}/${userId}`;
+  const endpoint = `${apiEndpoint}/get_allocations/${id}/${userId}`;
   return httpService.get(endpoint);
 }
 

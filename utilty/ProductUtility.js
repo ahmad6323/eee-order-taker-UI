@@ -14,12 +14,13 @@ export function getProducts() {
 }
 
 export async function saveProduct(product) {
-  return httpService.post(apiEndpoint,product,{
-    headers:{
-      'Content-Type': 'multipart/form-data',
-      Accept : "application/json"
+  return httpService.post(apiEndpoint,product,
+    {
+      headers:{
+        "Content-Type" : "application/json"
+      }
     }
-  });
+  );
 }
 
 export function deleteProduct(productId) {

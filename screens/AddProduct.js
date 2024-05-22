@@ -85,8 +85,9 @@ function AddProduct({ navigation }) {
         });
         return base64String;
       })).then(async (base64Array)=>{
-        formData.append("imageUrl",base64Array);
 
+        formData.append("imageUrl",base64Array);
+        
         let data = getFormDataContent(formData);
   
         let parsedData = {
@@ -95,7 +96,7 @@ function AddProduct({ navigation }) {
           department: JSON.parse(data.department),
           sizes: JSON.parse(data.sizes)
         };
-  
+        
         await saveProduct(parsedData);
         navigation.navigate("profiles");
       });

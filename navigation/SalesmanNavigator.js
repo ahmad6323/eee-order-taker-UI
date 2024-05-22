@@ -9,7 +9,6 @@ import History from "../screens/salesman/history";
 import OrderPlaced from "../screens/salesman/OrderPlaced";
 import OrderNotPlaced from "../screens/salesman/OrderNotPlaced";
 import Dashboard from "../screens/salesman/Dashboard";
-import UserHomeScreen from "../screens/salesman/UserHomeScreen";
 
 const SalesmanNavigator = () => {
   return (
@@ -18,7 +17,7 @@ const SalesmanNavigator = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="userhome" component={UserHomeScreen} />
+      <Stack.Screen name="userhome" component={Dashboard} />
       <Stack.Screen name="profile" component={HomeScreen} />
       <Stack.Screen name="list" component={ProductsList} />
       <Stack.Screen name="cart" component={CartScreen} />
