@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import config from "../config.json";
 import colors from '../config/colors';
 
-const pictureEndpoint = config.pictureUrl + "public/products";
+const pictureEndpoint = config.pictureUrl + "/public/products";
 
 const ImageSlider = ({ images, style }) => {
 

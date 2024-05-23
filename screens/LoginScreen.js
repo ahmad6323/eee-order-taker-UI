@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import * as Yup from "yup";
 import AppFormField from "../components/forms/AppFormField";
@@ -18,6 +18,9 @@ const validationSchema = Yup.object({
 });
 
 function LoginScreen({ navigation }) {
+
+  const [timer, setTimer] = useState(null);
+
   const authContext = useContext(UserContext);
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
@@ -30,14 +33,24 @@ function LoginScreen({ navigation }) {
       authContext.setUser(user);
       salesmanAuthService.storeToken(data);
       setErrorVisible(false);
+
+      if (timer) clearTimeout(timer);
+
+      const newTimer = setTimeout(() => {
+        authContext.setUser(null);
+      }, 900000);
+
+      setTimer(newTimer);
+
     } catch (error) {
       if (error.response && error.response.status === 400)
         setError(error.response.data);
       setErrorVisible(true);
-    } finally {
-      // setIsLoading(false); // Stop showing activity indicator
     }
   };
+
+ 
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
@@ -101,7 +114,7 @@ const styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   subText: {
     color: colors.medium,

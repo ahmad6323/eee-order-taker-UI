@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   subText: {
     color: colors.medium,

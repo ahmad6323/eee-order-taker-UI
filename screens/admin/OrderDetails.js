@@ -8,10 +8,9 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { getSaleman } from "../../utilty/salesmanUtility";
 import config from "../../config.json";
-
 
 
 const OrderDetailsScreen = ({ navigation, route }) => {
@@ -58,7 +57,7 @@ const OrderDetailsScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Order Details</Text>
       <Text style={styles.locationInfo}>{`${locationName}`}</Text>
-      {/* Smaller Map */}
+      
       <View style={styles.mapContainer}>
         <MapView
           provider={MapView.PROVIDER_GOOGLE}
@@ -87,7 +86,6 @@ const OrderDetailsScreen = ({ navigation, route }) => {
         </MapView>
       </View>
 
-      {/* Image Carousel */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} >
         {
           order.products.map((product,index)=>{
@@ -115,7 +113,7 @@ const OrderDetailsScreen = ({ navigation, route }) => {
 
       <View style={styles.productInfo}>
         <ScrollView>
-          <Text style={styles.title}>{order.pname}</Text>
+          <Text style={styles.title}>{order.name}</Text>
         </ScrollView>
         <Text style={styles.heading}>{formatPrice(order.totalBill)}/-</Text>
       </View>
@@ -145,12 +143,12 @@ const styles = StyleSheet.create({
   title: {
     paddingTop: 16,
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 10,
   },
   heading: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   locationInfo: {
     fontSize: 16,
@@ -186,7 +184,7 @@ const styles = StyleSheet.create({
   },
   detailsButtonText: {
     color: "#FFF",
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
 });
 

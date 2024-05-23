@@ -66,7 +66,6 @@ const CartScreen = ({ navigation }) => {
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener(async (state) => {
       if (state.isConnected && offlineOrders.length > 0) {
-        // If online and there are offline orders, place them
         await placeOfflineOrders();
       }
     });
@@ -79,7 +78,7 @@ const CartScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <Image
-        source={{ uri: `${config.pictureUrl}public/products/${item.image}` }}
+        source={{ uri: `${config.pictureUrl}/public/products/${item.image}` }}
         style={styles.itemImage}
         resizeMode="cover"
       />
@@ -258,7 +257,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 20,
     textAlign: "center",
   },
@@ -281,7 +280,7 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 10,
   },
   itemPrice: {
@@ -306,7 +305,7 @@ const styles = StyleSheet.create({
   placeOrderText: {
     color: colors.light,
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   noItemText: {
     textAlign: "center",

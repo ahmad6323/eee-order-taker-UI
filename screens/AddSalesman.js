@@ -12,6 +12,8 @@ import { saveSalesman, updateSalesMan } from "../utilty/salesmanUtility";
 import { getDepartments } from "../utilty/deptUtility";
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import ImageInput from "../components/ImageInput"
+import * as FileSystem from "expo-file-system";
 
 
 function AddSalesman({ navigation, route }) {
@@ -20,7 +22,9 @@ function AddSalesman({ navigation, route }) {
   const [showPassword, setShowPassword] = useState(false);
   const [departments, setDepartments] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [image, setImage] = useState(null);
   const { salesman } = route.params;
+
 
   let values = {
     _id: route.params.new === false  ? route.params.salesman._id : "",
@@ -52,9 +56,21 @@ function AddSalesman({ navigation, route }) {
     if(route.params.new){
       try {
         info.department = selectedDepartments;
-        await saveSalesman(info);
-        navigation.navigate("verification", { email: info.email });
+
+        if(image){
+          const base64String = await FileSystem.readAsStringAsync(image, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+          info.image = base64String;
+
+          await saveSalesman(info);
+          navigation.navigate("verification", { email: info.email });
+        }else{
+          await saveSalesman(info);
+          navigation.navigate("verification", { email: info.email });
+        }
       } catch (error) {
+        console.log(error);
         if (error.response && error.response.status === 400) {
           setError(error.response.data);
           setErrorVisible(true);
@@ -73,6 +89,7 @@ function AddSalesman({ navigation, route }) {
       }
     }
   };
+
 
   return (
     <View style={styles.container}>
@@ -155,6 +172,7 @@ function AddSalesman({ navigation, route }) {
                 />
               )}
             />
+            <ImageInput imageUri={image} onSelectImage={setImage}/>
             <SubmitButton title={"Done"} />
           </AppForm>
         </View>
@@ -190,7 +208,7 @@ const styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   subText: {
     color: colors.medium,

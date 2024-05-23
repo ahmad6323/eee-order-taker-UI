@@ -12,10 +12,6 @@ import {  saveColor, getColors, deleteColor } from "../../utilty/colorUtility";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 
-const validationSchema = Yup.object().shape({
-  color: Yup.string().required("Color is required"),
-});
-
 function ColorScreen({ navigation }) {
   const [error, setError] = useState("");
   const [errorVisible, setErrorVisible] = useState(false);
@@ -35,11 +31,6 @@ function ColorScreen({ navigation }) {
   };
 
   const handleSubmit = async (values) => {
-    if (!validationSchema.isValidSync(values)) {
-      setError("Invalid Color name");
-      setErrorVisible(true);
-      return;
-    }
     try {
       await saveColor({ color: values.color });
       fetchColors();
@@ -66,7 +57,7 @@ function ColorScreen({ navigation }) {
   }
 
   return (
-    <SafeScreen style={{ paddingTop: 50 }}>
+    <ScrollView style={{ paddingTop: 40 }}>
       <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
       <View style={styles.container}>
         <View style={styles.innerContainer}>
@@ -80,7 +71,6 @@ function ColorScreen({ navigation }) {
             <AppForm
               initialValues={{ color: "" }}
               onSubmit={handleSubmit}
-              validationSchema={validationSchema}
             >
               <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormField
@@ -92,35 +82,33 @@ function ColorScreen({ navigation }) {
               <SubmitButton title={"Submit"} />
             </AppForm>
           </View>
-          <View style={{ marginTop: 60 }}>
-            <AppText style={{ fontSize: 26, fontWeight: "bold" }}>
+          <View style={{ marginVertical: 10, marginBottom: 15 }}>
+            <AppText style={{ fontSize: 26, fontFamily: "Bold", marginBottom: 5 }}>
               Added Colors
             </AppText>
-          </View>
-          <ScrollView>
-            <View style={{ marginVertical: 20 }}>
-              {savedColors.map((color, index) => (
-                <TouchableOpacity
-                  onPress={() => {}}
-                  key={index}
-                  style={styles.departmentContainer}
+            {savedColors.map((color, index) => (
+              <TouchableOpacity
+                onPress={() => {}}
+                key={index}
+                style={styles.departmentContainer}
+              >
+                <AppText style={styles.departmentText}>{color.color}</AppText>
+                <TouchableOpacity 
+                  onPress={() => onDeleteSize(color)}
                 >
-                  <AppText style={styles.departmentText}>{color.color}</AppText>
-                  <TouchableOpacity onPress={() => onDeleteSize(color)}>
-                    <FontAwesome6
-                      style={{ marginRight: 10 }}
-                      name="delete-left"
-                      size={24}
-                      color={colors.medium}
-                    />
-                  </TouchableOpacity>
+                  <FontAwesome6
+                    style={{ marginRight: 10 }}
+                    name="delete-left"
+                    size={24}
+                    color={colors.medium}
+                  />
                 </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
       </View>
-    </SafeScreen>
+    </ScrollView>
   );
 }
 
@@ -134,13 +122,13 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   logoContainer: {
-    marginBottom: 20,
+    marginBottom: 5,
     alignItems: "flex-start",
   },
   logo: {
     color: colors.dark,
-    fontSize: 35,
-    fontWeight: "bold",
+    fontSize: 32,
+    fontFamily: "Bold",
   },
   subText: {
     color: colors.medium,
@@ -161,7 +149,7 @@ const styles = StyleSheet.create({
   },
   departmentText: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     padding: 10,
     flex: 1,
   },

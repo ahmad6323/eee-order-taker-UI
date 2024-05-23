@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   subText: {
     color: colors.medium,
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   detailsTextContainer: {},
   productName: {
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   productDescription: {
     color: colors.medium,
@@ -205,14 +205,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.light,
   },
   price: {
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   totalPriceContainer: {
     marginBottom: 10,
     alignItems: "flex-end",
   },
   totalPriceText: {
-    fontWeight: "bold",
+    fontFamily: "Bold",
     fontSize: 18,
   },
 });

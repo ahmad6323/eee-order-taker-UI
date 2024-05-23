@@ -34,7 +34,7 @@ function Dashboards({ navigation }) {
           <View style={{ alignItems: "center" }}>
             <AppText style={{ color: colors.medium }}>Total Orders</AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
+              style={{ color: colors.black, fontFamily: "Bold", fontSize: 24 }}
             >
               10069
             </AppText>
@@ -92,7 +92,7 @@ function Dashboards({ navigation }) {
               Total Products
             </AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
+              style={{ color: colors.black, fontFamily: "Bold", fontSize: 24 }}
             >
               69
             </AppText>
@@ -159,7 +159,7 @@ function Dashboards({ navigation }) {
               Total Salesman
             </AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
+              style={{ color: colors.black, fontFamily: "Bold", fontSize: 24 }}
             >
               169
             </AppText>
@@ -222,7 +222,7 @@ function Dashboards({ navigation }) {
               Total Sales
             </AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
+              style={{ color: colors.black, fontFamily: "Bold", fontSize: 24 }}
             >
               69696
             </AppText>
@@ -267,7 +267,7 @@ function Dashboards({ navigation }) {
         }}
       >
         <View>
-          <AppText style={{ fontWeight: "bold" }}>
+          <AppText style={{ fontFamily: "Bold" }}>
             Trending Product (top sale)
           </AppText>
           <AppText style={{ color: colors.medium }}>My Shirt</AppText>
@@ -293,7 +293,7 @@ function Dashboards({ navigation }) {
         }}
       >
         <View>
-          <AppText style={{ fontWeight: "bold" }}>
+          <AppText style={{ fontFamily: "Bold" }}>
             Digressive Product (lowest sale)
           </AppText>
           <AppText style={{ color: colors.medium }}>Denim Jeans</AppText>
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   subText: {
     paddingLeft: 20,

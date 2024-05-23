@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { getOrders } from "../../utilty/orderUtility";
 
+import config from "../../config.json";
+
 const OrderHistoryScreen = ({ navigation }) => {
   const [orders, setOrders] = useState([]);
 
@@ -39,14 +41,14 @@ const OrderHistoryScreen = ({ navigation }) => {
       <Text style={styles.title}>Order History</Text>
       <FlatList
         data={orders}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item.salesmanId + Math.floor(Math.random() * (1000 - 10 + 1)) + 10}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             onPress={() => navigation.navigate("orderdetail", { order: item })}
             style={styles.orderItem}
             key={index}
           >
-            {/* <Image source={{ uri: item.pimage[0] }} style={styles.itemImage} /> */}
+            <Image source={{ uri: `${config.pictureUrl}/public/salesman/${item.image}`}} style={styles.itemImage} />
             <View style={styles.itemDetails}>
               <Text style={styles.itemName}>Salsman: {item.salesmanName}</Text>
               {
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 34,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 46,
   },
   orderItem: {
@@ -102,13 +104,14 @@ const styles = StyleSheet.create({
     height: 80,
     marginRight: 16,
     borderRadius: 8,
+    resizeMode: "contain"
   },
   itemDetails: {
     flex: 1,
   },
   itemName: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   color: {
     fontSize: 14,
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
   },
   size: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     top: 17,
   },
   quantity: {
@@ -125,7 +128,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
 });
 

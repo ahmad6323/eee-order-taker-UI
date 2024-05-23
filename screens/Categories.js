@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 30,
-    fontWeight: "Bold",
+    fontFamily: "Bold",
   },
   subText: {
     color: colors.medium,
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   },
   categoryHeaderText: {
     color: colors.white,
-    fontWeight: "Bold",
+    fontFamily: "Bold",
     marginRight: 10,
   },
   categoryContainer: {

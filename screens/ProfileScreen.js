@@ -60,12 +60,12 @@ const ProfileScreen = ({ navigation }) => {
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.innerContainer}>
-            <View style={{ alignItems: "flex-start", marginBottom: 25 }}>
-              <Text style={{ fontWeight: "Bold", fontSize: 27 }}>
+            <View style={{ alignItems: "flex-start", marginBottom: 10 }}>
+              <Text style={{ fontFamily: "Bold", fontSize: 27 }}>
                 Admin Panel
               </Text>
               <Text
-                style={{ fontWeight: "Bold", fontSize: 14, color: "#6e6969" }}
+                style={{ fontFamily: "Bold", fontSize: 14, color: "#6e6969" }}
               >
                 Select Any Option Below
               </Text>
@@ -99,7 +99,7 @@ const ProfileScreen = ({ navigation }) => {
                   }}
                 >
                   <Text
-                    style={{ color: "white", fontSize: 14, fontWeight: "Bold" }}
+                    style={{ color: "white", fontSize: 14, fontFamily: "Bold" }}
                   >
                     More Details
                   </Text>
@@ -206,7 +206,7 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <Text
-              style={{ color: colors.dark, fontSize: 18, paddingTop: 15, fontWeight: "Bold" }}
+              style={{ color: colors.dark, fontSize: 18, paddingTop: 15, fontFamily: "Bold" }}
             >
               More Options
             </Text>
@@ -362,30 +362,31 @@ const styles = StyleSheet.create({
   },
   text1: {
     color: "white",
-    fontSize: 20,
-    fontWeight: "Bold",
+    fontSize: 18,
+    fontFamily: "Bold",
   },
   text2: {
     color: "white",
-    fontSize: 26,
-    fontWeight: "Bold",
+    fontSize: 24,
+    fontFamily: "Bold",
   },
   totalSalesNumber: {
     color: "white",
     fontSize: 18,
-    fontWeight: "Bold",
+    fontFamily: "Bold",
   },
   innerContainer: {
     width: "100%",
     backgroundColor: "white",
     borderRadius: 10,
-    padding: 20,
+    padding: 10,
     flex: 1,
   },
   main_row: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     marginBottom: 10,
+    width: "100%"
   },
   row: {
     flexDirection: "row",

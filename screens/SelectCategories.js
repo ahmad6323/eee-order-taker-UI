@@ -11,7 +11,6 @@ function SelectCategory({ navigation, route }) {
 
   const [isEmptyError, setIsEmptyError] = useState(false);
 
-  const [disableMain, setDisableMain] = useState(false);
   const [category, setCategory] = useState(null);
   const [subCategories, setSubcategories] = useState([""]);
 
@@ -19,10 +18,8 @@ function SelectCategory({ navigation, route }) {
 
   useEffect(() => {
     if(category_id !== null && category_id !== undefined){
-      setDisableMain(true);
       getSubs();
     }else{
-      setDisableMain(false);
       setCategory(null);
       setSubcategories([]);
     }
@@ -88,7 +85,6 @@ function SelectCategory({ navigation, route }) {
             <AppText style={{ fontSize: 18 }}>Category</AppText>
             <AppTextInput
               placeholder={"Main Category"}
-              editable={!disableMain}
               onChangeText={(text) => {
                 setCategory({name: text});
               }}
@@ -167,7 +163,7 @@ styles = StyleSheet.create({
   },
   categoryText: {
     color: colors.white,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   innerContainer: {
     width: "80%",
@@ -179,7 +175,7 @@ styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   subText: {
     color: colors.medium,

@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 10,
   },
   price: {
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   },
   sizesLabel: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 10,
   },
   sizeButton: {
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   },
   colorsLabel: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 10,
   },
   colorButton: {
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   addToCartButtonText: {
     color: colors.light,
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
 });
 

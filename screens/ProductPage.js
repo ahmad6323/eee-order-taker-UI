@@ -84,15 +84,15 @@ const styles = StyleSheet.create({
   },
   phone:{
     fontSize:16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   feed:{
     fontSize:16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   customerName: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   address: {
     fontSize: 14,
@@ -101,10 +101,10 @@ const styles = StyleSheet.create({
   totalAmount: {
     paddingTop:30,
     fontSize: 14,
-    fontWeight:"bold"
+    fontWeight: "Bold"
   },
   feedbackContainer: {
-    fontWeight:"bold",
+    fontWeight: "Bold",
     paddingVertical: 30,
     marginBottom:60
   },
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   },
   detailsButtonText: {
     color: "#FFF",
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
 });
 

@@ -52,7 +52,7 @@ function Dashboard({ navigation, route }) {
           <View style={{ alignItems: "flex-start" }}>
             <AppText style={{ color: colors.medium }}>Total Orders</AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "Bold", fontSize: 24 }}
+              style={{ color: colors.black, fontFamily: "Bold", fontSize: 24 }}
             >
               {ordersAndSales ? ordersAndSales.orders : 0}
             </AppText>
@@ -115,7 +115,7 @@ function Dashboard({ navigation, route }) {
               Total Products
             </AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "Bold", fontSize: 24 }}
+              style={{ color: colors.black, fontFamily: "Bold", fontSize: 24 }}
             >
               {ordersAndSales ? ordersAndSales.totalProducts : 0}
             </AppText>
@@ -175,7 +175,7 @@ function Dashboard({ navigation, route }) {
             Total Sales
           </AppText>
           <AppText
-            style={{ color: colors.black, fontWeight: "Bold", fontSize: 22 }}
+            style={{ color: colors.black, fontFamily: "Bold", fontSize: 22 }}
           >
             {ordersAndSales ? ordersAndSales.totalSales : 0.00} /-
           </AppText>
@@ -232,7 +232,7 @@ function Dashboard({ navigation, route }) {
               Total Salesman
             </AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "Bold", fontSize: 24 }}
+              style={{ color: colors.black, fontFamily: "Bold", fontSize: 24 }}
             >
               {ordersAndSales  ? ordersAndSales.totalSalesman : 0}
             </AppText>
@@ -337,7 +337,7 @@ function Dashboard({ navigation, route }) {
           }}
         ></View> */}
         <View style={{}}>
-          <AppText style={{ fontWeight: "Bold" }}>
+          <AppText style={{ fontFamily: "Bold" }}>
             Trending Product (top sale)
           </AppText>
           <AppText style={{ color: colors.medium }}>My Shirt</AppText>
@@ -363,7 +363,7 @@ function Dashboard({ navigation, route }) {
         }}
       >
         <View>
-          <AppText style={{ fontWeight: "Bold" }}>
+          <AppText style={{ fontFamily: "Bold" }}>
             Digressive Product (lowest sale)
           </AppText>
           <AppText style={{ color: colors.medium }}>Denim Jeans</AppText>
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "Bold",
+    fontFamily: "Bold",
   },
   subText: {
     paddingLeft: 20,

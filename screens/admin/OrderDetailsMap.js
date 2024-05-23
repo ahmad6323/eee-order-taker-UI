@@ -14,14 +14,14 @@ const OrderDetailsMap = ({ navigation, route }) => {
         initialRegion={{
           latitude: parseFloat(lat),
           longitude: parseFloat(long),
-          latitudeDelta: 0.01, // Adjusted for closer zoom
-          longitudeDelta: 0.01, // Adjusted for closer zoom
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
         }}
       >
         <Marker
           coordinate={{
             latitude: parseFloat(lat),
-            longitude: parseFloat(long), // Corrected typo
+            longitude: parseFloat(long),
           }}
           title="Order Location"
         />
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingTop: 50,
     fontSize: 26,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 5,
   },
   locationInfo: {

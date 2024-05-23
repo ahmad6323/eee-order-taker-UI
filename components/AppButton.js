@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     color: colors.white,
     textTransform: "uppercase",
     marginRight: 10,

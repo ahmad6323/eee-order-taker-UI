@@ -7,50 +7,64 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import config from "../../config.json";
 
-const Receipt = ({ navigation }) => {
+const Receipt = ({ navigation, route }) => {
+
+  const { order } = route.params;
+
+  const formatPrice = (price)=>{
+    return price.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'PKR',
+    })
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <Image
-          source={{
-            uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN5IPQRr-pbH6kbO09YGNlvaKxRyb6Hk_SRRwajW7eHw&s", // Replace with actual image URL
-          }}
-          style={styles.image}
-        />
-        <Image
-          source={{
-            uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN5IPQRr-pbH6kbO09YGNlvaKxRyb6Hk_SRRwajW7eHw&s", // Replace with actual image URL
-          }}
-          style={styles.image}
-        />
-        <Image
-          source={{
-            uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN5IPQRr-pbH6kbO09YGNlvaKxRyb6Hk_SRRwajW7eHw&s", // Replace with actual image URL
-          }}
-          style={styles.image}
-        />
-        <Image
-          source={{
-            uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN5IPQRr-pbH6kbO09YGNlvaKxRyb6Hk_SRRwajW7eHw&s", // Replace with actual image URL
-          }}
-          style={styles.image}
-        />
-        {/* Add more images */}
+        {
+          order.products.map((product,index)=>{
+            return <View key={index}
+              style={{
+                flexDirection: "row"
+              }}
+            >
+              {
+                product.imageUrl.map((img,index)=>(
+                  <Image
+                    key={index}
+                    source={{
+                      uri: `${config.pictureUrl}/public/products/${img}`
+                    }}
+                    style={styles.image}
+                    defaultSource={require("../../assets/noimage.jpg")}
+                  />
+                ))
+              }
+            </View>
+          })
+        }
       </ScrollView>
 
       <View style={styles.customerInfo}>
-        <Text style={styles.customerName}>Customer Name</Text>
-        <Text style={styles.address}>Address with city goes here</Text>
-        <Text style={styles.totalAmount}>Total amount: 1000</Text>
+        <Image
+          source={{
+            uri: `${config.pictureUrl}/public/salesman/${order.image}`
+          }}
+          style={styles.salesmanImage}
+          defaultSource={require("../../assets/noimage.jpg")}
+        />
+        <Text style={styles.customerName}>{order.salesmanName}</Text>
+        <Text style={styles.totalAmount}>Total amount: {formatPrice(order.totalBill)} /- </Text>
       </View>
 
       <Text>Customer's Phone No:</Text>
-      <Text style={styles.phone}>+92300 1234567</Text>
+      <Text style={styles.phone}>{order.phone}</Text>
 
       <View style={styles.feedbackContainer}>
         <Text style={styles.feed}>Customer Feedback:</Text>
-        <Text>The Product was very nice etc...</Text>
+        <Text>{order.feedBack ? order.feedBack : "No feedback provided!"}</Text>
       </View>
 
       <TouchableOpacity
@@ -75,6 +89,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 30,
   },
+  salesmanImage: {
+    width: 100,
+    height: 100,
+    marginRight: 10,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
   customerInfo: {
     paddingVertical: 20,
     paddingHorizontal: 15,
@@ -87,27 +108,26 @@ const styles = StyleSheet.create({
   },
   phone: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   feed: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   customerName: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   address: {
     fontSize: 14,
     color: "#666",
   },
   totalAmount: {
-    paddingTop: 30,
     fontSize: 14,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   feedbackContainer: {
-    fontWeight: "bold",
+    fontFamily: "Bold",
     paddingVertical: 30,
     marginBottom: 60,
   },
@@ -119,8 +139,8 @@ const styles = StyleSheet.create({
   },
   detailsButtonText: {
     color: "#FFF",
-    fontWeight: "bold",
-  },
+    fontFamily: "Bold",
+  }
 });
 
 export default Receipt;

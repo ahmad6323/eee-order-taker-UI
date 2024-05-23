@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 10,
     color: "#333",
   },
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginRight: 10,
     color: "#333",
   },

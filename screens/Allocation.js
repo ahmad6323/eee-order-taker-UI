@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   boxTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 10,
   },
   remainingText: {
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 5,
   },
   quantityContainer: {

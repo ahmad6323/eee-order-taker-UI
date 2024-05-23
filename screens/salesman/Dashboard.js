@@ -34,16 +34,13 @@ const Dashboard = ({ navigation }) => {
         -1,
         true,
       );
-
       getDashboardData(user._id);
-
     }
   }, [isFocused]);
 
   const getDashboardData = async (id)=>{
     try {
       const { data } = await getDashboardContentForSalesman(id);
-      console.log(data);
       setDashboardData(data);
     } catch (error) {
       console.error("Error fetching salesman:", error);
@@ -90,7 +87,7 @@ const Dashboard = ({ navigation }) => {
           >
             Total Sales (PKR)
           </AppText>
-          <AppText style={{ color: "black", fontWeight: "bold", fontSize: 22 }}>
+          <AppText style={{ color: "black", fontFamily: "Bold", fontSize: 22 }}>
             {
               dashboardData ? dashboardData.totalSales + " /- ": 0
             }
@@ -126,7 +123,7 @@ const Dashboard = ({ navigation }) => {
             <View style={{ alignItems: "flex-start" }}>
               <AppText style={{ color: "black" }}>Total Orders</AppText>
               <AppText
-                style={{ color: "black", fontWeight: "bold", fontSize: 24 }}
+                style={{ color: "black", fontFamily: "Bold", fontSize: 24 }}
               >
                 {
                   dashboardData ? dashboardData.orders : 0 
@@ -191,7 +188,6 @@ const Dashboard = ({ navigation }) => {
               marginHorizontal: 15,
               elevation: 6,
             }}
-            onPress={() => navigation.navigate("list")}
           >
             <View style={{ alignItems: "flex-start" }}>
               <AppText
@@ -199,6 +195,7 @@ const Dashboard = ({ navigation }) => {
                   color: "black",
                   fontSize: 15,
                 }}
+                onPress={()=>{navigation.navigate("history")}}
               >
                 Order History
               </AppText>
@@ -307,7 +304,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     color: "black",
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   subText: {
     paddingLeft: 20,

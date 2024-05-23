@@ -12,9 +12,6 @@ import { saveSize, deleteSize, getSizes } from "../../utilty/sizeUtility";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 
-const validationSchema = Yup.object().shape({
-  size: Yup.string().required("Size is required"),
-});
 
 function SizeScreen({ navigation }) {
   const [error, setError] = useState("");
@@ -36,12 +33,6 @@ function SizeScreen({ navigation }) {
   };
 
   const handleSubmit = async (values) => {
-    if (!validationSchema.isValidSync(values)) {
-      setError("Invalid Size name");
-      setErrorVisible(true);
-      return;
-    }
-
     try {
       // Save department to backend
       await saveSize({ size: values.size });
@@ -71,13 +62,12 @@ function SizeScreen({ navigation }) {
     }
   };
 
-  // Check if departments is still null
   if (sizes === null) {
-    return null; // Render nothing while departments are being fetched
+    return null;
   }
 
   return (
-    <SafeScreen style={{ paddingTop: 50 }}>
+    <ScrollView style={{ paddingTop: 50 }}>
       <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
       <View style={styles.container}>
         <View style={styles.innerContainer}>
@@ -91,7 +81,6 @@ function SizeScreen({ navigation }) {
             <AppForm
               initialValues={{ size: "" }}
               onSubmit={handleSubmit}
-              validationSchema={validationSchema}
             >
               <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormField
@@ -103,12 +92,10 @@ function SizeScreen({ navigation }) {
               <SubmitButton title={"Submit"} />
             </AppForm>
           </View>
-          <View style={{ marginTop: 60 }}>
-            <AppText style={{ fontSize: 26, fontWeight: "bold" }}>
+          <View>
+            <AppText style={{ fontSize: 24, fontFamily: "Bold", marginTop: 10 }}>
               Added Sizes
             </AppText>
-          </View>
-          <ScrollView>
             <View style={{ marginVertical: 20 }}>
               {sizes.map((size, index) => (
                 <TouchableOpacity
@@ -128,10 +115,10 @@ function SizeScreen({ navigation }) {
                 </TouchableOpacity>
               ))}
             </View>
-          </ScrollView>
+          </View>
         </View>
       </View>
-    </SafeScreen>
+    </ScrollView>
   );
 }
 
@@ -151,7 +138,7 @@ const styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   subText: {
     color: colors.medium,
@@ -164,15 +151,15 @@ const styles = StyleSheet.create({
   departmentContainer: {
     backgroundColor: "#e8e8e8",
     width: "100%",
-    height: 70,
+    height: 60,
     borderRadius: 10,
     alignItems: "center",
     flexDirection: "row",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   departmentText: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     padding: 10,
     flex: 1,
   },

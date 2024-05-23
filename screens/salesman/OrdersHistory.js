@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,28 +7,24 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { getOrdersSalesman } from "../../utilty/orderUtility";
+import { getOrders } from "../../utilty/orderUtility";
+
 import config from "../../config.json";
-import { UserContext } from "../../UserContext";
 
-
-const History = () => {
-
-  const { user } = useContext(UserContext);
-
+const OrderHistorySalesman = ({ navigation }) => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const fetchOrders = async (id) => {
+    const fetchOrders = async () => {
       try {
-        const fetchedOrders = await getOrdersSalesman(id);
+        const fetchedOrders = await getOrders();
         setOrders(fetchedOrders.data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     };
 
-    fetchOrders(user._id);
+    fetchOrders();
   }, []);
 
   const formatPrice = (price)=>{
@@ -43,13 +39,16 @@ const History = () => {
       <Text style={styles.title}>Order History</Text>
       <FlatList
         data={orders}
-        keyExtractor={(item) => item.orderId}
+        keyExtractor={(item) => item.salesmanId + Math.floor(Math.random() * (1000 - 10 + 1)) + 10}
         renderItem={({ item, index }) => (
           <TouchableOpacity
+            onPress={() => navigation.navigate("orderdetail", { order: item })}
             style={styles.orderItem}
             key={index}
           >
+            <Image source={{ uri: `${config.pictureUrl}/public/salesman/${item.image}`}} style={styles.itemImage} />
             <View style={styles.itemDetails}>
+              <Text style={styles.itemName}>Salsman: {item.salesmanName}</Text>
               {
                 item.products.map((product,index)=>{
                   return <View key={index}>
@@ -76,7 +75,6 @@ const History = () => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -132,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default History;
+export default OrderHistorySalesman;

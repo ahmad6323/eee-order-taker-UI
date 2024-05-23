@@ -16,7 +16,7 @@ import AppText from "../components/AppText";
 import ImageSlider from "../components/ImageSlider";
 import config from "../config.json";
 
-const pictureEndpoint = config.pictureUrl + "public/products";
+const pictureEndpoint = config.pictureUrl + "/public/products";
 
 const AddedProducts = ({ navigation }) => {
   const [products, setProducts] = useState([]);
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 25,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     fontFamily: "Poppins"
   },
   subText: {
@@ -225,23 +225,23 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 5,
     color: colors.dark,
     fontFamily: "Poppins"
   },
   variationHeading: {
     fontSize: 17,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 5,
     color: colors.dark,
     fontFamily: "Poppins"
   },
   bold: {
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   color: {
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 5,
     color: colors.medium,
   },
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     color: colors.danger,
     marginLeft: 10,
     fontFamily: "Poppins"
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   listItemName: {
     fontSize: 18,
     fontFamily: "Poppins",
-    fontWeight: "bold",
+    fontFamily: "Bold",
     color: colors.dark,
     marginBottom: 5,
     marginTop: 40,
@@ -294,18 +294,18 @@ const styles = StyleSheet.create({
   listItemPrice: {
     fontSize: 16,
     fontFamily: "Poppins",
-    fontWeight: "bold",
+    fontFamily: "Bold",
     color: colors.danger,
     marginBottom: 5,
     alignSelf: "flex-end",
   },
   color: {
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 5,
     color: colors.medium,
   },
   bold: {
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   sizeContainer: {
     flexDirection: "row",

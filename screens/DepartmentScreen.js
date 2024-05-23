@@ -8,20 +8,15 @@ import AppErrorMessage from "../components/forms/AppErrorMessage";
 import colors from "../config/colors";
 import AppText from "../components/AppText";
 import SafeScreen from "../components/SafeScreen";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { saveDepartment, getDepartments } from "../utilty/deptUtility";
-
-const validationSchema = Yup.object().shape({
-  department: Yup.string().required().label("Department"),
-});
+import { ScrollView } from "react-native-gesture-handler";
 
 function DepartmentScreen({ navigation }) {
   const [error, setError] = useState("");
   const [errorVisible, setErrorVisible] = useState(false);
-  const [departments, setDepartments] = useState(null); // Initialize to null
+  const [departments, setDepartments] = useState(null);
 
   useEffect(() => {
-    // Fetch departments from backend when component mounts
     fetchDepartments();
   }, []);
 
@@ -35,20 +30,10 @@ function DepartmentScreen({ navigation }) {
   };
 
   const handleSubmit = async (values) => {
-    if (!validationSchema.isValidSync(values)) {
-      setError("Invalid department name");
-      setErrorVisible(true);
-      return;
-    }
-
     try {
-      // Save department to backend
       await saveDepartment({ name: values.department });
-
-      // Fetch updated department list from backend
       fetchDepartments();
-
-      // Clear form field and errors
+      values = "";
       setError("");
       setErrorVisible(false);
     } catch (error) {
@@ -58,9 +43,8 @@ function DepartmentScreen({ navigation }) {
     }
   };
 
-  // Check if departments is still null
   if (departments === null) {
-    return null; // Render nothing while departments are being fetched
+    return null;
   }
 
   return (
@@ -77,24 +61,23 @@ function DepartmentScreen({ navigation }) {
             <AppForm
               initialValues={{ department: "" }}
               onSubmit={handleSubmit}
-              validationSchema={validationSchema}
             >
               <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormField
                 name={"department"}
                 autoCapitalize="none"
                 autoCorrect={false}
-                placeholder="Select Department"
+                placeholder="Dep1, Dep2 ..."
               />
               <SubmitButton title={"Submit"} />
             </AppForm>
           </View>
           <View style={{ marginTop: 60 }}>
-            <AppText style={{ fontSize: 26, fontWeight: "bold" }}>
+            <AppText style={{ fontSize: 26, fontFamily: "Bold" }}>
               Added Departments
             </AppText>
           </View>
-          <View style={{ marginVertical: 20 }}>
+          <ScrollView style={{ marginVertical: 20 }}>
             {departments.map((department, index) => (
               <TouchableOpacity
                 onPress={() =>
@@ -111,7 +94,7 @@ function DepartmentScreen({ navigation }) {
                 </AppText>
               </TouchableOpacity>
             ))}
-          </View>
+          </ScrollView>
         </View>
       </View>
     </SafeScreen>
@@ -134,7 +117,7 @@ const styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   subText: {
     color: colors.medium,
@@ -155,7 +138,7 @@ const styles = StyleSheet.create({
   },
   departmentText: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     padding: 10,
     flex: 1,
   },

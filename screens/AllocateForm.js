@@ -121,7 +121,7 @@ function AllocateForm({ navigation }) {
               allocations.map((allocation,index) => {
                 return <View>
                   <AppFormPickerCustom
-                    key={index+500}
+                    key={index}
                     items={products.map((product) => ({
                       label: `${product.productId.name} - ${product.size.size} - ${product.color.color}`,
                       value: product._id,
@@ -145,6 +145,7 @@ function AllocateForm({ navigation }) {
                       handleRemoveAllocation(index);
                     }} 
                       disabled={allocations.length === 1}
+                      key={index+1500}
                     >
                       <Text style={{ color: colors.danger, marginBottom: 5 }}>
                         Remove Allocation

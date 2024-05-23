@@ -25,7 +25,7 @@ const DeptProduct = ({ route }) => {
   return (
     <SafeScreen>
       <View style={{ padding: 10, marginHorizontal: 10, marginVertical: 20 }}>
-        <AppText style={{ fontSize: 25, fontWeight: "bold" }}>{name}</AppText>
+        <AppText style={{ fontSize: 25, fontFamily: "Bold" }}>{name}</AppText>
         <AppText>List of added product for this department</AppText>
       </View>
       <View style={styles.container}>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   mainLabel: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     marginBottom: 5,
   },
   subLabel: {
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   priceText: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
 });
 

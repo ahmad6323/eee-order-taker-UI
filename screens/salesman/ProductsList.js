@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   subText: {
     color: colors.medium,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     color: colors.dark,
   },
   bold: {
-    fontWeight: "bold",
+    fontFamily: "Bold",
   },
   color: {
     marginBottom: 5,
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   variantTitle: {
     marginBottom: 5,
     fontSize: 18,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     color: colors.dark,
   },
   actionsContainer: {
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     color: colors.danger,
     marginLeft: 10,
   },

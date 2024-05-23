@@ -11,6 +11,10 @@ export function getOrders() {
   return httpService.get(apiEndpoint);
 }
 
+export function getOrdersSalesman(id) {
+  return httpService.get(apiEndpoint + `/salesman_orders/${id}`);
+}
+
 export function getProfileScreenData() {
   return httpService.get(apiEndpoint+"/profile_screen");
 }

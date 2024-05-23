@@ -11,6 +11,7 @@ import AppText from "../components/AppText";
 import colors from "../config/colors";
 import { getSalesmans, deleteSalesman } from "../utilty/salesmanUtility";
 import SafeScreen from "../components/SafeScreen";
+import config from "../config.json";
 
 const AddedSalesman = ({ navigation }) => {
   const [salesmanList, setSalesmanList] = useState([]);
@@ -63,11 +64,9 @@ const AddedSalesman = ({ navigation }) => {
                 key={salesman._id}
               >
                 <Image
-                  source={
-                    salesman.image
-                      ? { uri: salesman.image }
-                      : require("../assets/noimage.jpg")
-                  }
+                  source={{
+                    uri: `${config.pictureUrl}/public/salesman/${salesman.image}`
+                  }}
                   style={styles.profilePicture}
                 />
                 <View style={styles.detailsContainer}>
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
   logo: {
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontFamily: "Bold",
     fontFamily: "Poppins"
   },
   subText: {

@@ -8,12 +8,13 @@ function departmentUrl(id) {
 }
 
 export function saveDepartment(department) {
-  if (department._id) {
-    const body = { ...department };
-    delete body._id;
-    return httpService.put(departmentUrl(department._id), body);
-  }
   return httpService.post(apiEndpoint, department);
+}
+
+export function updateDepartment(department) {
+  const body = { ...department };
+  delete body._id;
+  return httpService.put(departmentUrl(department._id), body);
 }
 
 export function getDepartments() {
