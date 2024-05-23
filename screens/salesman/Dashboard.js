@@ -240,7 +240,7 @@ const Dashboard = ({ navigation }) => {
           <View style={{ alignItems: "flex-end" }}>
             <AnimatedIcon name="cart" size={30} color="green" style={animatedStyle}/>
             <Text style={styles.textOnTop}>{
-              cartItems && cartItems.length !== 0 ? cartItems.length : "" 
+              cartItems && cartItems.length !== 0 ? "+" + cartItems.length : "" 
             }</Text>
           </View>
         </View>
