@@ -15,7 +15,6 @@ import * as Location from "expo-location";
 import { saveOrder } from "../../utilty/orderUtility";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
-import { getProduct } from "../../utilty/ProductUtility";
 import config from "../../config.json";
 
 const CartScreen = ({ navigation }) => {

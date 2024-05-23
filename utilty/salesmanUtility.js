@@ -53,3 +53,9 @@ export function getSalesmanById(id) {
 export function getSaleman(salesmanId) {
   return httpService.get(apiEnd + `/${salesmanId}`);
 }
+
+export function getDashboardContentForSalesman(salesmanId) {
+  return httpService.get(apiEnd + `/dashboard_content/${salesmanId}`);
+}
+
+

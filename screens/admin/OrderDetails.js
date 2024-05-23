@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { getSaleman } from "../../utilty/salesmanUtility";
+import config from "../../config.json";
+
+
 
 const OrderDetailsScreen = ({ navigation, route }) => {
   const [salesman, setSalesman] = useState(null);
@@ -19,7 +22,7 @@ const OrderDetailsScreen = ({ navigation, route }) => {
   useEffect(() => {
     const fetchSalesman = async () => {
       try {
-        const salesmanDetails = await getSaleman(order.salesmanName);
+        const salesmanDetails = await getSaleman(order.salesmanId);
         setSalesman(salesmanDetails.data);
       } catch (error) {
         console.log(error);
@@ -44,6 +47,13 @@ const OrderDetailsScreen = ({ navigation, route }) => {
     fetchLocationName();
   }, [order.salesman]);
 
+  const formatPrice = (price)=>{
+    return price.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'PKR',
+    })
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Order Details</Text>
@@ -51,7 +61,7 @@ const OrderDetailsScreen = ({ navigation, route }) => {
       {/* Smaller Map */}
       <View style={styles.mapContainer}>
         <MapView
-          provider={PROVIDER_GOOGLE}
+          provider={MapView.PROVIDER_GOOGLE}
           onPress={() =>
             navigation.navigate("orderdetailmap", {
               long: order.location.longitude,
@@ -78,20 +88,36 @@ const OrderDetailsScreen = ({ navigation, route }) => {
       </View>
 
       {/* Image Carousel */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <Image
-          style={styles.image}
-          defaultSource={require("../../assets/noimage.jpg")}
-        />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} >
+        {
+          order.products.map((product,index)=>{
+            return <View key={index}
+              style={{
+                flexDirection: "row"
+              }}
+            >
+              {
+                product.imageUrl.map((img,index)=>(
+                  <Image
+                    key={index}
+                    source={{
+                      uri: `${config.pictureUrl}/public/products/${img}`
+                    }}
+                    style={styles.image}
+                    defaultSource={require("../../assets/noimage.jpg")}
+                  />
+                ))
+              }
+            </View>
+          })
+        }
       </ScrollView>
 
       <View style={styles.productInfo}>
-        <Text style={styles.title}>{order.pname}</Text>
-        <Text>SKU: 000-000-000</Text>
-        <Text style={styles.heading}>{`RS: ${order.totalBill}`}</Text>
-        {/* <Text style={styles.heading}>{`Quantity: ${order.quantity}`}</Text> */}
-        {/* <Text>{`${order.color} / ${order.size}`}</Text> */}
-        {/* <Text>{`${order.pcategory.mainCategory} / ${order.pcategory.subCategory}`}</Text> */}
+        <ScrollView>
+          <Text style={styles.title}>{order.pname}</Text>
+        </ScrollView>
+        <Text style={styles.heading}>{formatPrice(order.totalBill)}/-</Text>
       </View>
 
       <View style={styles.contactInfo}>
@@ -140,7 +166,9 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 200,
-    height: 200,
+    height: 250,
+    backgroundColor: "transparent",
+    resizeMode: "contain",
     marginRight: 10,
     borderRadius: 8,
   },

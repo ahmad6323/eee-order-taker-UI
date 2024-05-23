@@ -1,32 +1,54 @@
-import React, { useContext, useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet, View, Text } from "react-native";
 import AppText from "../../components/AppText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserContext } from "../../UserContext";
 import salesmanAuthService from "../../utilty/salesmanAuthService";
 
+import { useIsFocused } from "@react-navigation/native";
+import { useCart } from "../../CartContext";
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { Easing, useSharedValue, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated';
+import { getDashboardContentForSalesman } from "../../utilty/salesmanUtility";
+
 
 const AnimatedIcon = Animated.createAnimatedComponent(Ionicons);
 
-
 const Dashboard = ({ navigation }) => {
 
+  const { cartItems } = useCart();
   const { user, setUser } = useContext(UserContext);
 
   const scale = useSharedValue(1);
+  const isFocused = useIsFocused();
+
+  const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
-    scale.value = withRepeat(
-      withTiming(1.2, {
-        duration: 500,
-        easing: Easing.linear,
-      }),
-      -1,
-      true,
-    );
-  }, []);
+    if(isFocused){
+      scale.value = withRepeat(
+        withTiming(1.3, {
+          duration: 500,
+          easing: Easing.linear,
+        }),
+        -1,
+        true,
+      );
+
+      getDashboardData(user._id);
+
+    }
+  }, [isFocused]);
+
+  const getDashboardData = async (id)=>{
+    try {
+      const { data } = await getDashboardContentForSalesman(id);
+      console.log(data);
+      setDashboardData(data);
+    } catch (error) {
+      console.error("Error fetching salesman:", error);
+    }
+  }
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -69,7 +91,9 @@ const Dashboard = ({ navigation }) => {
             Total Sales (PKR)
           </AppText>
           <AppText style={{ color: "black", fontWeight: "bold", fontSize: 22 }}>
-            999999999
+            {
+              dashboardData ? dashboardData.totalSales + " /- ": 0
+            }
           </AppText>
         </View>
         <View
@@ -104,7 +128,9 @@ const Dashboard = ({ navigation }) => {
               <AppText
                 style={{ color: "black", fontWeight: "bold", fontSize: 24 }}
               >
-                10000
+                {
+                  dashboardData ? dashboardData.orders : 0 
+                }
               </AppText>
             </View>
             <View
@@ -204,7 +230,6 @@ const Dashboard = ({ navigation }) => {
             width: "40%",
             height: 130,
             borderRadius: 13,
-            alignItems: "flex-starts",
             padding: 10,
             justifyContent: "space-between",
             elevation: 6,
@@ -216,14 +241,10 @@ const Dashboard = ({ navigation }) => {
             </View>
           </TouchableOpacity>
           <View style={{ alignItems: "flex-end" }}>
-            <AppText
-              style={{
-                color: "black",
-                fontSize: 15,
-              }}
-            >
-              <AnimatedIcon name="cart" size={30} color="red" style={animatedStyle}/>
-            </AppText>
+            <AnimatedIcon name="cart" size={30} color="green" style={animatedStyle}/>
+            <Text style={styles.textOnTop}>{
+              cartItems && cartItems.length !== 0 ? cartItems.length : "" 
+            }</Text>
           </View>
         </View>
         <View
@@ -259,8 +280,8 @@ const Dashboard = ({ navigation }) => {
           salesmanAuthService.removeToken();
         }}
       >
-        <AnimatedIcon name="cog" size={30} color="red" style={animatedStyle}/>
-        <AppText style={{ color: "black", fontSize: 19 }}>
+        <AnimatedIcon name="exit-outline" size={30} color="red"/>
+        <AppText style={{ color: "black", fontSize: 22, marginLeft: 15 }}>
           Logout
         </AppText>
       </TouchableOpacity>
@@ -312,6 +333,15 @@ const styles = StyleSheet.create({
     top: 0,
     height: 170,
     borderRadius: 13,
+  },
+  textOnTop: {
+    position: 'absolute',
+    top: -12, 
+    right: 5, 
+    fontSize: 14,
+    color: 'red',
+    fontFamily: "Bold",
+    borderRadius: 25,
   },
 });
 

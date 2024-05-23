@@ -10,3 +10,7 @@ export function saveOrder(category) {
 export function getOrders() {
   return httpService.get(apiEndpoint);
 }
+
+export function getProfileScreenData() {
+  return httpService.get(apiEndpoint+"/profile_screen");
+}

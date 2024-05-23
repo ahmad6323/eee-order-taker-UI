@@ -68,7 +68,7 @@ function Category({ navigation }) {
             paddingHorizontal: 10,
           }}
         >
-          <AppText style={{ fontSize: 26, fontWeight: "bold" }}>
+          <AppText style={{ fontSize: 26, fontFamily: "Poppins" }}>
             Added Categories
           </AppText>
         </View>
@@ -119,7 +119,12 @@ function Category({ navigation }) {
                     style={styles.categoryContainer}
                     key={subIndex}
                   >
-                    <AppText>{subcategory.name} - {subcategory.sku}</AppText>
+                    <AppText 
+                      style={{
+                        fontSize: 14,
+                        width: "100%"
+                      }}
+                    >{subcategory.name} - {subcategory.sku}</AppText>
                   </View>
                 ))}
               </View>
@@ -136,19 +141,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    paddingBottom: 20,
   },
   innerContainer: {
     width: "80%",
   },
   logoContainer: {
-    marginBottom: 20,
+    marginBottom: 5,
     alignItems: "flex-start",
   },
   logo: {
     color: colors.dark,
-    fontSize: 35,
-    fontWeight: "bold",
+    fontSize: 30,
+    fontWeight: "Bold",
   },
   subText: {
     color: colors.medium,
@@ -162,26 +166,26 @@ const styles = StyleSheet.create({
   categoryHeader: {
     backgroundColor: colors.primary,
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     borderRadius: 10,
     marginBottom: 10,
     width: "90%",
   },
   categoryHeaderText: {
     color: colors.white,
-    fontWeight: "bold",
+    fontWeight: "Bold",
     marginRight: 10,
   },
   categoryContainer: {
     backgroundColor: colors.white,
     width: "80%",
     height: 50,
-    borderRadius: 10,
+    borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 10,
-    paddingHorizontal: 20,
-    marginRight: 20,
+    marginBottom: 5,
+    paddingHorizontal: 10,
+    marginRight: 10,
     marginLeft: "auto",
   },
   category: {
@@ -190,13 +194,13 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 10,
     justifyContent: "center",
-    padding: 12,
-    marginTop: 20,
-    marginBottom: 20,
+    padding: 10,
+    marginTop: 10,
+    marginBottom: 10,
   },
   categoryText: {
     color: colors.white,
-    fontWeight: "bold",
+    fontFamily: "Poppins"
   },
 });
 

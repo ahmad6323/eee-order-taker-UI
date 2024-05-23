@@ -78,7 +78,6 @@ const ProductListDetail = ({ route, navigation }) => {
   };
 
   const handleAddToCart = () => {
-    console.log(orderFromThisPage);
     addToCart({
       salesman: user._id,
       ...orderFromThisPage

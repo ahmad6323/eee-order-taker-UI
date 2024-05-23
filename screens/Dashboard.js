@@ -8,17 +8,13 @@ import { getSalesmans } from "../utilty/salesmanUtility";
 import { getProducts } from "../utilty/ProductUtility";
 
 function Dashboard({ navigation, route }) {
-  const { orders, sales } = route.params;
-  const [salesman, setSalesman] = useState(0);
-  const [products, setProducts] = useState(0);
+  const { ordersAndSales } = route.params;
 
   useEffect(() => {
     const fetchSalesman = async () => {
       try {
         const fetchedSalesman = await getSalesmans();
         const res = await getProducts();
-        setProducts(res.data.length);
-        setSalesman(fetchedSalesman.data.length);
       } catch (error) {
         console.error("Error fetching salesman:", error);
       }
@@ -56,9 +52,9 @@ function Dashboard({ navigation, route }) {
           <View style={{ alignItems: "flex-start" }}>
             <AppText style={{ color: colors.medium }}>Total Orders</AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
+              style={{ color: colors.black, fontWeight: "Bold", fontSize: 24 }}
             >
-              {orders.length}
+              {ordersAndSales ? ordersAndSales.orders : 0}
             </AppText>
           </View>
           <Svg
@@ -119,9 +115,9 @@ function Dashboard({ navigation, route }) {
               Total Products
             </AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
+              style={{ color: colors.black, fontWeight: "Bold", fontSize: 24 }}
             >
-              {products}
+              {ordersAndSales ? ordersAndSales.totalProducts : 0}
             </AppText>
           </View>
           <Svg
@@ -156,16 +152,6 @@ function Dashboard({ navigation, route }) {
           </Svg>
         </View>
       </View>
-      {/* <View
-        style={{
-          flexDirection: "row",
-          marginVertical: 10,
-          marginBottom: 18,
-          paddingLeft: 10,
-          // marginRight: 10,
-          alignSelf: "center",
-        }}
-      > */}
       <View
         style={{
           marginBottom: 10,
@@ -189,9 +175,9 @@ function Dashboard({ navigation, route }) {
             Total Sales
           </AppText>
           <AppText
-            style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
+            style={{ color: colors.black, fontWeight: "Bold", fontSize: 22 }}
           >
-            {sales.toFixed(2)}
+            {ordersAndSales ? ordersAndSales.totalSales : 0.00} /-
           </AppText>
         </View>
         <Svg
@@ -246,9 +232,9 @@ function Dashboard({ navigation, route }) {
               Total Salesman
             </AppText>
             <AppText
-              style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
+              style={{ color: colors.black, fontWeight: "Bold", fontSize: 24 }}
             >
-              {salesman}
+              {ordersAndSales  ? ordersAndSales.totalSalesman : 0}
             </AppText>
           </View>
           <Svg
@@ -298,11 +284,6 @@ function Dashboard({ navigation, route }) {
             <AppText style={{ color: colors.medium, fontSize: 19 }}>
               Graphs
             </AppText>
-            {/* <AppText
-              style={{ color: colors.black, fontWeight: "bold", fontSize: 24 }}
-            >
-              169
-            </AppText> */}
           </View>
           <Svg
             style={{ alignSelf: "flex-end" }}
@@ -356,7 +337,7 @@ function Dashboard({ navigation, route }) {
           }}
         ></View> */}
         <View style={{}}>
-          <AppText style={{ fontWeight: "bold" }}>
+          <AppText style={{ fontWeight: "Bold" }}>
             Trending Product (top sale)
           </AppText>
           <AppText style={{ color: colors.medium }}>My Shirt</AppText>
@@ -382,7 +363,7 @@ function Dashboard({ navigation, route }) {
         }}
       >
         <View>
-          <AppText style={{ fontWeight: "bold" }}>
+          <AppText style={{ fontWeight: "Bold" }}>
             Digressive Product (lowest sale)
           </AppText>
           <AppText style={{ color: colors.medium }}>Denim Jeans</AppText>
@@ -416,7 +397,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     color: colors.dark,
     fontSize: 35,
-    fontWeight: "bold",
+    fontWeight: "Bold",
   },
   subText: {
     paddingLeft: 20,

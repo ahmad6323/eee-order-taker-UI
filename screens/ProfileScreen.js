@@ -14,7 +14,7 @@ import adminAuth from "../utilty/adminAuth";
 import { UserContext } from "../UserContext";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
-import { getOrders } from "../utilty/orderUtility";
+import { getProfileScreenData } from "../utilty/orderUtility";
 
 const chartConfig = {
   backgroundGradientFrom: colors.danger,
@@ -37,21 +37,16 @@ const data = {
 };
 
 const ProfileScreen = ({ navigation }) => {
-  const [orders, setOrders] = useState([]);
-  const [sales, setSales] = useState(0);
 
-  const { user, setUser } = useContext(UserContext);
+  const [ordersAndSales, setOrdersAndSales] = useState(null);
+
+  const { setUser } = useContext(UserContext);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const fetchedOrders = await getOrders();
-        setOrders(fetchedOrders.data);
-        const totalSales = fetchedOrders.data.reduce(
-          (acc, order) => acc + order.price,
-          0
-        );
-        setSales(totalSales);
+        const {data} = await getProfileScreenData();
+        setOrdersAndSales(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
@@ -66,11 +61,11 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.innerContainer}>
             <View style={{ alignItems: "flex-start", marginBottom: 25 }}>
-              <Text style={{ fontWeight: "bold", fontSize: 27 }}>
+              <Text style={{ fontWeight: "Bold", fontSize: 27 }}>
                 Admin Panel
               </Text>
               <Text
-                style={{ fontWeight: "bold", fontSize: 14, color: "#6e6969" }}
+                style={{ fontWeight: "Bold", fontSize: 14, color: "#6e6969" }}
               >
                 Select Any Option Below
               </Text>
@@ -78,7 +73,7 @@ const ProfileScreen = ({ navigation }) => {
             <View style={styles.main_row}>
               <TouchableOpacity
                 onPress={() =>
-                  navigation.navigate("dashboard", { sales, orders })
+                  navigation.navigate("dashboard", { ordersAndSales })
                 }
                 style={{
                   backgroundColor: "#fc5c65",
@@ -91,11 +86,11 @@ const ProfileScreen = ({ navigation }) => {
               >
                 <View>
                   <Text style={styles.text1}>Total Orders</Text>
-                  <Text style={styles.text2}>{orders.length}</Text>
+                  <Text style={styles.text2}>{ordersAndSales ? ordersAndSales.orders : 0}</Text>
                 </View>
                 <View>
-                  <Text style={styles.text1}>Total Saless</Text>
-                  <Text style={styles.text2}>0.00</Text>
+                  <Text style={styles.text1}>Total Sales</Text>
+                  <Text style={styles.totalSalesNumber}>{ordersAndSales ? ordersAndSales.totalSales : "0.00"} /- </Text>
                 </View>
                 <View
                   style={{
@@ -104,7 +99,7 @@ const ProfileScreen = ({ navigation }) => {
                   }}
                 >
                   <Text
-                    style={{ color: "white", fontSize: 14, fontWeight: "bold" }}
+                    style={{ color: "white", fontSize: 14, fontWeight: "Bold" }}
                   >
                     More Details
                   </Text>
@@ -211,7 +206,7 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <Text
-              style={{ color: colors.dark, fontSize: 18, paddingTop: 15, fontWeight: "bold" }}
+              style={{ color: colors.dark, fontSize: 18, paddingTop: 15, fontWeight: "Bold" }}
             >
               More Options
             </Text>
@@ -367,15 +362,18 @@ const styles = StyleSheet.create({
   },
   text1: {
     color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-    fontFamily: "Poppins"
+    fontSize: 20,
+    fontWeight: "Bold",
   },
   text2: {
     color: "white",
     fontSize: 26,
-    fontWeight: "bold",
-    fontFamily: "Poppins"
+    fontWeight: "Bold",
+  },
+  totalSalesNumber: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "Bold",
   },
   innerContainer: {
     width: "100%",

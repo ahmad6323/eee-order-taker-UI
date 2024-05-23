@@ -17,7 +17,6 @@ const OrderHistoryScreen = ({ navigation }) => {
     const fetchOrders = async () => {
       try {
         const fetchedOrders = await getOrders();
-        console.log(fetchedOrders.data);
         setOrders(fetchedOrders.data);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -49,21 +48,25 @@ const OrderHistoryScreen = ({ navigation }) => {
           >
             {/* <Image source={{ uri: item.pimage[0] }} style={styles.itemImage} /> */}
             <View style={styles.itemDetails}>
-              <Text style={styles.itemName}>{item.salesmanName}</Text>
+              <Text style={styles.itemName}>Salsman: {item.salesmanName}</Text>
               {
-                item.products.map((product)=>{
-                  return product.variations.map((variation,index)=>{
-                    return (
-                      <Text key={index} style={styles.quantity}>SKU: {variation.sku} - {variation.quantity}</Text>
-                    )
-                  })
+                item.products.map((product,index)=>{
+                  return <View key={index}>
+                    <View>
+                      <Text style={styles.itemName}>{product.name}</Text>
+                      <Text style={styles.quantity}>{formatPrice(product.price)} /- </Text>
+                      {
+                        product.variations.map((variation,index2)=>{
+                          return (
+                            <Text key={index2} style={styles.quantity}>SKU: {variation.sku} - {variation.quantity}</Text>
+                          )
+                        })
+                      }
+                    </View>
+                  </View>
                 })
               }
               <Text style={styles.price}>Price: {formatPrice(item.totalBill)} /-</Text> 
-              {/* <Text style={styles.color}>Color: {item.color}</Text>
-              <Text style={styles.size}>Size: {item.size}</Text>
-              <Text style={styles.quantity}>Quantity: {item.quantity}</Text>
-              <Text style={styles.price}>Price: ${item.price.toFixed(2)}</Text> */}
               <View style={styles.line} /> 
             </View>
           </TouchableOpacity>
