@@ -7,15 +7,18 @@ import AppForm from "../../components/forms/AppForm";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import colors from "../../config/colors";
 import AppText from "../../components/AppText";
-import SafeScreen from "../../components/SafeScreen";
-import {  saveColor, getColors, deleteColor } from "../../utilty/colorUtility";
-import { FontAwesome6 } from "@expo/vector-icons";
+import {  saveColor, getColors, updateColor } from "../../utilty/colorUtility";
 import { ScrollView } from "react-native-gesture-handler";
+import EditorModal from "../../components/EditFieldModal";
+import { AntDesign } from "@expo/vector-icons";
 
 function ColorScreen({ navigation }) {
   const [error, setError] = useState("");
   const [errorVisible, setErrorVisible] = useState(false);
   const [savedColors, setSavedColors] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
+  const [valueToEdit, setValueToEdit] = useState(null);
 
   useEffect(() => {
     fetchColors();
@@ -43,14 +46,23 @@ function ColorScreen({ navigation }) {
     }
   };
 
-  const onDeleteSize = async (colorToDel) => {
-    try {
-      await deleteColor(colorToDel._id);
-      setSavedColors(savedColors.filter((color) => color.color !== colorToDel.size));
-    } catch (error) {
-      console.error("Error deleting color:", error);
+  const updateField = async (value)=> {
+    if(!valueToEdit){
+      return;
     }
-  };
+    try {
+      await updateColor(valueToEdit._id,value.value.trim());
+      fetchColors();
+      setValueToEdit(null);
+      setShowModal(false);
+      setError("");
+      setErrorVisible(false);
+    } catch (error) {
+      console.error("Error saving department:", error);
+      setError(error.response.data);
+      setErrorVisible(true);
+    }
+  }
 
   if (savedColors === null) {
     return null; 
@@ -59,6 +71,11 @@ function ColorScreen({ navigation }) {
   return (
     <ScrollView style={{ paddingTop: 40 }}>
       <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
+      <EditorModal title={"Color"} value={valueToEdit ? valueToEdit.value : ""} visible={showModal} onPress={updateField} onClose={()=>{
+        setValueToEdit(null);
+        console.log("closing");
+        setShowModal(false);
+      }}/>
       <View style={styles.container}>
         <View style={styles.innerContainer}>
           <View style={styles.logoContainer}>
@@ -87,23 +104,27 @@ function ColorScreen({ navigation }) {
               Added Colors
             </AppText>
             {savedColors.map((color, index) => (
-              <TouchableOpacity
-                onPress={() => {}}
+              <View
                 key={index}
                 style={styles.departmentContainer}
               >
                 <AppText style={styles.departmentText}>{color.color}</AppText>
-                <TouchableOpacity 
-                  onPress={() => onDeleteSize(color)}
-                >
-                  <FontAwesome6
-                    style={{ marginRight: 10 }}
-                    name="delete-left"
-                    size={24}
-                    color={colors.medium}
+                <AntDesign
+                    name={"edit"}
+                    size={22}
+                    color="blue"
+                    style={{
+                      marginRight: 10
+                    }}
+                    onPress={() => {
+                      setShowModal(true);
+                      setValueToEdit({
+                        _id: color._id,
+                        value: color.color
+                      });
+                    }}
                   />
-                </TouchableOpacity>
-              </TouchableOpacity>
+              </View>
             ))}
           </View>
         </View>

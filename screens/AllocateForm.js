@@ -59,7 +59,6 @@ function AllocateForm({ navigation }) {
 
     try {
       const response = await allocate(result);
-      console.log("Allocation successful: ", response.data);
       navigation.navigate("allocation");
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -119,9 +118,10 @@ function AllocateForm({ navigation }) {
             />
             {
               allocations.map((allocation,index) => {
-                return <View>
+                return <View
+                  key={index}
+                >
                   <AppFormPickerCustom
-                    key={index}
                     items={products.map((product) => ({
                       label: `${product.productId.name} - ${product.size.size} - ${product.color.color}`,
                       value: product._id,
@@ -134,7 +134,6 @@ function AllocateForm({ navigation }) {
                     value={allocation.productId}
                   />
                   <AppFormFieldCustom
-                    key={index+1000}
                     autoCapitalize="none"
                     autoCorrect={false}
                     placeholder="Quantity for this Product"

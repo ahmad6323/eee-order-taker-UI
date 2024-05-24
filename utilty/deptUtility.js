@@ -11,12 +11,6 @@ export function saveDepartment(department) {
   return httpService.post(apiEndpoint, department);
 }
 
-export function updateDepartment(department) {
-  const body = { ...department };
-  delete body._id;
-  return httpService.put(departmentUrl(department._id), body);
-}
-
 export function getDepartments() {
   return httpService.get(apiEndpoint);
 }
@@ -27,4 +21,8 @@ export function deleteDepartment(id) {
 
 export function getDepartment(departmentId) {
   return httpService.get(apiEndpoint + `/${departmentId}`);
+}
+
+export function updateDepartment(id,department) {
+  return httpService.put(apiEndpoint + `/${id}`,{department});
 }

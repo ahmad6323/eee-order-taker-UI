@@ -153,7 +153,7 @@ const ProfileScreen = ({ navigation }) => {
                   navigation.navigate("addsaleman", { new: true })
                 }
                 style={{
-                  width: 110,
+                  width: 120,
                   height: 100,
                   alignItems: "center",
                   marginVertical: 10,
@@ -171,7 +171,7 @@ const ProfileScreen = ({ navigation }) => {
                   navigation.navigate("addproduct", { product: {} })
                 }
                 style={{
-                  width: 110,
+                  width: 120,
                   height: 100,
                   alignItems: "center",
                   marginVertical: 10,
@@ -191,7 +191,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("allocation")}
                 style={{
-                  width: 110,
+                  width: 120,
                   height: 100,
                   alignItems: "center",
                   marginVertical: 10,
@@ -206,17 +206,17 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <Text
-              style={{ color: colors.dark, fontSize: 18, paddingTop: 15, fontFamily: "Bold" }}
+              style={{ color: colors.dark, fontSize: 18, paddingLeft: 15, paddingRight: 15, fontFamily: "Bold" }}
             >
               More Options
             </Text>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+              style={{ flexDirection: "row", justifyContent: "space-between", padding: 15 }}
             >
               <TouchableOpacity
                 onPress={() => navigation.navigate("department")}
                 style={{
-                  width: 110,
+                  width: 120,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -232,7 +232,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("history")}
                 style={{
-                  width: 110,
+                  width: 120,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -248,7 +248,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("categories")}
                 style={{
-                  width: 110,
+                  width: 120,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -263,12 +263,12 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+              style={{ flexDirection: "row", justifyContent: "space-between", paddingLeft: 15, paddingRight: 15, }}
             >
               <TouchableOpacity
                 onPress={() => navigation.navigate("sizes")}
                 style={{
-                  width: 110,
+                  width: 120,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -288,7 +288,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("colors")}
                 style={{
-                  width: 110,
+                  width: 120,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -307,7 +307,7 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={{
-                  width: 110,
+                  width: 120,
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -319,7 +319,7 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
+              style={{ flexDirection: "row", justifyContent: "space-between", paddingLeft: 10 }}
             >
               <TouchableOpacity
                 onPress={() => {

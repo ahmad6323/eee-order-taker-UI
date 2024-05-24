@@ -35,7 +35,6 @@ const EmailVerificationInput = ({ route, navigation }) => {
 
     try {
       const response = await verification(code);
-      console.log(response);
       if (response.data) {
         navigation.navigate("profiles");
       }

@@ -18,7 +18,7 @@ import NetInfo from "@react-native-community/netinfo";
 import config from "../../config.json";
 
 const CartScreen = ({ navigation }) => {
-  const { cartItems, removeFromCart, setCartItems } = useCart();
+  const { cartItems, removeFromCart } = useCart();
   const [location, setLocation] = useState(null);
   const [isPlaceOrderEnabled, setIsPlaceOrderEnabled] = useState(false);
   const [isFetchingLocation, setIsFetchingLocation] = useState(true);
@@ -154,21 +154,24 @@ const CartScreen = ({ navigation }) => {
         latitude: location.coords.latitude,
       };
 
-      const isConnected = await NetInfo.fetch().then(
-        (state) => state.isConnected
-      );
+      navigation.navigate("customer_details",{orderData});
 
-      if (isConnected) {
-        await saveOrder(orderData);
-        setCartItems([]);
-        navigation.navigate("done");
-      } else {
-        await storeOfflineOrder(orderData);
-        Alert.alert(
-          "Offline Order Stored",
-          "Order will be placed when the internet connection is available."
-        );
-      }
+      // await saveOrder(orderData);
+      
+      // const isConnected = await NetInfo.fetch().then(
+      //   (state) => state.isConnected
+      // );
+      // test pending for offline orders placement
+      // if (isConnected) {
+      //   setCartItems([]);
+      //   navigation.navigate("done");
+      // } else {
+      //   await storeOfflineOrder(orderData);
+      //   Alert.alert(
+      //     "Offline Order Stored",
+      //     "Order will be placed when the internet connection is available."
+      //   );
+      // }
     } catch (error) {
       console.log(error);
       navigation.navigate("fail", error.response?.data);

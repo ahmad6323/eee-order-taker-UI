@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import * as Yup from "yup";
 import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppForm from "../../components/forms/AppForm";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import colors from "../../config/colors";
 import AppText from "../../components/AppText";
-import SafeScreen from "../../components/SafeScreen";
-import { saveSize, deleteSize, getSizes } from "../../utilty/sizeUtility";
-import { FontAwesome6 } from "@expo/vector-icons";
+import { saveSize, getSizes, updateSize } from "../../utilty/sizeUtility";
 import { ScrollView } from "react-native-gesture-handler";
-
+import EditorModal from "../../components/EditFieldModal";
+import { AntDesign } from "@expo/vector-icons";
 
 function SizeScreen({ navigation }) {
   const [error, setError] = useState("");
   const [errorVisible, setErrorVisible] = useState(false);
-  const [sizes, setSizes] = useState(null); // Initialize to null
+  const [sizes, setSizes] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
+  const [valueToEdit, setValueToEdit] = useState(null);
 
   useEffect(() => {
-    // Fetch departments from backend when component mounts
     fetchSizes();
   }, []);
 
@@ -34,13 +34,8 @@ function SizeScreen({ navigation }) {
 
   const handleSubmit = async (values) => {
     try {
-      // Save department to backend
       await saveSize({ size: values.size });
-
-      // Fetch updated department list from backend
       fetchSizes();
-
-      // Clear form field and errors
       setError("");
       setErrorVisible(false);
     } catch (error) {
@@ -49,18 +44,24 @@ function SizeScreen({ navigation }) {
       setErrorVisible(true);
     }
   };
-  const onDeleteSize = async (sizeToDelete) => {
-    try {
-      // Assuming deleteSize is an async function that deletes the size from the backend
-      await deleteSize(sizeToDelete._id);
 
-      // Update the sizes state to exclude the deleted size
-      setSizes(sizes.filter((size) => size.size !== sizeToDelete.size));
-    } catch (error) {
-      console.error("Error deleting size:", error);
-      // Handle error appropriately
+  const updateField = async (value)=> {
+    if(!valueToEdit){
+      return;
     }
-  };
+    try {
+      await updateSize(valueToEdit._id,value.value.trim());
+      fetchSizes();
+      setValueToEdit(null);
+      setShowModal(false);
+      setError("");
+      setErrorVisible(false);
+    } catch (error) {
+      console.error("Error saving department:", error);
+      setError(error.response.data);
+      setErrorVisible(true);
+    }
+  }
 
   if (sizes === null) {
     return null;
@@ -69,6 +70,10 @@ function SizeScreen({ navigation }) {
   return (
     <ScrollView style={{ paddingTop: 50 }}>
       <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
+      <EditorModal visible={showModal} onPress={updateField} value={valueToEdit ? valueToEdit.value : "" } title={"Size"} onClose={()=>{
+        setShowModal(false);
+        setValueToEdit(null);
+      }}/>
       <View style={styles.container}>
         <View style={styles.innerContainer}>
           <View style={styles.logoContainer}>
@@ -98,21 +103,27 @@ function SizeScreen({ navigation }) {
             </AppText>
             <View style={{ marginVertical: 20 }}>
               {sizes.map((size, index) => (
-                <TouchableOpacity
-                  onPress={() => {}}
+                <View
                   key={index}
                   style={styles.departmentContainer}
                 >
                   <AppText style={styles.departmentText}>{size.size}</AppText>
-                  <TouchableOpacity onPress={() => onDeleteSize(size)}>
-                    <FontAwesome6
-                      style={{ marginRight: 10 }}
-                      name="delete-left"
-                      size={24}
-                      color={colors.medium}
-                    />
-                  </TouchableOpacity>
-                </TouchableOpacity>
+                  <AntDesign
+                    name={"edit"}
+                    size={22}
+                    color="blue"
+                    style={{
+                      marginRight: 10
+                    }}
+                    onPress={() => {
+                      setShowModal(true);
+                      setValueToEdit({
+                        _id: size._id,
+                        value: size.size
+                      });
+                    }}
+                  />
+                </View>
               ))}
             </View>
           </View>

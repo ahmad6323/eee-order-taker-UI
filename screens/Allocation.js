@@ -9,10 +9,13 @@ import {
 import colors from "../config/colors";
 import { deleteAlloation, getAllocations,  } from "../utilty/allocationUtility"; // Fix the import name here
 import { MaterialIcons } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 
 const AllocationScreen = ({ navigation }) => {
 
   const [allocations, setAllocations] = useState([]);
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const fetchAllocations = async () => {
@@ -24,7 +27,9 @@ const AllocationScreen = ({ navigation }) => {
       }
     };
 
-    fetchAllocations();
+    if(isFocused){
+      fetchAllocations();
+    }
   }, []);
 
   const handleDeleteAllocation = async (id) => {

@@ -18,3 +18,7 @@ export function deleteColor(id) {
 export function saveColor(color) {
   return httpService.post(apiEndpoint, color);
 }
+
+export function updateColor(id, color) {
+  return httpService.put(apiEndpoint + `/${id}`, {color});
+}

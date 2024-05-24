@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
-import * as Yup from "yup";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppFormField from "../components/forms/AppFormField";
 import SubmitButton from "../components/forms/SubmitButton";
@@ -63,12 +62,11 @@ function AddSalesman({ navigation, route }) {
           });
           info.image = base64String;
 
-          await saveSalesman(info);
-          navigation.navigate("verification", { email: info.email });
-        }else{
-          await saveSalesman(info);
-          navigation.navigate("verification", { email: info.email });
         }
+
+        await saveSalesman(info);
+        navigation.navigate("profiles");
+
       } catch (error) {
         console.log(error);
         if (error.response && error.response.status === 400) {
@@ -227,6 +225,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 3,
   },
+  selectedTextStyle: {
+    color: '#333',
+    fontSize: 16,
+    fontFamily: 'Bold',
+  },
+  placeholderStyle: {
+    color: '#999', 
+    fontFamily: 'Poppins',
+  }
 });
 
 export default AddSalesman;

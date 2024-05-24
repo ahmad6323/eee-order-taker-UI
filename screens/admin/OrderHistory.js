@@ -50,7 +50,7 @@ const OrderHistoryScreen = ({ navigation }) => {
           >
             <Image source={{ uri: `${config.pictureUrl}/public/salesman/${item.image}`}} style={styles.itemImage} />
             <View style={styles.itemDetails}>
-              <Text style={styles.itemName}>Salsman: {item.salesmanName}</Text>
+              <Text style={styles.itemName}>{item.salesmanName}</Text>
               {
                 item.products.map((product,index)=>{
                   return <View key={index}>

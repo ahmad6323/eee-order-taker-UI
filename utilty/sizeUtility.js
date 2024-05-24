@@ -18,3 +18,7 @@ export function deleteSize(id) {
 export function saveSize(size) {
   return httpService.post(apiEndpoint, size);
 }
+
+export function updateSize(id,size) {
+  return httpService.put(apiEndpoint + `/${id}`, {size: size});
+}

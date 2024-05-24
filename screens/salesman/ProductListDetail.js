@@ -18,12 +18,11 @@ import AppErrorMessage from "../../components/forms/AppErrorMessage";
 const ProductListDetail = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
   
-  const { addToCart, cartItems } = useCart();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [orderFromThisPage, setOrderFromThisPage] = useState({});
   const [error, setError] = useState(false);
   const [errorVisible, setErrorVisible] = useState(false);
-
   
   const { product_id } = route.params;
 
@@ -78,13 +77,28 @@ const ProductListDetail = ({ route, navigation }) => {
   };
 
   const handleAddToCart = () => {
+    const updatedVariations = getVariationsWithZeroQuantity(orderFromThisPage);
+    
+    const updatedData = {
+      productId: product.productId,
+      name: product.name,
+      image: product.imageUrl[0],
+      pricePerUnit: product.price,
+      variations: updatedVariations
+    };
+
     addToCart({
       salesman: user._id,
-      ...orderFromThisPage
+      ...updatedData
     });
+
     alert("Your Item added to cart successfully!");
     navigation.navigate("list");
   };
+
+  function getVariationsWithZeroQuantity(order) {
+    return order.variations.filter(variation => variation.quantity !== 0);
+  }
 
   if(product === null){
     return (

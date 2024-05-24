@@ -224,25 +224,29 @@ const Dashboard = ({ navigation }) => {
         <View
           style={{
             backgroundColor: "white",
-            width: "40%",
-            height: 130,
+            width: "45%",
             borderRadius: 13,
             padding: 10,
             justifyContent: "space-between",
             elevation: 6,
           }}
         >
-          <TouchableOpacity  onPress={() => navigation.navigate("cart")} >
-            <View style={{ alignItems: "flex-start" }}>
+          <TouchableOpacity  onPress={() => navigation.navigate("cart")} 
+            style={{
+              height: 110,
+              justifyContent: "space-between"
+            }}
+          >
+            <View>
               <AppText style={{ color: "black", fontSize: 19 }}>Cart</AppText>
             </View>
+            <View style={{ alignItems: "flex-end" }}>
+              <AnimatedIcon name="cart" size={30} color="green" style={animatedStyle}/>
+              <Text style={styles.textOnTop}>{
+                cartItems && cartItems.length !== 0 ? "+" + cartItems.length : "" 
+              }</Text>
+            </View>
           </TouchableOpacity>
-          <View style={{ alignItems: "flex-end" }}>
-            <AnimatedIcon name="cart" size={30} color="green" style={animatedStyle}/>
-            <Text style={styles.textOnTop}>{
-              cartItems && cartItems.length !== 0 ? "+" + cartItems.length : "" 
-            }</Text>
-          </View>
         </View>
         <View
           style={{
@@ -256,14 +260,19 @@ const Dashboard = ({ navigation }) => {
             marginHorizontal: 17,
           }}
         >
-          <TouchableOpacity>
+          <TouchableOpacity 
+            style={{
+              height: 110,
+              justifyContent: "space-between"
+            }}
+          >
             <View style={{ alignItems: "flex-start" }}>
               <AppText style={{ color: "black", fontSize: 19 }}>Settings</AppText>
             </View>
+            <View style={{ alignItems: "flex-end" }}>
+              <AnimatedIcon name="cog" size={30} color="red" style={animatedStyle}/>
+            </View>
           </TouchableOpacity>
-          <View style={{ alignItems: "flex-end" }}>
-            <AnimatedIcon name="cog" size={30} color="red" style={animatedStyle}/>
-          </View>
         </View>
       </View>
       <TouchableOpacity

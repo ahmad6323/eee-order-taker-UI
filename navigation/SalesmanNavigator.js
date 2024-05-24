@@ -9,6 +9,7 @@ import History from "../screens/salesman/history";
 import OrderPlaced from "../screens/salesman/OrderPlaced";
 import OrderNotPlaced from "../screens/salesman/OrderNotPlaced";
 import Dashboard from "../screens/salesman/Dashboard";
+import Checkout from "../screens/salesman/Checkout";
 
 const SalesmanNavigator = () => {
   return (
@@ -21,6 +22,7 @@ const SalesmanNavigator = () => {
       <Stack.Screen name="profile" component={HomeScreen} />
       <Stack.Screen name="list" component={ProductsList} />
       <Stack.Screen name="cart" component={CartScreen} />
+      <Stack.Screen name="customer_details" component={Checkout} />
       <Stack.Screen name="listdetail" component={ProductListDetail} />
       <Stack.Screen name="history" component={History} />
       <Stack.Screen name="done" component={OrderPlaced} />

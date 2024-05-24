@@ -163,7 +163,6 @@ function AddProduct({ navigation }) {
                   style={styles.dropdown}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
                   data={departments.map((dept) => ({
                     label: dept.name,
@@ -190,7 +189,6 @@ function AddProduct({ navigation }) {
                   style={styles.dropdown}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
                   data={colors.map((color) => ({
                     label: color.color,
@@ -217,7 +215,6 @@ function AddProduct({ navigation }) {
                   style={styles.dropdown}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
-                  inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.iconStyle}
                   data={sizes.map((size) => ({
                     label: size.size,
@@ -280,6 +277,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     borderTopColor: "gray",
+    fontFamily: "Poppins"
   },
   icon: {
     marginRight: 5,
@@ -310,6 +308,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 10,
   },
+  selectedTextStyle: {
+    color: '#333',
+    fontSize: 16,
+    fontFamily: 'Bold',
+  },
+  placeholderStyle: {
+    color: '#999', 
+    fontFamily: 'Poppins',
+  }
 });
 
 export default AddProduct;

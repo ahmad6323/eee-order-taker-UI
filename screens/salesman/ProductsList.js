@@ -71,7 +71,7 @@ const ProductsList = ({ navigation }) => {
                   <Text style={styles.description}>{allocation.productDetails.description}</Text>
                   <Text style={styles.variantTitle}>Variants & Quantity Allocated</Text>
                   <Text style={styles.variationIds}>
-                    {allocation.variations.map(variation => `${variation._id} - ${variation.quantity}`).join(' ')}
+                    {allocation.variations.map(variation => `${variation.size.size.trim()} - ${variation.color.color.trim()} - ${variation.quantity}`).join('\n')}
                   </Text>
                 </View>
                 <View style={styles.actionsContainer}>
