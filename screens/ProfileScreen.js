@@ -16,25 +16,6 @@ import { Entypo } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { getProfileScreenData } from "../utilty/orderUtility";
 
-const chartConfig = {
-  backgroundGradientFrom: colors.danger,
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: colors.danger,
-  backgroundGradientToOpacity: 0.5,
-  color: (opacity = 1) => `rgba(50, 50, 50, ${opacity})`,
-  strokeWidth: 2, // optional, default 3
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false, // optional
-};
-
-const data = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  datasets: [
-    {
-      data: [20, 45, 28, 80, 99, 43],
-    },
-  ],
-};
 
 const ProfileScreen = ({ navigation }) => {
 

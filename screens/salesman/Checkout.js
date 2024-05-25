@@ -8,6 +8,32 @@ import colors from "../../config/colors";
 import AppText from "../../components/AppText";
 import { useCart } from "../../CartContext";
 import { saveOrder } from "../../utilty/orderUtility";
+import * as yup from "yup";
+
+const customerDetailValidation = yup.object().shape({
+  firstName: yup.string()
+    .required('First name is required')
+    .min(2, 'First name must be at least 2 characters')
+    .max(50, 'First name must be at most 50 characters'),
+  lastName: yup.string()
+    .required('Last name is required')
+    .min(2, 'Last name must be at least 2 characters')
+    .max(50, 'Last name must be at most 50 characters'),
+  city: yup.string()
+    .required('City is required')
+    .min(2, 'City must be at least 2 characters')
+    .max(100, 'City must be at most 100 characters'),
+  address: yup.string()
+    .required('Address is required')
+    .min(5, 'Address must be at least 5 characters')
+    .max(200, 'Address must be at most 200 characters'),
+  phone: yup.string()
+    .required('Phone is required')
+    .matches(/^\d{11}$/, 'Phone must be exactly 11 digits'),
+  remarks: yup.string()
+    .required()
+    .max(500, 'Remarks must be at most 500 characters'),
+});
 
 function Checkout({ navigation, route }) {
 
@@ -32,7 +58,6 @@ function Checkout({ navigation, route }) {
       ...orderData,
       customerData: info
     }
-
     try{
       await saveOrder(finalOrderData);
       navigation.navigate("done");
@@ -42,16 +67,7 @@ function Checkout({ navigation, route }) {
       setErrorVisible(true);
       setError(ex.response.data);
     }
-    
   };
-  
-  
-  const formatPrice = (price)=>{
-    return price.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'PKR',
-    });
-  }
 
   return (
     <View style={styles.container}>
@@ -70,6 +86,7 @@ function Checkout({ navigation, route }) {
           <AppForm
             initialValues={values}
             onSubmit={handleSubmit}
+            validationSchema={customerDetailValidation}
           >
             <AppErrorMessage error={error} visible={errorVisible} />
             <View 

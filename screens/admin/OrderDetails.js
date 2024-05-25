@@ -112,8 +112,25 @@ const OrderDetailsScreen = ({ navigation, route }) => {
       </ScrollView>
 
       <View style={styles.productInfo}>
-        <ScrollView>
-          <Text style={styles.title}>{order.name}</Text>
+        <ScrollView horizontal>
+          {
+            order.products.map((product,index)=>{
+              return <View
+                key={index}
+              >
+                {
+                  product.variations.map((variation,index)=>{
+                    return <View key={index}>
+                      <Text style={{
+                        fontFamily: "Poppins",
+                        fontSize: 18
+                      }}>{variation.sku} - {variation.quantity}</Text>
+                    </View>
+                  }) 
+                }
+              </View>
+            })
+          }
         </ScrollView>
         <Text style={styles.heading}>{formatPrice(order.totalBill)}/-</Text>
       </View>

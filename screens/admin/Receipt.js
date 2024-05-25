@@ -48,14 +48,8 @@ const Receipt = ({ navigation, route }) => {
       </ScrollView>
 
       <View style={styles.customerInfo}>
-        <Image
-          source={{
-            uri: `${config.pictureUrl}/public/salesman/${order.image}`
-          }}
-          style={styles.salesmanImage}
-          defaultSource={require("../../assets/noimage.jpg")}
-        />
-        <Text style={styles.customerName}>{order.salesmanName}</Text>
+        <Text style={styles.customerName}>{order.customer.firstName + " " + order.customer.lastName}</Text>
+        <Text style={styles.address}>{order.customer.city} - {order.customer.address}</Text>
         <Text style={styles.totalAmount}>Total amount: {formatPrice(order.totalBill)} /- </Text>
       </View>
 
@@ -64,7 +58,7 @@ const Receipt = ({ navigation, route }) => {
 
       <View style={styles.feedbackContainer}>
         <Text style={styles.feed}>Customer Feedback:</Text>
-        <Text>{order.feedBack ? order.feedBack : "No feedback provided!"}</Text>
+        <Text>{order.customer ? order.customer.remarks : "No feedback provided!"}</Text>
       </View>
 
       <TouchableOpacity
@@ -119,7 +113,7 @@ const styles = StyleSheet.create({
     fontFamily: "Bold",
   },
   address: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#666",
   },
   totalAmount: {
