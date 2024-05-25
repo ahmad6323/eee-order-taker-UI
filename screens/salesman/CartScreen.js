@@ -22,7 +22,6 @@ const CartScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
   const [isPlaceOrderEnabled, setIsPlaceOrderEnabled] = useState(false);
   const [isFetchingLocation, setIsFetchingLocation] = useState(true);
-  const [offlineOrders, setOfflineOrders] = useState([]);
   const [totalBill, setTotalBill] = useState(0);
 
   useEffect(() => {
@@ -63,17 +62,6 @@ const CartScreen = ({ navigation }) => {
     fetchLocation();
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(async (state) => {
-      if (state.isConnected && offlineOrders.length > 0) {
-        await placeOfflineOrders();
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [offlineOrders]);
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
@@ -155,62 +143,12 @@ const CartScreen = ({ navigation }) => {
       };
 
       navigation.navigate("customer_details",{orderData});
-
-      // await saveOrder(orderData);
-      
-      // const isConnected = await NetInfo.fetch().then(
-      //   (state) => state.isConnected
-      // );
-      // test pending for offline orders placement
-      // if (isConnected) {
-      //   setCartItems([]);
-      //   navigation.navigate("done");
-      // } else {
-      //   await storeOfflineOrder(orderData);
-      //   Alert.alert(
-      //     "Offline Order Stored",
-      //     "Order will be placed when the internet connection is available."
-      //   );
-      // }
     } catch (error) {
       console.log(error);
       navigation.navigate("fail", error.response?.data);
     }
   };
-
-  const storeOfflineOrder = async (orderData) => {
-    try {
-      const existingOrders = await AsyncStorage.getItem("offlineOrders");
-      const orders = existingOrders ? JSON.parse(existingOrders) : [];
-      orders.push(orderData);
-      await AsyncStorage.setItem("offlineOrders", JSON.stringify(orders));
-      console.log("Stored offline order:", orderData); 
-    } catch (error) {
-      console.error("Error storing offline order:", error);
-    }
-  };
-
-  const placeOfflineOrders = async () => {
-    try {
-      const existingOrders = await AsyncStorage.getItem("offlineOrders");
-      console.log("Existing offline orders:", existingOrders); 
-      if (existingOrders) {
-        const orders = JSON.parse(existingOrders);
-        for (const order of orders) {
-          await saveOrder(order);
-          console.log("Placed offline order:", order);
-          // Add this log statement
-        }
-        await AsyncStorage.removeItem("offlineOrders");
-        setOfflineOrders([]);
-        navigation.navigate("done");
-      }
-    } catch (error) {
-      console.error("Error placing offline orders:", error);
-      navigation.navigate("fail");
-    }
-  };
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>

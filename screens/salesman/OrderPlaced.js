@@ -1,16 +1,15 @@
 import * as React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
+
 import {
-  FontFamily,
   Color,
   Border,
   Padding,
   FontSize,
 } from "../../GlobalStyles";
 
-const OrderPlaced = ({ navigation }) => {
+const OrderPlaced = ({ navigation, route }) => {
   return (
     <View style={[styles.orderPlaced, styles.iconLayout1]}>
       <View style={styles.orderPlacedChild} />
@@ -38,7 +37,7 @@ const OrderPlaced = ({ navigation }) => {
           Order Confirmed
         </Text>
         <Text style={[styles.orderHasBeen, { marginLeft: 20 }]}>
-          Order has been successfully placed!
+          {route.params.description}
         </Text>
       </View>
       <Pressable

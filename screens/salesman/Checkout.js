@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { StyleSheet, View, Text, Button, Alert } from "react-native";
 import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppForm from "../../components/forms/AppForm";
@@ -7,8 +7,11 @@ import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import colors from "../../config/colors";
 import AppText from "../../components/AppText";
 import { useCart } from "../../CartContext";
-import { saveOrder } from "../../utilty/orderUtility";
 import * as yup from "yup";
+import { saveOrder } from "../../utilty/orderUtility";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import NetInfo from "@react-native-community/netinfo";
+
 
 const customerDetailValidation = yup.object().shape({
   firstName: yup.string()
@@ -31,7 +34,6 @@ const customerDetailValidation = yup.object().shape({
     .required('Phone is required')
     .matches(/^\d{11}$/, 'Phone must be exactly 11 digits'),
   remarks: yup.string()
-    .required()
     .max(500, 'Remarks must be at most 500 characters'),
 });
 
@@ -57,15 +59,45 @@ function Checkout({ navigation, route }) {
     const finalOrderData = {
       ...orderData,
       customerData: info
-    }
-    try{
-      await saveOrder(finalOrderData);
-      navigation.navigate("done");
+    } 
+
+    // offline check
+    const isConnected = await NetInfo.fetch().then(
+      (state) => state.isConnected
+    );
+    
+    if (isConnected) {
+      // online
+      try{
+        await saveOrder(finalOrderData);
+        navigation.navigate("done", { description: "Order is placed successfully!"});
+        setCartItems([]);
+      }catch(ex){
+        console.log(ex);
+        setErrorVisible(true);
+        setError(ex.response.data);
+      }
+    }else{
+      // case: offline
+      await storeOfflineOrder(finalOrderData);
+      Alert.alert(
+        "Offline Order Stored",
+        "Order will be placed when the internet connection is available."
+      );
+      navigation.navigate("done", { description: "Order is locally stored, and will be processed when device is connected to the internet!"});
       setCartItems([]);
-    }catch(ex){
-      console.log(ex);
-      setErrorVisible(true);
-      setError(ex.response.data);
+    }
+  };
+
+  const storeOfflineOrder = async (orderData) => {
+    try {
+      const existingOrders = await AsyncStorage.getItem("offlineOrders");
+      const orders = existingOrders ? JSON.parse(existingOrders) : [];
+      orders.push(orderData);
+      await AsyncStorage.setItem("offlineOrders", JSON.stringify(orders));
+      console.log("Stored offline order:", orderData); 
+    } catch (error) {
+      console.error("Error storing offline order:", error);
     }
   };
 

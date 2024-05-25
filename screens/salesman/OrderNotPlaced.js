@@ -1,9 +1,7 @@
 import * as React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
 import {
-  FontFamily,
   Color,
   Border,
   Padding,
@@ -49,9 +47,9 @@ const OrderNotPlaced = ({ navigation, route }) => {
           styles.titlecaptionLayout,
           { marginLeft: 20 },
         ]}
-        onPress={() => navigation.navigate("cart")}
+        onPress={() => navigation.navigate("userhome")}
       >
-        <Text style={[styles.button, styles.cashTypo]}>Back to Checkout</Text>
+        <Text style={[styles.button, styles.cashTypo]}>Back to Home</Text>
       </Pressable>
 
       <View style={styles.navBar}>

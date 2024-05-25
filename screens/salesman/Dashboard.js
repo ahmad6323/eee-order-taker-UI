@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Alert } from "react-native";
 import AppText from "../../components/AppText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { UserContext } from "../../UserContext";
@@ -10,6 +10,9 @@ import { useCart } from "../../CartContext";
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { Easing, useSharedValue, useAnimatedStyle, withRepeat, withTiming } from 'react-native-reanimated';
 import { getDashboardContentForSalesman } from "../../utilty/salesmanUtility";
+
+import { saveOrder } from "../../utilty/orderUtility";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const AnimatedIcon = Animated.createAnimatedComponent(Ionicons);
@@ -35,8 +38,32 @@ const Dashboard = ({ navigation }) => {
         true,
       );
       getDashboardData(user._id);
+
+      // user logged in again after logging in / coming onlion, we place the orders if we have
+      // if not, skip
+      checkAndPlaceOffLineOrders();
     }
   }, [isFocused]);
+
+  const checkAndPlaceOffLineOrders = async ()=>{
+    try {
+      const existingOrders = await AsyncStorage.getItem("offlineOrders");
+      if (existingOrders) {
+        const orders = JSON.parse(existingOrders);
+        for (const order of orders) {
+          await saveOrder(order);
+        }
+        await AsyncStorage.removeItem("offlineOrders");
+        Alert.alert(
+          "Offline Orders Notification",
+          "All offline orders are cleared!"
+        )
+      }
+    } catch (error) {
+      console.error("Error placing offline orders:", error);
+      navigation.navigate("fail");
+    }
+  }
 
   const getDashboardData = async (id)=>{
     try {
