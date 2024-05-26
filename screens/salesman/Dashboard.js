@@ -13,7 +13,9 @@ import { getDashboardContentForSalesman } from "../../utilty/salesmanUtility";
 
 import { saveOrder } from "../../utilty/orderUtility";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Snackbar } from "react-native-paper";
 
+import NetInfo from "@react-native-community/netinfo";
 
 const AnimatedIcon = Animated.createAnimatedComponent(Ionicons);
 
@@ -27,6 +29,15 @@ const Dashboard = ({ navigation }) => {
 
   const [dashboardData, setDashboardData] = useState(null);
 
+  const [snackBarMessage, setSnackBarMessage] = useState("");
+
+  const [visible, setVisible] = React.useState(false);
+
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => {
+    setVisible(false);
+  } 
   useEffect(() => {
     if(isFocused){
       scale.value = withRepeat(
@@ -38,26 +49,35 @@ const Dashboard = ({ navigation }) => {
         true,
       );
       getDashboardData(user._id);
-
-      // user logged in again after logging in / coming onlion, we place the orders if we have
-      // if not, skip
       checkAndPlaceOffLineOrders();
     }
   }, [isFocused]);
 
   const checkAndPlaceOffLineOrders = async ()=>{
+    // add check for online, if offline remove token ?
     try {
-      const existingOrders = await AsyncStorage.getItem("offlineOrders");
-      if (existingOrders) {
-        const orders = JSON.parse(existingOrders);
-        for (const order of orders) {
-          await saveOrder(order);
+
+      // offline check
+      const isConnected = await NetInfo.fetch().then(
+        (state) => state.isConnected
+      );
+      
+      if (isConnected) {
+        // online
+        const existingOrders = await AsyncStorage.getItem("offlineOrders");
+        if (existingOrders) {
+          const orders = JSON.parse(existingOrders);
+          for (const order of orders) {
+            await saveOrder(order);
+          }
+          await AsyncStorage.removeItem("offlineOrders");
+          setSnackBarMessage("All offline orders are synced and cleared from your device!");
+          onToggleSnackBar();
         }
-        await AsyncStorage.removeItem("offlineOrders");
-        Alert.alert(
-          "Offline Orders Notification",
-          "All offline orders are cleared!"
-        )
+      }else{
+        // case: offline
+        setSnackBarMessage("Your device is offline! We will sync order, if available, once the device is online!");
+        onToggleSnackBar();
       }
     } catch (error) {
       console.error("Error placing offline orders:", error);
@@ -86,6 +106,17 @@ const Dashboard = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'Okay',
+          onPress: () => {
+            onDismissSnackBar()
+          },
+        }}>
+        {snackBarMessage}
+      </Snackbar>
       <View style={styles.innerContainer}>
         <View style={styles.logoContainer}>
           <AppText style={styles.logo}>{user.name}</AppText>

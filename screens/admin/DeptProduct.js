@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import AppText from "../../components/AppText";
 import SafeScreen from "../../components/SafeScreen";
-import { getdProducts } from "../../utilty/ProductUtility";
+import { getDepartmentProducts } from "../../utilty/ProductUtility";
+import config from "../../config.json"
 
 const DeptProduct = ({ route }) => {
   const { id, name } = route.params;
@@ -11,11 +12,10 @@ const DeptProduct = ({ route }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await getdProducts(id);
-        setProducts(response.data); // Assuming the response data is an array of products
+        const response = await getDepartmentProducts(id);
+        setProducts(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
-        // Handle error
       }
     };
 
@@ -36,7 +36,7 @@ const DeptProduct = ({ route }) => {
             <View style={styles.productContainer} key={index}>
               <View style={styles.imageContainer}>
                 <Image
-                  source={{ uri: product.imageUrl[0] }}
+                  source={{ uri: `${config.pictureUrl}/public/products/${product.imageUrl[0]}` }}
                   style={styles.productImage}
                   resizeMode="cover"
                   defaultSource={require("../../assets/noimage.jpg")}

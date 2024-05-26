@@ -38,6 +38,7 @@ function LoginScreen({ navigation }) {
 
       const newTimer = setTimeout(() => {
         authContext.setUser(null);
+        salesmanAuthService.removeToken();
       }, 900000);
 
       setTimer(newTimer);

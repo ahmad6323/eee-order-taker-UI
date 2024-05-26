@@ -72,7 +72,7 @@ function DepartmentScreen({ navigation }) {
   return (
     <ScrollView style={{ paddingTop: 50 }}>
       <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
-      <EditorModal visible={showModal} onPress={updateField} value={valueToEdit ? valueToEdit.value : "" } title={"Size"} onClose={()=>{
+      <EditorModal visible={showModal} onPress={updateField} value={valueToEdit ? valueToEdit.value : "" } title={"Department"} onClose={()=>{
         setShowModal(false);
         setValueToEdit(null);
         console.log("closing");

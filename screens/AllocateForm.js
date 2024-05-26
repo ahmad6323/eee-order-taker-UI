@@ -20,8 +20,6 @@ function AllocateForm({ navigation }) {
   const [errorVisible, setErrorVisible] = useState(false);
   const [salesmen, setSalesmen] = useState([]);
   const [products, setProducts] = useState([]);
-  const [sizes, setSizes] = useState([]);
-  const [colorFields, setColorFields] = useState([{ name: "", sizes: {} }]);
 
   const [allocations, setAllocations] = useState([]);
 
@@ -58,7 +56,7 @@ function AllocateForm({ navigation }) {
     };
 
     try {
-      const response = await allocate(result);
+      await allocate(result);
       navigation.navigate("allocation");
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -72,8 +70,7 @@ function AllocateForm({ navigation }) {
     if(salesman.value.length > 0){
       const { data } = await getProductsForSalesman(salesman.value);
       setProducts(data);
-      setAllocations([]);
-      setAllocations([...allocations, {productId: {}, quantity: 0}]);
+      setAllocations([{productId: {}, quantity: 0}]);
     }
   }
 
@@ -141,7 +138,7 @@ function AllocateForm({ navigation }) {
                     onChangeText={(value) => handleQuantityChange(index, value)}
                   />
                   <TouchableOpacity onPress={()=>{
-                      handleRemoveAllocation(index);
+                      // handleRemoveAllocation(index);
                     }} 
                       disabled={allocations.length === 1}
                       key={index+1500}

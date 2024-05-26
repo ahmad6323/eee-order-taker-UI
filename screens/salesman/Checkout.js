@@ -11,7 +11,7 @@ import * as yup from "yup";
 import { saveOrder } from "../../utilty/orderUtility";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
-
+import { Snackbar } from "react-native-paper";
 
 const customerDetailValidation = yup.object().shape({
   firstName: yup.string()
@@ -43,6 +43,17 @@ function Checkout({ navigation, route }) {
 
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
+
+  const [visible, setVisible] = React.useState(false);
+
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => {
+    setVisible(false);
+    navigation.navigate("done", { description: "Order is locally stored, and will be processed when device is connected to the internet!"});
+  }
+
+  const [snackBarMessage, setSnackBarMessage] = useState("");
 
   const { setCartItems } = useCart();
 
@@ -80,12 +91,9 @@ function Checkout({ navigation, route }) {
     }else{
       // case: offline
       await storeOfflineOrder(finalOrderData);
-      Alert.alert(
-        "Offline Order Stored",
-        "Order will be placed when the internet connection is available."
-      );
-      navigation.navigate("done", { description: "Order is locally stored, and will be processed when device is connected to the internet!"});
       setCartItems([]);
+      setSnackBarMessage("Order is saved, it will be uploaded once the device is connected to the internet!");
+      onToggleSnackBar();
     }
   };
 
@@ -95,7 +103,6 @@ function Checkout({ navigation, route }) {
       const orders = existingOrders ? JSON.parse(existingOrders) : [];
       orders.push(orderData);
       await AsyncStorage.setItem("offlineOrders", JSON.stringify(orders));
-      console.log("Stored offline order:", orderData); 
     } catch (error) {
       console.error("Error storing offline order:", error);
     }
@@ -103,6 +110,17 @@ function Checkout({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+      <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: 'Okay',
+          onPress: () => {
+            onDismissSnackBar()
+          },
+        }}>
+        {snackBarMessage}
+      </Snackbar>
       <View style={styles.innerContainer}>
         <View style={styles.logoContainer}>
           <Button

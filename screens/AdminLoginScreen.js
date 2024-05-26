@@ -23,6 +23,8 @@ function LoginScreen({ navigation }) {
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
 
+  const [timer, setTimer] = useState(null);
+
   const handleSubmit = async ({ email, password }) => {
     try {
       setIsLoading(true);
@@ -31,6 +33,16 @@ function LoginScreen({ navigation }) {
       authContext.setUser(user);
       adminAuth.storeToken(data);
       setErrorVisible(false);
+
+      if (timer) clearTimeout(timer);
+
+      const newTimer = setTimeout(() => {
+        authContext.setUser(null);
+        adminAuth.removeToken();
+      }, 900000);
+
+      setTimer(newTimer);
+
     } catch (error) {
       if (error.response && error.response.status === 400)
         setError(error.response.data);

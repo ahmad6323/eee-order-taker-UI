@@ -146,7 +146,7 @@ const AddedProducts = ({ navigation }) => {
                         name="delete"
                         size={25}
                         color={colors.primary}
-                        onPress={() => handleDelete(product._id)}
+                        // onPress={() => handleDelete(product._id)}
                       />
                       <MaterialCommunityIcons
                         name="pencil"

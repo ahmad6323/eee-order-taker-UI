@@ -30,3 +30,8 @@ export function deleteProduct(productId) {
 export function getdProducts(did) {
   return httpService.get(`${apiEndpoint}/department/${did}`);
 }
+
+
+export function getDepartmentProducts(departId) {
+  return httpService.get(apiEndpoint + `/department_products/${departId}`);
+}
