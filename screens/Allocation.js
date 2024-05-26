@@ -67,9 +67,7 @@ const AllocationScreen = ({ navigation }) => {
             </View>
           ))
         }
-        <TouchableOpacity 
-          // onPress={() => handleDeleteAllocation(item._id)}
-        >
+        <TouchableOpacity onPress={() => handleDeleteAllocation(item._id)} >
           <MaterialIcons
             style={{ alignSelf: "flex-end" }}
             name="delete-outline"
