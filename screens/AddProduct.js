@@ -21,6 +21,13 @@ import { getColors } from "../utilty/colorUtility";
 import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import * as FileSystem from "expo-file-system";
+import * as Yup from "yup";
+
+const productSchema = Yup.object().shape({
+  name: Yup.string().required('Name is required'),
+  price: Yup.number().required('Price is required').min(0, 'Price must be at least 0'),
+  description: Yup.string().required('Description is required'),
+});
 
 
 function AddProduct({ navigation }) {
@@ -69,6 +76,12 @@ function AddProduct({ navigation }) {
   const handleSubmit = async (productData) => {
     try {
 
+      if(!productData.category){
+        setError("Please select a category");
+        setErrorVisible(true);
+        return;
+      }
+      
       let formData = new FormData();
 
       formData.append('name', productData.name);
@@ -135,13 +148,14 @@ function AddProduct({ navigation }) {
                   name: "",
                   category: "",
                   department: "",
-                  price: "",
+                  price: 0,
                   sizes: selectedSizes,
                   colors: selectedColors,
                   imageUrl: [],
                   description: "",
                 }}
                 onSubmit={handleSubmit}
+                validationSchema={productSchema}
               >
                 <AppErrorMessage error={error} visible={errorVisible} />
                 <AppFormField
