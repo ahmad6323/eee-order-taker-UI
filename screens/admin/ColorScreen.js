@@ -69,7 +69,9 @@ function ColorScreen({ navigation }) {
   }
 
   return (
-    <ScrollView style={{ paddingTop: 40 }}>
+    <ScrollView style={{ paddingTop: 40 }}
+      showsVerticalScrollIndicator={false}
+    >
       <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
       <EditorModal title={"Color"} value={valueToEdit ? valueToEdit.value : ""} visible={showModal} onPress={updateField} onClose={()=>{
         setValueToEdit(null);

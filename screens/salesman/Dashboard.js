@@ -120,7 +120,7 @@ const Dashboard = ({ navigation }) => {
       <View style={styles.innerContainer}>
         <View style={styles.logoContainer}>
           <AppText style={styles.logo}>{user.name}</AppText>
-          <AppText style={styles.subText}>Department : Apparel</AppText>
+          <AppText style={styles.subText}>Department : {user.departments}</AppText>
         </View>
       </View>
       <View
@@ -246,6 +246,7 @@ const Dashboard = ({ navigation }) => {
               marginHorizontal: 15,
               elevation: 6,
             }}
+            onPress={()=>{navigation.navigate("history")}}
           >
             <View style={{ alignItems: "flex-start" }}>
               <AppText
@@ -253,7 +254,6 @@ const Dashboard = ({ navigation }) => {
                   color: "black",
                   fontSize: 15,
                 }}
-                onPress={()=>{navigation.navigate("history")}}
               >
                 Order History
               </AppText>

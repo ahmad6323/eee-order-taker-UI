@@ -41,6 +41,9 @@ const History = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Order History</Text>
+      {
+        orders.length === 0 && <Text style={styles.itemName}>No Orders Available to view!</Text>
+      }
       <FlatList
         data={orders}
         keyExtractor={(item) => item.orderId}

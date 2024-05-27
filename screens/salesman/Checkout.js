@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, Alert } from "react-native";
+import { StyleSheet, View, Text, Button } from "react-native";
 import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppForm from "../../components/forms/AppForm";
@@ -12,6 +12,7 @@ import { saveOrder } from "../../utilty/orderUtility";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { Snackbar } from "react-native-paper";
+import SafeScreen from "../../components/SafeScreen";
 
 const customerDetailValidation = yup.object().shape({
   firstName: yup.string()
@@ -109,172 +110,174 @@ function Checkout({ navigation, route }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Snackbar
-        visible={visible}
-        onDismiss={onDismissSnackBar}
-        action={{
-          label: 'Okay',
-          onPress: () => {
-            onDismissSnackBar()
-          },
-        }}>
-        {snackBarMessage}
-      </Snackbar>
-      <View style={styles.innerContainer}>
-        <View style={styles.logoContainer}>
-          <Button
-            onPress={() => navigation.navigate("cart")}
-            title="Cancel"
-          />
-          <AppText style={styles.logo}>Add Customer Details</AppText>
-          <AppText style={styles.subText}>
-            Add customers details to confirm...
-          </AppText>
-        </View>
-        <View style={styles.formContainer}>
-          <AppForm
-            initialValues={values}
-            onSubmit={handleSubmit}
-            validationSchema={customerDetailValidation}
-          >
-            <AppErrorMessage error={error} visible={errorVisible} />
-            <View 
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between"
-              }}
+    <SafeScreen>
+      <View style={styles.container}>
+        <Snackbar
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          action={{
+            label: 'Okay',
+            onPress: () => {
+              onDismissSnackBar()
+            },
+          }}>
+          {snackBarMessage}
+        </Snackbar>
+        <View style={styles.innerContainer}>
+          <View style={styles.logoContainer}>
+            <Button
+              onPress={() => navigation.navigate("cart")}
+              title="Cancel"
+            />
+            <AppText style={styles.logo}>Add Customer Details</AppText>
+            <AppText style={styles.subText}>
+              Add customers details to confirm...
+            </AppText>
+          </View>
+          <View style={styles.formContainer}>
+            <AppForm
+              initialValues={values}
+              onSubmit={handleSubmit}
+              validationSchema={customerDetailValidation}
             >
-              <View
+              <AppErrorMessage error={error} visible={errorVisible} />
+              <View 
                 style={{
-                  width:"46%",
-                  flexDirection: "column",
+                  flexDirection: "row",
+                  justifyContent: "space-between"
                 }}
               >
-                <Text
-                  style={styles.labels}
+                <View
+                  style={{
+                    width:"46%",
+                    flexDirection: "column",
+                  }}
                 >
-                  First Name
-                </Text>
-                <AppFormField
-                  name={"firstName"}
+                  <Text
+                    style={styles.labels}
+                  >
+                    First Name
+                  </Text>
+                  <AppFormField
+                    name={"firstName"}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    placeholder="First Name"
+                  />
+                </View>
+                <View
+                  style={{
+                    width:"47%",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Text
+                    style={styles.labels}
+                  >
+                    Last Name
+                  </Text>
+                  <AppFormField
+                    name={"lastName"}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    placeholder="Last Name"
+                  />
+                </View>
+              </View>
+              <View
+                  style={{
+                    flexDirection: "column",
+                  }}
+                >
+                  <Text
+                    style={styles.labels}
+                  >
+                    City
+                  </Text>
+                  <AppFormField
+                    name={"city"}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    placeholder="City"
+                  />
+              </View>
+              <View
+                  style={{
+                    flexDirection: "column",
+                  }}
+                >
+                  <Text
+                    style={styles.labels}
+                  >
+                    Address
+                  </Text>
+                  <AppFormField
+                  name={"address"}
                   autoCapitalize="none"
                   autoCorrect={false}
-                  placeholder="First Name"
+                  placeholder="Address"
                 />
               </View>
               <View
-                style={{
-                  width:"47%",
-                  flexDirection: "column",
-                }}
-              >
-                <Text
-                  style={styles.labels}
+                  style={{
+                    flexDirection: "column",
+                  }}
                 >
-                  Last Name
-                </Text>
-                <AppFormField
-                  name={"lastName"}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  placeholder="Last Name"
-                />
+                  <Text
+                    style={styles.labels}
+                  >
+                    Phone No.
+                  </Text>
+                  <AppFormField
+                    name={"phone"}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    placeholder="Phone Number"
+                  />
               </View>
-            </View>
-            <View
-                style={{
-                  flexDirection: "column",
-                }}
-              >
-                <Text
-                  style={styles.labels}
+              <View
+                  style={{
+                    flexDirection: "column",
+                  }}
                 >
-                  City
-                </Text>
-                <AppFormField
-                  name={"city"}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  placeholder="City"
-                />
-            </View>
-            <View
-                style={{
-                  flexDirection: "column",
-                }}
-              >
+                  <Text
+                    style={styles.labels}
+                  >
+                    Remarks
+                  </Text>
+                  <AppFormField
+                    name={"remarks"}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    placeholder="Remarks"
+                  />
+              </View>
+              <View style={styles.totalParent}>
                 <Text
-                  style={styles.labels}
+                  style={{
+                    fontSize: 18,
+                    fontFamily: "Poppins"
+                  }}
                 >
-                  Address
+                  Total
                 </Text>
-                <AppFormField
-                name={"address"}
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholder="Address"
-              />
-            </View>
-            <View
-                style={{
-                  flexDirection: "column",
-                }}
-              >
                 <Text
-                  style={styles.labels}
+                  style={{
+                    fontSize: 18,
+                    fontFamily: "Bold"
+                  }}
                 >
-                  Phone No.
+                  {
+                    orderData && orderData.totalPrice
+                  }
                 </Text>
-                <AppFormField
-                  name={"phone"}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  placeholder="Phone Number"
-                />
-            </View>
-            <View
-                style={{
-                  flexDirection: "column",
-                }}
-              >
-                <Text
-                  style={styles.labels}
-                >
-                  Remarks
-                </Text>
-                <AppFormField
-                  name={"remarks"}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  placeholder="Remarks"
-                />
-            </View>
-            <View style={styles.totalParent}>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: "Poppins"
-                }}
-              >
-                Total
-              </Text>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: "Bold"
-                }}
-              >
-                {
-                  orderData && orderData.totalPrice
-                }
-              </Text>
-            </View>
-            <SubmitButton title={"Place Order"} />
-          </AppForm>
+              </View>
+              <SubmitButton title={"Place Order"} />
+            </AppForm>
+          </View>
         </View>
       </View>
-    </View>
+    </SafeScreen>
   );
 }
 

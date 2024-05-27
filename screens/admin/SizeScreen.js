@@ -68,7 +68,9 @@ function SizeScreen({ navigation }) {
   }
 
   return (
-    <ScrollView style={{ paddingTop: 50 }}>
+    <ScrollView style={{ paddingTop: 50 }} 
+      showsVerticalScrollIndicator={false}
+    >
       <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
       <EditorModal visible={showModal} onPress={updateField} value={valueToEdit ? valueToEdit.value : "" } title={"Size"} onClose={()=>{
         setShowModal(false);

@@ -70,7 +70,9 @@ function DepartmentScreen({ navigation }) {
   }
 
   return (
-    <ScrollView style={{ paddingTop: 50 }}>
+    <ScrollView style={{ paddingTop: 30 }}
+      showsVerticalScrollIndicator={false}
+    >
       <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
       <EditorModal visible={showModal} onPress={updateField} value={valueToEdit ? valueToEdit.value : "" } title={"Department"} onClose={()=>{
         setShowModal(false);
