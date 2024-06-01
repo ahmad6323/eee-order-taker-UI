@@ -16,9 +16,7 @@ import { Entypo } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { getProfileScreenData } from "../utilty/orderUtility";
 
-
 const ProfileScreen = ({ navigation }) => {
-
   const [ordersAndSales, setOrdersAndSales] = useState(null);
 
   const { setUser } = useContext(UserContext);
@@ -26,7 +24,7 @@ const ProfileScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const {data} = await getProfileScreenData();
+        const { data } = await getProfileScreenData();
         setOrdersAndSales(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -67,11 +65,15 @@ const ProfileScreen = ({ navigation }) => {
               >
                 <View>
                   <Text style={styles.text1}>Total Orders</Text>
-                  <Text style={styles.text2}>{ordersAndSales ? ordersAndSales.orders : 0}</Text>
+                  <Text style={styles.text2}>
+                    {ordersAndSales ? ordersAndSales.orders : 0}
+                  </Text>
                 </View>
                 <View>
                   <Text style={styles.text1}>Total Sales</Text>
-                  <Text style={styles.totalSalesNumber}>{ordersAndSales ? ordersAndSales.totalSales : "0.00"} /- </Text>
+                  <Text style={styles.totalSalesNumber}>
+                    {ordersAndSales ? ordersAndSales.totalSales : "0.00"} /-{" "}
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -130,29 +132,27 @@ const ProfileScreen = ({ navigation }) => {
               style={{ flexDirection: "row", justifyContent: "space-evenly" }}
             >
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("addsaleman", { new: true })
-                }
+                onPress={() => navigation.navigate("addsaleman", { new: true })}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 100,
                   alignItems: "center",
                   marginVertical: 10,
                   backgroundColor: "#f8f4f4",
-                  justifyContent: "space-around",
+                  // justifyContent: "space-around",
                   borderRadius: 10,
                   padding: 5,
                 }}
               >
                 <MaterialIcons name="man" size={40} color="#fc5c65" />
-                <Text style={styles.buttonHeadings} >Add Salesman</Text>
+                <Text style={styles.buttonHeadings}>Add Salesman</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("addproduct", { product: {} })
                 }
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 100,
                   alignItems: "center",
                   marginVertical: 10,
@@ -172,7 +172,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("allocation")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 100,
                   alignItems: "center",
                   marginVertical: 10,
@@ -187,17 +187,26 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <Text
-              style={{ color: colors.dark, fontSize: 18, paddingLeft: 15, paddingRight: 15, fontFamily: "Bold" }}
+              style={{
+                color: colors.dark,
+                fontSize: 18,
+                paddingLeft: 15,
+                paddingRight: 15,
+                fontFamily: "Bold",
+              }}
             >
               More Options
             </Text>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between", padding: 15 }}
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+              }}
             >
               <TouchableOpacity
                 onPress={() => navigation.navigate("department")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -213,7 +222,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("history")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -229,7 +238,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("categories")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -244,12 +253,15 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between", paddingLeft: 15, paddingRight: 15, }}
+              style={{
+                flexDirection: "row",
+                justifyContent: "flex-start",
+              }}
             >
               <TouchableOpacity
                 onPress={() => navigation.navigate("sizes")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -257,6 +269,8 @@ const ProfileScreen = ({ navigation }) => {
                   justifyContent: "space-around",
                   borderRadius: 10,
                   padding: 5,
+                  marginLeft: 10,
+                  marginRight: 8,
                 }}
               >
                 <FontAwesome6
@@ -269,7 +283,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("colors")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -279,28 +293,16 @@ const ProfileScreen = ({ navigation }) => {
                   padding: 5,
                 }}
               >
-                <FontAwesome6
-                  name="brush"
-                  size={35}
-                  color="black"
-                />
+                <FontAwesome6 name="brush" size={35} color="black" />
                 <Text style={styles.buttonHeadings}>Colors</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 120,
-                  height: 90,
-                  alignItems: "center",
-                  marginVertical: 10,
-                  justifyContent: "space-around",
-                  borderRadius: 10,
-                  padding: 5,
-                }}
-              >
               </TouchableOpacity>
             </View>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between", paddingLeft: 10 }}
+              style={{
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                paddingLeft: 10,
+              }}
             >
               <TouchableOpacity
                 onPress={() => {
@@ -316,11 +318,7 @@ const ProfileScreen = ({ navigation }) => {
                   padding: 5,
                 }}
               >
-                <FontAwesome6
-                  name="door-open"
-                  size={25}
-                  color="red"
-                />
+                <FontAwesome6 name="door-open" size={25} color="red" />
                 <Text style={styles.buttonHeadings}>Logout</Text>
               </TouchableOpacity>
             </View>
@@ -367,7 +365,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     marginBottom: 10,
-    width: "100%"
+    width: "100%",
   },
   row: {
     flexDirection: "row",
@@ -380,8 +378,8 @@ const styles = StyleSheet.create({
   buttonHeadings: {
     fontSize: 14,
     fontFamily: "Poppins",
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });
 
 export default ProfileScreen;
