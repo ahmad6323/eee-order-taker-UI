@@ -135,11 +135,11 @@ const ProfileScreen = ({ navigation }) => {
                 onPress={() => navigation.navigate("addsaleman", { new: true })}
                 style={{
                   width: "30%",
-                  height: 100,
+                  height: 90,
                   alignItems: "center",
                   marginVertical: 10,
                   backgroundColor: "#f8f4f4",
-                  // justifyContent: "space-around",
+                  justifyContent: "space-around",
                   borderRadius: 10,
                   padding: 5,
                 }}
@@ -153,7 +153,7 @@ const ProfileScreen = ({ navigation }) => {
                 }
                 style={{
                   width: "30%",
-                  height: 100,
+                  height: 90,
                   alignItems: "center",
                   marginVertical: 10,
                   backgroundColor: "#f8f4f4",
@@ -173,7 +173,7 @@ const ProfileScreen = ({ navigation }) => {
                 onPress={() => navigation.navigate("allocation")}
                 style={{
                   width: "30%",
-                  height: 100,
+                  height: 90,
                   alignItems: "center",
                   marginVertical: 10,
                   backgroundColor: "#f8f4f4",
@@ -255,7 +255,7 @@ const ProfileScreen = ({ navigation }) => {
             <View
               style={{
                 flexDirection: "row",
-                justifyContent: "flex-start",
+                justifyContent: "space-evenly",
               }}
             >
               <TouchableOpacity
@@ -269,8 +269,6 @@ const ProfileScreen = ({ navigation }) => {
                   justifyContent: "space-around",
                   borderRadius: 10,
                   padding: 5,
-                  marginLeft: 10,
-                  marginRight: 8,
                 }}
               >
                 <FontAwesome6
@@ -296,29 +294,23 @@ const ProfileScreen = ({ navigation }) => {
                 <FontAwesome6 name="brush" size={35} color="black" />
                 <Text style={styles.buttonHeadings}>Colors</Text>
               </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                paddingLeft: 10,
-              }}
-            >
               <TouchableOpacity
                 onPress={() => {
                   setUser(null);
                   adminAuth.removeToken();
                 }}
                 style={{
-                  width: 70,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
+                  backgroundColor: "#f8f4f4",
+                  justifyContent: "space-around",
                   borderRadius: 10,
                   padding: 5,
                 }}
               >
-                <FontAwesome6 name="door-open" size={25} color="red" />
+                <FontAwesome6 name="door-open" size={25} color="black" />
                 <Text style={styles.buttonHeadings}>Logout</Text>
               </TouchableOpacity>
             </View>
