@@ -39,12 +39,24 @@ const ProfileScreen = ({ navigation }) => {
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.innerContainer}>
-            <View style={{ alignItems: "flex-start", marginBottom: 10 }}>
-              <Text style={{ fontFamily: "Bold", fontSize: 27 }}>
+            <View
+              style={{
+                alignItems: "flex-start",
+                marginBottom: 10,
+              }}
+            >
+              <Text
+                style={{ fontFamily: "Bold", fontSize: 27, marginRight: 10 }}
+              >
                 Admin Panel
               </Text>
               <Text
-                style={{ fontFamily: "Bold", fontSize: 14, color: "#6e6969" }}
+                style={{
+                  fontFamily: "Bold",
+                  fontSize: 14,
+                  color: "#6e6969",
+                  lineHeight: 16,
+                }}
               >
                 Select Any Option Below
               </Text>
@@ -57,7 +69,7 @@ const ProfileScreen = ({ navigation }) => {
                 style={{
                   backgroundColor: "#fc5c65",
                   width: "50%",
-                  height: "100",
+                  height: 300,
                   borderRadius: 10,
                   justifyContent: "space-between",
                   padding: 8,
@@ -65,7 +77,7 @@ const ProfileScreen = ({ navigation }) => {
               >
                 <View>
                   <Text style={styles.text1}>Total Orders</Text>
-                  <Text style={styles.text2}>
+                  <Text style={styles.totalSalesNumber}>
                     {ordersAndSales ? ordersAndSales.orders : 0}
                   </Text>
                 </View>
@@ -324,10 +336,10 @@ const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   background: {
     backgroundColor: "#f8f4f4",
-    flex: 1,
+    // flex: 1,
   },
   container: {
-    flex: 1,
+    // flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
