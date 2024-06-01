@@ -1,4 +1,4 @@
 {
-  "apiUrl": "http://172.20.10.7:3500/api",
-  "pictureUrl": "http://172.20.10.7:3500"
+  "apiUrl": "http://10.13.23.17:3500/api",
+  "pictureUrl": "http://10.13.23.17:3500"
 }

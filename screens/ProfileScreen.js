@@ -56,7 +56,7 @@ const ProfileScreen = ({ navigation }) => {
                 }
                 style={{
                   backgroundColor: "#fc5c65",
-                  width: "55%",
+                  width: "50%",
                   height: "100",
                   borderRadius: 10,
                   justifyContent: "space-between",
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   column: {
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
   },
   buttonHeadings: {
     fontSize: 14,
