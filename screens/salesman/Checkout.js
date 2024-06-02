@@ -1,5 +1,10 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import React, {
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
+import { StyleSheet, View, Text, Button, Image } from "react-native";
 import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppForm from "../../components/forms/AppForm";
@@ -13,6 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { Snackbar } from "react-native-paper";
 import SafeScreen from "../../components/SafeScreen";
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 
 const customerDetailValidation = yup.object().shape({
   firstName: yup.string()
@@ -67,11 +73,22 @@ function Checkout({ navigation, route }) {
     remarks: "",
   };
 
+  const [confirmSheet, setConfirmSheet] = useState(false);
+  const [orderDataConfirmed, setOrderDataConfirmed] = useState(null);
+
   const handleSubmit = async (info) => {
+    setConfirmSheet(true);
     const finalOrderData = {
       ...orderData,
       customerData: info
     } 
+    setOrderDataConfirmed(finalOrderData);
+  };
+
+  const orderConfirmed = async ()=>{
+    if(orderDataConfirmed == null){
+      return;
+    }
 
     // offline check
     const isConnected = await NetInfo.fetch().then(
@@ -81,7 +98,7 @@ function Checkout({ navigation, route }) {
     if (isConnected) {
       // online
       try{
-        await saveOrder(finalOrderData);
+        await saveOrder(orderDataConfirmed);
         navigation.navigate("done", { description: "Order is placed successfully!"});
         setCartItems([]);
       }catch(ex){
@@ -91,12 +108,14 @@ function Checkout({ navigation, route }) {
       }
     }else{
       // case: offline
-      await storeOfflineOrder(finalOrderData);
+      await storeOfflineOrder(orderDataConfirmed);
       setCartItems([]);
       setSnackBarMessage("Order is saved, it will be uploaded once the device is connected to the internet!");
       onToggleSnackBar();
     }
-  };
+
+    setConfirmSheet(false);
+  }
 
   const storeOfflineOrder = async (orderData) => {
     try {
@@ -108,6 +127,12 @@ function Checkout({ navigation, route }) {
       console.error("Error storing offline order:", error);
     }
   };
+
+  const bottomSheetRef = useRef(2);
+
+  const snapPoints = useMemo(() => ["40%", "50%"], []);
+  // callbacks
+  const handleSheetChanges = useCallback((index) => {}, []);
 
   return (
     <SafeScreen>
@@ -277,6 +302,36 @@ function Checkout({ navigation, route }) {
           </View>
         </View>
       </View>
+      {
+        confirmSheet && 
+        <BottomSheet
+          ref={bottomSheetRef}
+          onChange={handleSheetChanges}
+          snapPoints={snapPoints}
+        >
+          <BottomSheetView style={styles.contentContainer}>
+            <Image
+              source={require("../../assets/order_confirm.png")}
+              style={styles.image}
+            />
+            <Text style={styles.boldText}>Confirm Order</Text>
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: "Poppins"
+              }}
+            >
+              All seems good! Confirm order
+            </Text>
+            <Button
+              title="Confirm"
+              onPress={()=>{
+                orderConfirmed();
+              }}
+            />
+          </BottomSheetView>
+        </BottomSheet>
+      }
     </SafeScreen>
   );
 }
@@ -349,7 +404,22 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     alignItems: "center",
   },
-
+  contentContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: 145,
+    height: 145,
+    backgroundColor: "transparent",
+    marginBottom: 20,
+    resizeMode: "cover"
+  },
+  boldText: {
+    fontFamily: 'Bold',
+    fontSize: 22,
+    marginBottom: 10,
+  },
 });
 
 export default Checkout;

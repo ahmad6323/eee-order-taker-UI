@@ -13,7 +13,22 @@ import { MultiSelect } from 'react-native-element-dropdown';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import ImageInput from "../components/ImageInput"
 import * as FileSystem from "expo-file-system";
+import * as Yup from "yup";
 
+const formValidationSchema = Yup.object().shape({
+  name: Yup.string()
+    .required('Name is required')
+    .max(100, 'Name must be less than 100 characters'),
+  email: Yup.string()
+    .email('Invalid email format')
+    .required('Email is required'),
+  phone: Yup.string()
+    .matches(/^\d{11}$/, 'Phone number must be exactly 11 digits')
+    .required('Phone number is required'),
+  password: Yup.string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters'),
+});
 
 function AddSalesman({ navigation, route }) {
   const [error, setError] = useState();
@@ -23,7 +38,6 @@ function AddSalesman({ navigation, route }) {
   const [selectedDepartments, setSelectedDepartments] = useState([]);
   const [image, setImage] = useState(null);
   const { salesman } = route.params;
-
 
   let values = {
     _id: route.params.new === false  ? route.params.salesman._id : "",
@@ -102,6 +116,7 @@ function AddSalesman({ navigation, route }) {
           <AppForm
             initialValues={values}
             onSubmit={handleSubmit}
+            validationSchema={formValidationSchema}
           >
             <AppErrorMessage error={error} visible={errorVisible} />
             <AppFormField

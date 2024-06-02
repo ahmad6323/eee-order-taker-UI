@@ -18,19 +18,19 @@ const AllocationScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    const fetchAllocations = async () => {
-      try {
-        const { data } = await getAllocations();
-        setAllocations(data);
-      } catch (error) {
-        console.error("Error fetching allocations data:", error);
-      }
-    };
-
     if(isFocused){
       fetchAllocations();
     }
-  }, []);
+  }, [isFocused]);
+
+  const fetchAllocations = async () => {
+    try {
+      const { data } = await getAllocations();
+      setAllocations(data);
+    } catch (error) {
+      console.error("Error fetching allocations data:", error);
+    }
+  };
 
   const handleDeleteAllocation = async (id) => {
     try {

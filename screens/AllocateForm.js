@@ -40,30 +40,46 @@ function AllocateForm({ navigation }) {
     fetchData();
   }, []);
 
+
   const handleSubmit = async (info) => {
     // Clean the allocations and extract only the value from productId
-    const cleanedAllocations = allocations.map(allocation => {
-      return {
-        productId: allocation.productId.value,
-        quantity: allocation.quantity
-      };
-    });
+    // Step 1: Clean the allocations
+    const cleanedAllocations = allocations.map(allocation => ({
+      productId: allocation.productId.value,
+      quantity: allocation.quantity
+    }));
+
+    // Step 2: Filter out allocations with quantity zero
+    const filteredAllocations = cleanedAllocations.filter(allocation => allocation.quantity !== 0);
+
+    if(filteredAllocations.length === 0){
+      setError("No products were allocated!");
+      setErrorVisible(true)
+      return;
+    }
 
     // Combine the cleaned allocations with the values object
     const result = {
       ...info,
-      allocations: cleanedAllocations
+      allocations: filteredAllocations
     };
 
-    try {
-      await allocate(result);
-      navigation.navigate("allocation");
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        setError(error.response.data);
-        setErrorVisible(true);
+    if(result.salesmanId.length === 0){
+      setError("No product was allocated!");
+      setErrorVisible(true)
+      return;
+    }else{
+      try {
+        await allocate(result);
+        navigation.navigate("allocation");
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          setError(error.response.data);
+          setErrorVisible(true);
+        }
       }
     }
+
   };
 
   const productsForSalesman = async (salesman)=>{
@@ -138,7 +154,7 @@ function AllocateForm({ navigation }) {
                     onChangeText={(value) => handleQuantityChange(index, value)}
                   />
                   <TouchableOpacity onPress={()=>{
-                      // handleRemoveAllocation(index);
+                      handleRemoveAllocation(index);
                     }} 
                       disabled={allocations.length === 1}
                       key={index+1500}
