@@ -16,9 +16,7 @@ import { Entypo } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { getProfileScreenData } from "../utilty/orderUtility";
 
-
 const ProfileScreen = ({ navigation }) => {
-
   const [ordersAndSales, setOrdersAndSales] = useState(null);
 
   const { setUser } = useContext(UserContext);
@@ -26,7 +24,7 @@ const ProfileScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const {data} = await getProfileScreenData();
+        const { data } = await getProfileScreenData();
         setOrdersAndSales(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -41,12 +39,24 @@ const ProfileScreen = ({ navigation }) => {
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.innerContainer}>
-            <View style={{ alignItems: "flex-start", marginBottom: 10 }}>
-              <Text style={{ fontFamily: "Bold", fontSize: 27 }}>
+            <View
+              style={{
+                alignItems: "flex-start",
+                marginBottom: 10,
+              }}
+            >
+              <Text
+                style={{ fontFamily: "Bold", fontSize: 27, marginRight: 10 }}
+              >
                 Admin Panel
               </Text>
               <Text
-                style={{ fontFamily: "Bold", fontSize: 14, color: "#6e6969" }}
+                style={{
+                  fontFamily: "Bold",
+                  fontSize: 14,
+                  color: "#6e6969",
+                  lineHeight: 16,
+                }}
               >
                 Select Any Option Below
               </Text>
@@ -58,8 +68,8 @@ const ProfileScreen = ({ navigation }) => {
                 }
                 style={{
                   backgroundColor: "#fc5c65",
-                  width: "55%",
-                  height: "100",
+                  width: "50%",
+                  height: 300,
                   borderRadius: 10,
                   justifyContent: "space-between",
                   padding: 8,
@@ -67,11 +77,15 @@ const ProfileScreen = ({ navigation }) => {
               >
                 <View>
                   <Text style={styles.text1}>Total Orders</Text>
-                  <Text style={styles.text2}>{ordersAndSales ? ordersAndSales.orders : 0}</Text>
+                  <Text style={styles.totalSalesNumber}>
+                    {ordersAndSales ? ordersAndSales.orders : 0}
+                  </Text>
                 </View>
                 <View>
                   <Text style={styles.text1}>Total Sales</Text>
-                  <Text style={styles.totalSalesNumber}>{ordersAndSales ? ordersAndSales.totalSales : "0.00"} /- </Text>
+                  <Text style={styles.totalSalesNumber}>
+                    {ordersAndSales ? ordersAndSales.totalSales : "0.00"} /-{" "}
+                  </Text>
                 </View>
                 <View
                   style={{
@@ -130,12 +144,10 @@ const ProfileScreen = ({ navigation }) => {
               style={{ flexDirection: "row", justifyContent: "space-evenly" }}
             >
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("addsaleman", { new: true })
-                }
+                onPress={() => navigation.navigate("addsaleman", { new: true })}
                 style={{
-                  width: 120,
-                  height: 100,
+                  width: "30%",
+                  height: 90,
                   alignItems: "center",
                   marginVertical: 10,
                   backgroundColor: "#f8f4f4",
@@ -145,15 +157,15 @@ const ProfileScreen = ({ navigation }) => {
                 }}
               >
                 <MaterialIcons name="man" size={40} color="#fc5c65" />
-                <Text style={styles.buttonHeadings} >Add Salesman</Text>
+                <Text style={styles.buttonHeadings}>Add Salesman</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("addproduct", { product: {} })
                 }
                 style={{
-                  width: 120,
-                  height: 100,
+                  width: "30%",
+                  height: 90,
                   alignItems: "center",
                   marginVertical: 10,
                   backgroundColor: "#f8f4f4",
@@ -172,8 +184,8 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("allocation")}
                 style={{
-                  width: 120,
-                  height: 100,
+                  width: "30%",
+                  height: 90,
                   alignItems: "center",
                   marginVertical: 10,
                   backgroundColor: "#f8f4f4",
@@ -187,17 +199,26 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <Text
-              style={{ color: colors.dark, fontSize: 18, paddingLeft: 15, paddingRight: 15, fontFamily: "Bold" }}
+              style={{
+                color: colors.dark,
+                fontSize: 18,
+                paddingLeft: 15,
+                paddingRight: 15,
+                fontFamily: "Bold",
+              }}
             >
               More Options
             </Text>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between", padding: 15 }}
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+              }}
             >
               <TouchableOpacity
                 onPress={() => navigation.navigate("department")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -213,7 +234,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("history")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -229,7 +250,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("categories")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -244,12 +265,15 @@ const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-between", paddingLeft: 15, paddingRight: 15, }}
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-evenly",
+              }}
             >
               <TouchableOpacity
                 onPress={() => navigation.navigate("sizes")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -269,7 +293,7 @@ const ProfileScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => navigation.navigate("colors")}
                 style={{
-                  width: 120,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
@@ -279,48 +303,26 @@ const ProfileScreen = ({ navigation }) => {
                   padding: 5,
                 }}
               >
-                <FontAwesome6
-                  name="brush"
-                  size={35}
-                  color="black"
-                />
+                <FontAwesome6 name="brush" size={35} color="black" />
                 <Text style={styles.buttonHeadings}>Colors</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: 120,
-                  height: 90,
-                  alignItems: "center",
-                  marginVertical: 10,
-                  justifyContent: "space-around",
-                  borderRadius: 10,
-                  padding: 5,
-                }}
-              >
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between", paddingLeft: 10 }}
-            >
               <TouchableOpacity
                 onPress={() => {
                   setUser(null);
                   adminAuth.removeToken();
                 }}
                 style={{
-                  width: 70,
+                  width: "30%",
                   height: 90,
                   alignItems: "center",
                   marginVertical: 10,
+                  backgroundColor: "#f8f4f4",
+                  justifyContent: "space-around",
                   borderRadius: 10,
                   padding: 5,
                 }}
               >
-                <FontAwesome6
-                  name="door-open"
-                  size={25}
-                  color="red"
-                />
+                <FontAwesome6 name="door-open" size={25} color="black" />
                 <Text style={styles.buttonHeadings}>Logout</Text>
               </TouchableOpacity>
             </View>
@@ -334,10 +336,10 @@ const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   background: {
     backgroundColor: "#f8f4f4",
-    flex: 1,
+    // flex: 1,
   },
   container: {
-    flex: 1,
+    // flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -367,7 +369,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     marginBottom: 10,
-    width: "100%"
+    width: "100%",
   },
   row: {
     flexDirection: "row",
@@ -375,13 +377,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   column: {
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
   },
   buttonHeadings: {
     fontSize: 14,
     fontFamily: "Poppins",
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });
 
 export default ProfileScreen;
