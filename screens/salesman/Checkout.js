@@ -57,7 +57,6 @@ function Checkout({ navigation, route }) {
 
   const onDismissSnackBar = () => {
     setVisible(false);
-    navigation.navigate("done", { description: "Order is locally stored, and will be processed when device is connected to the internet!"});
   }
 
   const [snackBarMessage, setSnackBarMessage] = useState("");
@@ -86,6 +85,7 @@ function Checkout({ navigation, route }) {
   };
 
   const orderConfirmed = async ()=>{
+    
     if(orderDataConfirmed == null){
       return;
     }
@@ -99,12 +99,14 @@ function Checkout({ navigation, route }) {
       // online
       try{
         await saveOrder(orderDataConfirmed);
-        navigation.navigate("done", { description: "Order is placed successfully!"});
+        navigation.navigate("done", { description: "Order is placed successfully!", success: true});
         setCartItems([]);
       }catch(ex){
         console.log(ex);
         setErrorVisible(true);
         setError(ex.response.data);
+        // error
+        navigation.navigate("done", { description: "Unable to prcess order! Contact administrator.", success: false});
       }
     }else{
       // case: offline

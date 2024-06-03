@@ -10,6 +10,9 @@ import { saveSize, getSizes, updateSize } from "../../utilty/sizeUtility";
 import { ScrollView } from "react-native-gesture-handler";
 import EditorModal from "../../components/EditFieldModal";
 import { AntDesign } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
+
+const commonSizes = ['small', 'medium', 'large', 'extra large', 'extra extra large', 'extra extra extra large'];
 
 function SizeScreen({ navigation }) {
   const [error, setError] = useState("");
@@ -19,9 +22,13 @@ function SizeScreen({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const [valueToEdit, setValueToEdit] = useState(null);
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
-    fetchSizes();
-  }, []);
+    if(isFocused){
+      fetchSizes();
+    }
+  }, [isFocused]);
 
   const fetchSizes = async () => {
     try {
@@ -33,11 +40,24 @@ function SizeScreen({ navigation }) {
   };
 
   const handleSubmit = async (values) => {
+    setError(false);
+    setErrorVisible(false);
+
+    const sizeAbbreviations = values.size.split(',').map(size => size.trim().toLowerCase());
+    
+    const element = findFirstElementInArray(sizeAbbreviations);
+
+    if(element !== undefined){
+      setError(`Please use abbrevation for size: ${element}`);
+      setErrorVisible(true);
+      return;
+    }
+
     try {
       await saveSize({ size: values.size });
-      fetchSizes();
       setError("");
       setErrorVisible(false);
+      fetchSizes();
     } catch (error) {
       console.error("Error saving department:", error);
       setError(error.response.data);
@@ -45,17 +65,22 @@ function SizeScreen({ navigation }) {
     }
   };
 
+  function findFirstElementInArray(sizes) {
+    return sizes.find(element => commonSizes.includes(element));
+  }
+
   const updateField = async (value)=> {
     if(!valueToEdit){
       return;
     }
+
     try {
       await updateSize(valueToEdit._id,value.value.trim());
-      fetchSizes();
       setValueToEdit(null);
       setShowModal(false);
       setError("");
       setErrorVisible(false);
+      fetchSizes();
     } catch (error) {
       console.error("Error saving department:", error);
       setError(error.response.data);
@@ -71,7 +96,6 @@ function SizeScreen({ navigation }) {
     <ScrollView style={{ paddingTop: 50 }} 
       showsVerticalScrollIndicator={false}
     >
-      <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
       <EditorModal visible={showModal} onPress={updateField} value={valueToEdit ? valueToEdit.value : "" } title={"Size"} onClose={()=>{
         setShowModal(false);
         setValueToEdit(null);
