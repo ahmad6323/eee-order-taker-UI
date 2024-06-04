@@ -69,9 +69,9 @@ const ProductsList = ({ navigation }) => {
                 <View style={styles.detailsContainer}>
                   <Text style={styles.name}>{allocation.productDetails.name}</Text>
                   <Text style={styles.description}>{allocation.productDetails.description}</Text>
-                  <Text style={styles.variantTitle}>Variants & Quantity Allocated</Text>
+                  <Text style={styles.titleVariation}>Variation, Allocated, Remaining</Text>
                   <Text style={styles.variationIds}>
-                    {allocation.variations.map(variation => `${variation.size.size.trim()} - ${variation.color.color.trim()} - ${variation.quantity}`).join('\n')}
+                    {allocation.variations.map(variation => `${variation.size.size.trim()} - ${variation.color.color.trim()} - ${variation.quantity} - ${variation.remaining}`).join('\n')}
                   </Text>
                 </View>
                 <View style={styles.actionsContainer}>
@@ -162,6 +162,13 @@ const styles = StyleSheet.create({
   variantTitle: {
     marginBottom: 5,
     fontSize: 18,
+    fontFamily: "Bold",
+    color: colors.dark,
+  },
+  titleVariation: {
+    width: "100%",
+    marginBottom: 5,
+    fontSize: 16,
     fontFamily: "Bold",
     color: colors.dark,
   },

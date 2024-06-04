@@ -46,7 +46,6 @@ const OrderHistorySalesman = ({ navigation }) => {
             style={styles.orderItem}
             key={index}
           >
-            <Image source={{ uri: `${config.pictureUrl}/public/salesman/${item.image}`}} style={styles.itemImage} />
             <View style={styles.itemDetails}>
               <Text style={styles.itemName}>Salsman: {item.salesmanName}</Text>
               {

@@ -40,7 +40,7 @@ const ProductListDetail = ({ route, navigation }) => {
             variationId: variation.variationId,
             sku: variation.sku,
             quantity: 0,
-            maxQuantity: variation.quantity
+            maxQuantity: variation.remaining
           }))
         });
 
@@ -129,7 +129,7 @@ const ProductListDetail = ({ route, navigation }) => {
                   alignItems: "center"
                 }}
               >
-                <Text style={styles.sizesLabel}>{variation.color.color.trim() + " - " + variation.size.size.trim() + " - " + variation.quantity + " max"}</Text>
+                <Text style={styles.sizesLabel}>{variation.color.color.trim() + " - " + variation.size.size.trim() + " - " + variation.remaining + " max"}</Text>
                 <View style={styles.quantityContainer}>
                   <TouchableOpacity
                     disabled={orderFromThisPage.variations[index].quantity === 0}

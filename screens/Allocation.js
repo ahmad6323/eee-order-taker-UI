@@ -60,6 +60,9 @@ const AllocationScreen = ({ navigation }) => {
                     <Text style={styles.sizeQuantity}>
                       Quantity: {variation.quantity}
                     </Text>
+                    <Text style={styles.sizeQuantity}>
+                      Remaining: {variation.remaining}
+                    </Text>
                   </View>
                 </View>
                 ))
@@ -164,6 +167,7 @@ const styles = StyleSheet.create({
   sizeContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
+    justifyContent: "space-between",
     marginTop: 5,
   },
   sizeItem: {
