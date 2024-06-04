@@ -36,7 +36,6 @@ function DepartmentScreen({ navigation }) {
   const handleSubmit = async (values) => {
     try {
       await saveDepartment({ name: values.department });
-      fetchDepartments();
       values = "";
       setError("");
       setErrorVisible(false);
@@ -45,19 +44,20 @@ function DepartmentScreen({ navigation }) {
       setError("Error saving department");
       setErrorVisible(true);
     }
+    fetchDepartments();
   };
-
+  
   const updateField = async (value)=> {
     if(!valueToEdit){
       return;
     }
     try {
       await updateDepartment(valueToEdit._id,value.value.trim());
-      fetchDepartments();
       setValueToEdit(null);
       setShowModal(false);
       setError("");
       setErrorVisible(false);
+      fetchDepartments();
     } catch (error) {
       console.error("Error saving department:", error);
       setError(error.response.data);

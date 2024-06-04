@@ -10,6 +10,9 @@ import {
 } from "../../GlobalStyles";
 
 const OrderPlaced = ({ navigation, route }) => {
+
+  const { description, success } = route.params;
+
   return (
     <View style={[styles.orderPlaced, styles.iconLayout1]}>
       <View style={styles.orderPlacedChild} />
@@ -27,17 +30,24 @@ const OrderPlaced = ({ navigation, route }) => {
           </View>
         </View>
       </View>
-      <Image
-        style={[styles.illustrationSuccessIcon, { marginLeft: 20 }]}
-        contentFit="cover"
-        source={require("../../assets/success.png")}
-      />
+      {
+        success ? <Image
+          style={[styles.illustrationSuccessIcon, { marginLeft: 20 }]}
+          contentFit="cover"
+          source={require("../../assets/success.png")}
+        /> : 
+        <Image
+          style={[styles.illustrationSuccessIcon, { marginLeft: 20 }]}
+          contentFit="cover"
+          source={require("../../assets/failed.png")}
+        />
+      }
       <View style={[styles.titlecaption, styles.titlecaptionPosition]}>
         <Text style={[styles.orderConfirmed, { marginLeft: 20 }]}>
           Order Confirmed
         </Text>
         <Text style={[styles.orderHasBeen, { marginLeft: 20 }]}>
-          {route.params.description}
+          {description ? description : ""}
         </Text>
       </View>
       <Pressable
@@ -49,24 +59,6 @@ const OrderPlaced = ({ navigation, route }) => {
         onPress={() => navigation.navigate("userhome")}
       >
         <Text style={[styles.button, styles.cashTypo]}>Back to Home</Text>
-      </Pressable>
-      <View style={styles.navBar}>
-        <Text style={[styles.pageTitle, styles.pageTitlePosition]}>
-          Checkout
-        </Text>
-        <Text style={[styles.rightButton, styles.pageTitlePosition]}>
-          Go Back
-        </Text>
-      </View>
-      <Pressable
-        style={styles.close}
-        onPress={() => navigation.navigate("userhome")}
-      >
-        <Image
-          style={[styles.icon, styles.iconLayout1, { marginLeft: 20 }]}
-          contentFit="cover"
-          source={require("../../assets/close.png")}
-        />
       </Pressable>
     </View>
   );
@@ -107,10 +99,7 @@ const styles = StyleSheet.create({
   },
   orderPlacedChild: {
     bottom: 0,
-    height: 96,
     alignItems: "center",
-    left: 0,
-    right: 0,
     position: "absolute",
   },
   radioButton: {
@@ -135,7 +124,6 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   option2Parent: {
-    top: 299,
     display: "none",
     padding: Padding.p_base,
     left: 0,
@@ -234,7 +222,6 @@ const styles = StyleSheet.create({
   },
   orderPlaced: {
     flex: 1,
-    height: 812,
     overflow: "hidden",
     backgroundColor: Color.neutralLightLightest,
     width: "100%",
