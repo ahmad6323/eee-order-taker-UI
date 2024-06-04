@@ -11,14 +11,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import salesmanAuthService from "./utilty/salesmanAuthService";
 import { UserContext } from "./UserContext";
 import OfflineNotice from "./components/OfflineNotice";
-import { useFonts } from 'expo-font';
+import { useFonts } from "expo-font";
 import ActivityIndicator from "./components/ActivityIndicator";
 
 export default function App() {
-
   const [fontsLoaded] = useFonts({
-    'Poppins': require('./assets/fonts/poppins/Poppins-Regular.ttf'),
-    'Bold' : require('./assets/fonts/poppins/Poppins-Bold.ttf')
+    Poppins: require("./assets/fonts/poppins/Poppins-Regular.ttf"),
+    Bold: require("./assets/fonts/poppins/Poppins-Bold.ttf"),
   });
 
   const [user, setUser] = useState();
@@ -50,21 +49,20 @@ export default function App() {
 
   if (!isReady) return null;
 
-  if(!fontsLoaded){
-    return <ActivityIndicator visible={true}/>
+  if (!fontsLoaded) {
+    return <ActivityIndicator visible={true} />;
   }
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <NavigationContainer onReady={onNavigationContainerReady}>
-        {
-          user && user.role === "salesman" ? (
+        {user && user.role === "salesman" ? (
           <CartProvider>
             <OfflineNotice />
             <SalesmanNavigator />
           </CartProvider>
         ) : user && user.role === "admin" ? (
-          <ProfileNavigator /> 
+          <ProfileNavigator />
         ) : (
           <LoginNav />
         )}
