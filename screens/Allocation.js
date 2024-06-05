@@ -52,12 +52,13 @@ const AllocationScreen = ({ navigation }) => {
             <Text style={styles.heading}>{product.name}</Text>
             {product.variations.map((variation, index) => (
               <View key={index}>
-                <Text
-                  style={styles.color}
-                >{`Variation: ${variation.SKU} / ${variation.color} - ${variation.size}`}</Text>
+                <Text>{`Variation: ${variation.SKU} / ${variation.color} - ${variation.size}`}</Text>
                 <View style={styles.sizeContainer}>
                   <Text style={styles.sizeQuantity}>
-                    Quantity: {variation.quantity}
+                    Assigned: {variation.quantity}
+                  </Text>
+                  <Text style={styles.sizeQuantity}>
+                    Remaining: {variation.remaining}
                   </Text>
                 </View>
               </View>
@@ -160,6 +161,7 @@ const styles = StyleSheet.create({
   },
   sizeContainer: {
     flexDirection: "row",
+    justifyContent : "space-between",
     flexWrap: "wrap",
     marginTop: 5,
   },

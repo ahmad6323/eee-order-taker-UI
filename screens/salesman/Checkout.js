@@ -57,7 +57,9 @@ function Checkout({ navigation, route }) {
     navigation.navigate("done", {
       description:
         "Order is locally stored, and will be processed when device is connected to the internet!",
-    });
+        success: false
+      }
+    );
   };
 
   const [snackBarMessage, setSnackBarMessage] = useState("");
@@ -90,6 +92,7 @@ function Checkout({ navigation, route }) {
         await saveOrder(finalOrderData);
         navigation.navigate("done", {
           description: "Order is placed successfully!",
+          success: true
         });
         setCartItems([]);
       } catch (ex) {
