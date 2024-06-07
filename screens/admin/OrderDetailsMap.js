@@ -4,24 +4,24 @@ import MapView, { Marker } from "react-native-maps";
 
 const OrderDetailsMap = ({ navigation, route }) => {
   const { long, lat } = route.params;
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Order Details</Text>
       <Text style={styles.locationInfo}>Location Info with Date and Time</Text>
       <MapView
         style={styles.map}
-        initialRegion={{
-          latitude: parseFloat(lat),
-          longitude: parseFloat(long),
+        region={{
+          latitude: parseFloat(long),
+          longitude: parseFloat(lat),
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
       >
         <Marker
           coordinate={{
-            latitude: parseFloat(lat),
-            longitude: parseFloat(long),
+            latitude: parseFloat(long),
+            longitude: parseFloat(lat),
           }}
           title="Order Location"
         />
