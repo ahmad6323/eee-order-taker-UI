@@ -12,7 +12,14 @@ import EditorModal from "../../components/EditFieldModal";
 import { AntDesign } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 
-const commonSizes = ['small', 'medium', 'large', 'extra large', 'extra extra large', 'extra extra extra large'];
+const commonSizes = [
+  "small",
+  "medium",
+  "large",
+  "extra large",
+  "extra extra large",
+  "extra extra extra large",
+];
 
 function SizeScreen({ navigation }) {
   const [error, setError] = useState("");
@@ -25,7 +32,7 @@ function SizeScreen({ navigation }) {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    if(isFocused){
+    if (isFocused) {
       fetchSizes();
     }
   }, [isFocused]);
@@ -43,63 +50,75 @@ function SizeScreen({ navigation }) {
     setError(false);
     setErrorVisible(false);
 
-    const sizeAbbreviations = values.size.split(',').map(size => size.trim().toLowerCase());
-    
+    const sizeAbbreviations = values.size
+      .split(",")
+      .map((size) => size.trim().toLowerCase());
+
     const element = findFirstElementInArray(sizeAbbreviations);
 
-    if(element !== undefined){
-      setError(`Please use abbrevation for size: ${element}`);
+    if (element !== undefined) {
+      setError(`Please use abbreviation for size: ${element}`);
       setErrorVisible(true);
       return;
     }
 
+    const newSize = { size: values.size };
+    // Optimistically update the state
+    setSizes((prevSizes) => [...prevSizes, newSize]);
+
     try {
-      await saveSize({ size: values.size });
+      await saveSize(newSize);
       setError("");
       setErrorVisible(false);
       fetchSizes();
     } catch (error) {
-      console.error("Error saving department:", error);
+      console.error("Error saving size:", error);
+      // Revert state update if an error occurs
+      setSizes((prevSizes) => prevSizes.filter((size) => size !== newSize));
       setError(error.response.data);
       setErrorVisible(true);
     }
   };
 
   function findFirstElementInArray(sizes) {
-    return sizes.find(element => commonSizes.includes(element));
+    return sizes.find((element) => commonSizes.includes(element));
   }
 
-  const updateField = async (value)=> {
-    if(!valueToEdit){
+  const updateField = async (value) => {
+    if (!valueToEdit) {
       return;
     }
 
     try {
-      await updateSize(valueToEdit._id,value.value.trim());
+      await updateSize(valueToEdit._id, value.value.trim());
       setValueToEdit(null);
       setShowModal(false);
       setError("");
       setErrorVisible(false);
       fetchSizes();
     } catch (error) {
-      console.error("Error saving department:", error);
+      console.error("Error saving size:", error);
       setError(error.response.data);
       setErrorVisible(true);
     }
-  }
+  };
 
   if (sizes === null) {
     return null;
   }
 
   return (
-    <ScrollView style={{ paddingTop: 50 }} 
-      showsVerticalScrollIndicator={false}
-    >
-      <EditorModal visible={showModal} onPress={updateField} value={valueToEdit ? valueToEdit.value : "" } title={"Size"} onClose={()=>{
-        setShowModal(false);
-        setValueToEdit(null);
-      }}/>
+    <ScrollView style={{ paddingTop: 50 }} showsVerticalScrollIndicator={false}>
+      <EditorModal
+        visible={showModal}
+        onPress={updateField}
+        value={valueToEdit ? valueToEdit.value : ""}
+        title={"Size"}
+        onClose={() => {
+          setShowModal(false);
+          setValueToEdit(null);
+        }}
+      />
       <View style={styles.container}>
         <View style={styles.innerContainer}>
           <View style={styles.logoContainer}>
@@ -109,10 +128,7 @@ function SizeScreen({ navigation }) {
             </AppText>
           </View>
           <View style={styles.formContainer}>
-            <AppForm
-              initialValues={{ size: "" }}
-              onSubmit={handleSubmit}
-            >
+            <AppForm initialValues={{ size: "" }} onSubmit={handleSubmit}>
               <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormField
                 name={"size"}
@@ -124,28 +140,27 @@ function SizeScreen({ navigation }) {
             </AppForm>
           </View>
           <View>
-            <AppText style={{ fontSize: 24, fontFamily: "Bold", marginTop: 10 }}>
+            <AppText
+              style={{ fontSize: 24, fontFamily: "Bold", marginTop: 10 }}
+            >
               Added Sizes
             </AppText>
             <View style={{ marginVertical: 20 }}>
               {sizes.map((size, index) => (
-                <View
-                  key={index}
-                  style={styles.departmentContainer}
-                >
+                <View key={index} style={styles.departmentContainer}>
                   <AppText style={styles.departmentText}>{size.size}</AppText>
                   <AntDesign
                     name={"edit"}
                     size={22}
                     color="blue"
                     style={{
-                      marginRight: 10
+                      marginRight: 10,
                     }}
                     onPress={() => {
                       setShowModal(true);
                       setValueToEdit({
                         _id: size._id,
-                        value: size.size
+                        value: size.size,
                       });
                     }}
                   />

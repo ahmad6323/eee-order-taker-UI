@@ -7,7 +7,7 @@ import AppForm from "../../components/forms/AppForm";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import colors from "../../config/colors";
 import AppText from "../../components/AppText";
-import {  saveColor, getColors, updateColor } from "../../utilty/colorUtility";
+import { saveColor, getColors, updateColor } from "../../utilty/colorUtility";
 import { ScrollView } from "react-native-gesture-handler";
 import EditorModal from "../../components/EditFieldModal";
 import { AntDesign } from "@expo/vector-icons";
@@ -26,71 +26,79 @@ function ColorScreen({ navigation }) {
 
   const fetchColors = async () => {
     try {
-      const fetchedSizes = await getColors();
-      setSavedColors(fetchedSizes.data);
+      const fetchedColors = await getColors();
+      setSavedColors(fetchedColors.data);
     } catch (error) {
-      console.error("Error fetching sizes:", error);
+      console.error("Error fetching colors:", error);
     }
   };
 
   const handleSubmit = async (values) => {
+    const newColor = { color: values.color };
+    // Optimistically update the state
+    setSavedColors((prevColors) => [...prevColors, newColor]);
+
     try {
-      await saveColor({ color: values.color });
-      fetchColors();
+      await saveColor(newColor);
       setError("");
       setErrorVisible(false);
+      fetchColors();
     } catch (error) {
-      console.error("Error saving department:", error);
+      console.error("Error saving color:", error);
+      // Revert state update if an error occurs
+      setSavedColors((prevColors) =>
+        prevColors.filter((color) => color !== newColor)
+      );
       setError(error.response.data);
       setErrorVisible(true);
     }
   };
 
-  const updateField = async (value)=> {
-    if(!valueToEdit){
+  const updateField = async (value) => {
+    if (!valueToEdit) {
       return;
     }
     try {
-      await updateColor(valueToEdit._id,value.value.trim());
+      await updateColor(valueToEdit._id, value.value.trim());
       fetchColors();
       setValueToEdit(null);
       setShowModal(false);
       setError("");
       setErrorVisible(false);
     } catch (error) {
-      console.error("Error saving department:", error);
+      console.error("Error saving color:", error);
       setError(error.response.data);
       setErrorVisible(true);
     }
-  }
+  };
 
   if (savedColors === null) {
-    return null; 
+    return null;
   }
 
   return (
-    <ScrollView style={{ paddingTop: 40 }}
-      showsVerticalScrollIndicator={false}
-    >
-      <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
-      <EditorModal title={"Color"} value={valueToEdit ? valueToEdit.value : ""} visible={showModal} onPress={updateField} onClose={()=>{
-        setValueToEdit(null);
-        console.log("closing");
-        setShowModal(false);
-      }}/>
+    <ScrollView style={{ paddingTop: 40 }} showsVerticalScrollIndicator={false}>
+      <AppErrorMessage error={error} visible={errorVisible} />
+      <EditorModal
+        title={"Color"}
+        value={valueToEdit ? valueToEdit.value : ""}
+        visible={showModal}
+        onPress={updateField}
+        onClose={() => {
+          setValueToEdit(null);
+          setShowModal(false);
+        }}
+      />
       <View style={styles.container}>
         <View style={styles.innerContainer}>
           <View style={styles.logoContainer}>
             <AppText style={styles.logo}>Colors</AppText>
             <AppText style={styles.subText}>
-              All details related to Sizes
+              All details related to Colors
             </AppText>
           </View>
           <View style={styles.formContainer}>
-            <AppForm
-              initialValues={{ color: "" }}
-              onSubmit={handleSubmit}
-            >
+            <AppForm initialValues={{ color: "" }} onSubmit={handleSubmit}>
               <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormField
                 name={"color"}
@@ -102,30 +110,29 @@ function ColorScreen({ navigation }) {
             </AppForm>
           </View>
           <View style={{ marginVertical: 10, marginBottom: 15 }}>
-            <AppText style={{ fontSize: 26, fontFamily: "Bold", marginBottom: 5 }}>
+            <AppText
+              style={{ fontSize: 26, fontFamily: "Bold", marginBottom: 5 }}
+            >
               Added Colors
             </AppText>
             {savedColors.map((color, index) => (
-              <View
-                key={index}
-                style={styles.departmentContainer}
-              >
+              <View key={index} style={styles.departmentContainer}>
                 <AppText style={styles.departmentText}>{color.color}</AppText>
                 <AntDesign
-                    name={"edit"}
-                    size={22}
-                    color="blue"
-                    style={{
-                      marginRight: 10
-                    }}
-                    onPress={() => {
-                      setShowModal(true);
-                      setValueToEdit({
-                        _id: color._id,
-                        value: color.color
-                      });
-                    }}
-                  />
+                  name={"edit"}
+                  size={22}
+                  color="blue"
+                  style={{
+                    marginRight: 10,
+                  }}
+                  onPress={() => {
+                    setShowModal(true);
+                    setValueToEdit({
+                      _id: color._id,
+                      value: color.color,
+                    });
+                  }}
+                />
               </View>
             ))}
           </View>
