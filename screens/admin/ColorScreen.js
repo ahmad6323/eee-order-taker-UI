@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import * as Yup from "yup";
+import { StyleSheet, View, ScrollView, RefreshControl } from "react-native";
 import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppForm from "../../components/forms/AppForm";
@@ -8,7 +7,6 @@ import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import colors from "../../config/colors";
 import AppText from "../../components/AppText";
 import { saveColor, getColors, updateColor } from "../../utilty/colorUtility";
-import { ScrollView } from "react-native-gesture-handler";
 import EditorModal from "../../components/EditFieldModal";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -16,6 +14,7 @@ function ColorScreen({ navigation }) {
   const [error, setError] = useState("");
   const [errorVisible, setErrorVisible] = useState(false);
   const [savedColors, setSavedColors] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const [valueToEdit, setValueToEdit] = useState(null);
@@ -33,22 +32,20 @@ function ColorScreen({ navigation }) {
     }
   };
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { resetForm }) => {
+    setError("");
+    setErrorVisible(false);
+
     const newColor = { color: values.color };
-    // Optimistically update the state
-    setSavedColors((prevColors) => [...prevColors, newColor]);
 
     try {
       await saveColor(newColor);
       setError("");
       setErrorVisible(false);
-      fetchColors();
+      // fetchColors();
+      resetForm(); // Clear the form
     } catch (error) {
       console.error("Error saving color:", error);
-      // Revert state update if an error occurs
-      setSavedColors((prevColors) =>
-        prevColors.filter((color) => color !== newColor)
-      );
       setError(error.response.data);
       setErrorVisible(true);
     }
@@ -72,12 +69,24 @@ function ColorScreen({ navigation }) {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchColors();
+    setRefreshing(false);
+  };
+
   if (savedColors === null) {
     return null;
   }
 
   return (
-    <ScrollView style={{ paddingTop: 40 }} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={{ paddingTop: 40 }}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <AppErrorMessage error={error} visible={errorVisible} />
       <EditorModal
         title={"Color"}
@@ -99,7 +108,6 @@ function ColorScreen({ navigation }) {
           </View>
           <View style={styles.formContainer}>
             <AppForm initialValues={{ color: "" }} onSubmit={handleSubmit}>
-              <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormField
                 name={"color"}
                 autoCapitalize="none"
@@ -141,7 +149,6 @@ function ColorScreen({ navigation }) {
     </ScrollView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

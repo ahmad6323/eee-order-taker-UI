@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View, ScrollView, RefreshControl } from "react-native";
 import AppFormField from "../components/forms/AppFormField";
 import SubmitButton from "../components/forms/SubmitButton";
 import AppForm from "../components/forms/AppForm";
@@ -11,7 +11,6 @@ import {
   getDepartments,
   updateDepartment,
 } from "../utilty/deptUtility";
-import { ScrollView } from "react-native-gesture-handler";
 import EditorModal from "../components/EditFieldModal";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -19,6 +18,7 @@ function DepartmentScreen({ navigation }) {
   const [error, setError] = useState("");
   const [errorVisible, setErrorVisible] = useState(false);
   const [departments, setDepartments] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const [valueToEdit, setValueToEdit] = useState(null);
@@ -36,22 +36,20 @@ function DepartmentScreen({ navigation }) {
     }
   };
 
-  const handleSubmit = async (values) => {
-    const newDepartment = { name: values.department };
-    setDepartments((prevDepartments) => [...prevDepartments, newDepartment]);
+  const handleSubmit = async (values, { resetForm }) => {
+    setError("");
+    setErrorVisible(false);
 
+    const newDepartment = { name: values.department };
     try {
       await saveDepartment(newDepartment);
-      values.department = ""; // Clear the input field
+      resetForm(); // Clear the form
       setError("");
       setErrorVisible(false);
-      fetchDepartments();
+      // fetchDepartments();
     } catch (error) {
       console.error("Error saving department:", error);
-      setDepartments((prevDepartments) =>
-        prevDepartments.filter((dept) => dept !== newDepartment)
-      );
-      setError("Error saving department");
+      setError(error.response.data);
       setErrorVisible(true);
     }
   };
@@ -60,6 +58,7 @@ function DepartmentScreen({ navigation }) {
     if (!valueToEdit) {
       return;
     }
+
     const updatedDepartments = departments.map((department) =>
       department._id === valueToEdit._id
         ? { ...department, name: value.value.trim() }
@@ -82,12 +81,24 @@ function DepartmentScreen({ navigation }) {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchDepartments();
+    setRefreshing(false);
+  };
+
   if (departments === null) {
     return null;
   }
 
   return (
-    <ScrollView style={{ paddingTop: 30 }} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={{ paddingTop: 30 }}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <AppErrorMessage error={error} visible={errorVisible}></AppErrorMessage>
       <EditorModal
         visible={showModal}

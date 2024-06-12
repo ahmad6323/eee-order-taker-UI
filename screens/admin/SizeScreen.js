@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import AppFormField from "../../components/forms/AppFormField";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppForm from "../../components/forms/AppForm";
@@ -7,7 +13,6 @@ import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import colors from "../../config/colors";
 import AppText from "../../components/AppText";
 import { saveSize, getSizes, updateSize } from "../../utilty/sizeUtility";
-import { ScrollView } from "react-native-gesture-handler";
 import EditorModal from "../../components/EditFieldModal";
 import { AntDesign } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
@@ -25,6 +30,7 @@ function SizeScreen({ navigation }) {
   const [error, setError] = useState("");
   const [errorVisible, setErrorVisible] = useState(false);
   const [sizes, setSizes] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const [valueToEdit, setValueToEdit] = useState(null);
@@ -46,8 +52,8 @@ function SizeScreen({ navigation }) {
     }
   };
 
-  const handleSubmit = async (values) => {
-    setError(false);
+  const handleSubmit = async (values, { resetForm }) => {
+    setError("");
     setErrorVisible(false);
 
     const sizeAbbreviations = values.size
@@ -63,18 +69,15 @@ function SizeScreen({ navigation }) {
     }
 
     const newSize = { size: values.size };
-    // Optimistically update the state
-    setSizes((prevSizes) => [...prevSizes, newSize]);
 
     try {
       await saveSize(newSize);
       setError("");
       setErrorVisible(false);
-      fetchSizes();
+      resetForm(); // Clear the form
+      // fetchSizes();
     } catch (error) {
       console.error("Error saving size:", error);
-      // Revert state update if an error occurs
-      setSizes((prevSizes) => prevSizes.filter((size) => size !== newSize));
       setError(error.response.data);
       setErrorVisible(true);
     }
@@ -103,12 +106,24 @@ function SizeScreen({ navigation }) {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchSizes();
+    setRefreshing(false);
+  };
+
   if (sizes === null) {
     return null;
   }
 
   return (
-    <ScrollView style={{ paddingTop: 50 }} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={{ paddingTop: 50 }}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <EditorModal
         visible={showModal}
         onPress={updateField}

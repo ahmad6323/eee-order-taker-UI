@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import AppFormField from "../components/forms/AppFormField";
 import SubmitButton from "../components/forms/SubmitButton";
 import AppForm from "../components/forms/AppForm";
@@ -18,20 +14,20 @@ import { getDepartments } from "../utilty/deptUtility";
 import { getAllSubCategories } from "../utilty/catUtility";
 import { getSizes } from "../utilty/sizeUtility";
 import { getColors } from "../utilty/colorUtility";
-import { MultiSelect } from 'react-native-element-dropdown';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { MultiSelect } from "react-native-element-dropdown";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import * as FileSystem from "expo-file-system";
 import * as Yup from "yup";
 
 const productSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
-  price: Yup.number().required('Price is required').min(0, 'Price must be at least 0'),
-  description: Yup.string().required('Description is required'),
+  name: Yup.string().required("Name is required"),
+  price: Yup.number()
+    .required("Price is required")
+    .min(0, "Price must be at least 0"),
+  description: Yup.string().required("Description is required"),
 });
 
-
 function AddProduct({ navigation }) {
-
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -40,7 +36,7 @@ function AddProduct({ navigation }) {
   const [colors, setColors] = useState([]);
   const [selected, setSelected] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
-  const [selectedSizes, setSelectedSizes] = useState([])
+  const [selectedSizes, setSelectedSizes] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,41 +71,41 @@ function AddProduct({ navigation }) {
 
   const handleSubmit = async (productData) => {
     try {
-
-      if(!productData.category){
+      if (!productData.category) {
         setError("Please select a category");
         setErrorVisible(true);
         return;
       }
-      
+
       let formData = new FormData();
 
-      formData.append('name', productData.name);
-      formData.append('category',productData.category.value);
-      formData.append('price', productData.price);
-      formData.append('description', productData.description);
-      formData.append('department', JSON.stringify(selected));
-      formData.append('colors', JSON.stringify(selectedColors));
-      formData.append('sizes', JSON.stringify(selectedSizes));
+      formData.append("name", productData.name);
+      formData.append("category", productData.category.value);
+      formData.append("price", productData.price);
+      formData.append("description", productData.description);
+      formData.append("department", JSON.stringify(selected));
+      formData.append("colors", JSON.stringify(selectedColors));
+      formData.append("sizes", JSON.stringify(selectedSizes));
 
-      await Promise.all(productData.imageUrl.map(async (uri) => {
-        const base64String = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-        return base64String;
-      })).then(async (base64Array)=>{
+      await Promise.all(
+        productData.imageUrl.map(async (uri) => {
+          const base64String = await FileSystem.readAsStringAsync(uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
+          return base64String;
+        })
+      ).then(async (base64Array) => {
+        formData.append("imageUrl", base64Array);
 
-        formData.append("imageUrl",base64Array);
-        
         let data = getFormDataContent(formData);
-  
+
         let parsedData = {
           ...data,
           colors: JSON.parse(data.colors),
           department: JSON.parse(data.department),
-          sizes: JSON.parse(data.sizes)
+          sizes: JSON.parse(data.sizes),
         };
-        
+
         await saveProduct(parsedData);
         navigation.navigate("profiles");
       });
@@ -120,7 +116,7 @@ function AddProduct({ navigation }) {
 
   function getFormDataContent(formData) {
     const data = {};
-    formData._parts.forEach(part => {
+    formData._parts.forEach((part) => {
       const [key, value] = part;
       if (data[key]) {
         data[key] = [].concat(data[key], value);
@@ -130,7 +126,7 @@ function AddProduct({ navigation }) {
     });
     return data;
   }
-  
+
   return (
     <ScrollView>
       <SafeScreen>
@@ -138,9 +134,9 @@ function AddProduct({ navigation }) {
           <View style={styles.innerContainer}>
             <View style={styles.logoContainer}>
               <AppText style={styles.logo}>Add Product</AppText>
-              <AppText style={styles.subText}>
-                Provide the details to add a new product
-              </AppText>
+              <Text numberOfLines={1} style={styles.subText}>
+                Provide the details sto add a new product
+              </Text>
             </View>
             <View style={styles.formContainer}>
               <AppForm
@@ -187,7 +183,7 @@ function AddProduct({ navigation }) {
                   placeholder="Select departments"
                   searchPlaceholder="Search..."
                   value={selected}
-                  onChange={item => {
+                  onChange={(item) => {
                     setSelected(item);
                   }}
                   renderLeftIcon={() => (
@@ -213,7 +209,7 @@ function AddProduct({ navigation }) {
                   placeholder="Select Colors"
                   searchPlaceholder="Search..."
                   value={selectedColors}
-                  onChange={item => {
+                  onChange={(item) => {
                     setSelectedColors(item);
                   }}
                   renderLeftIcon={() => (
@@ -239,7 +235,7 @@ function AddProduct({ navigation }) {
                   placeholder="Select Sizes"
                   searchPlaceholder="Search..."
                   value={selectedSizes}
-                  onChange={item => {
+                  onChange={(item) => {
                     setSelectedSizes(item);
                   }}
                   renderLeftIcon={() => (
@@ -286,12 +282,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     padding: 10,
     height: 65,
-    backgroundColor: 'white',
-    borderBottomColor: 'gray',
+    backgroundColor: "white",
+    borderBottomColor: "gray",
     borderRadius: 20,
     borderWidth: 1,
     borderTopColor: "gray",
-    fontFamily: "Poppins"
+    fontFamily: "Poppins",
   },
   icon: {
     marginRight: 5,
@@ -314,7 +310,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   formContainer: {
-    marginTop: 20,
+    // marginTop: 10,
   },
   sizeInputContainer: {
     flexDirection: "row",
@@ -323,14 +319,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   selectedTextStyle: {
-    color: '#333',
+    color: "#333",
     fontSize: 16,
-    fontFamily: 'Bold',
+    fontFamily: "Bold",
   },
   placeholderStyle: {
-    color: '#999', 
-    fontFamily: 'Poppins',
-  }
+    color: "#999",
+    fontFamily: "Poppins",
+  },
 });
 
 export default AddProduct;
