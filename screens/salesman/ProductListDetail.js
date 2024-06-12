@@ -29,16 +29,16 @@ const ProductListDetail = ({ route, navigation }) => {
   useEffect(() => {
     const fetchProductById = async (id)=>{
       try{
-        const respProduct = await getAllocationByProductId(id,user._id);
-        setProduct(respProduct.data);
+        const { data } = await getAllocationByProductId(id);
+        setProduct(data);
         setOrderFromThisPage({
-          productId: respProduct.data.productId,
-          name: respProduct.data.name,
-          image: respProduct.data.imageUrl[0],
-          pricePerUnit: respProduct.data.price,
-          variations: respProduct.data.variations.map(variation => ({
-            variationId: variation.variationId,
-            sku: variation.sku,
+          productId: data.productId._id,
+          name: data.name,
+          image: data.productId.imageUrl[0],
+          pricePerUnit: data.productId.price,
+          variations: data.products.map(variation => ({
+            variationId: variation.variation.variationId,
+            sku: variation.variation.SKU,
             quantity: 0,
             maxQuantity: variation.remaining
           }))
@@ -80,10 +80,10 @@ const ProductListDetail = ({ route, navigation }) => {
     const updatedVariations = getVariationsWithZeroQuantity(orderFromThisPage);
     
     const updatedData = {
-      productId: product.productId,
-      name: product.name,
-      image: product.imageUrl[0],
-      pricePerUnit: product.price,
+      productId: product.productId._id,
+      name: product.productId.name,
+      image: product.productId.imageUrl[0],
+      pricePerUnit: product.productId.price,
       variations: updatedVariations
     };
 
@@ -110,17 +110,17 @@ const ProductListDetail = ({ route, navigation }) => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.imageContainer}>
-        <ImageSlider style={styles.productImage} images={product && product.imageUrl} />
+        <ImageSlider style={styles.productImage} images={product && product.productId.imageUrl} />
       </View>
       <View style={styles.detailsContainer}>
         <AppErrorMessage error={error} visible={errorVisible} />
-        <Text style={styles.name}>{product.name}</Text>
-        <Text style={styles.price}>Price {product.price}/- PKR</Text>
-        <Text style={styles.description}>{product.description}</Text>
+        <Text style={styles.name}>{product.productId.name}</Text>
+        <Text style={styles.price}>Price {product.productId.price}/- PKR</Text>
+        <Text style={styles.description}>{product.productId.description}</Text>
         <View style={styles.sizesContainer}>
           <Text style={styles.sizesLabel}>Variations Allocated</Text>
           {
-            product.variations && orderFromThisPage && orderFromThisPage.variations && product.variations.map((variation,index)=>{
+            product.products && orderFromThisPage && orderFromThisPage.variations && product.products.map((variation,index)=>{
               return <View 
                 key={index}
                 style={{
@@ -129,7 +129,7 @@ const ProductListDetail = ({ route, navigation }) => {
                   alignItems: "center"
                 }}
               >
-                <Text style={styles.sizesLabel}>{variation.color.color.trim() + " - " + variation.size.size.trim() + " - " + variation.remaining + " max"}</Text>
+                <Text style={styles.sizesLabel}>{variation.variation.color.color.trim() + " - " + variation.variation.size.size.trim() + " - " + variation.remaining + " max"}</Text>
                 <View style={styles.quantityContainer}>
                   <TouchableOpacity
                     disabled={orderFromThisPage.variations[index].quantity === 0}

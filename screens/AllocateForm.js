@@ -45,7 +45,8 @@ function AllocateForm({ navigation }) {
     // Clean the allocations and extract only the value from productId
     // Step 1: Clean the allocations
     const cleanedAllocations = allocations.map(allocation => ({
-      productId: allocation.productId.value,
+      productId: allocation.productId,
+      variation: allocation.variation.value,
       quantity: allocation.quantity
     }));
 
@@ -86,7 +87,7 @@ function AllocateForm({ navigation }) {
     if(salesman.value.length > 0){
       const { data } = await getProductsForSalesman(salesman.value);
       setProducts(data);
-      setAllocations([{productId: {}, quantity: 0}]);
+      setAllocations([{productId: "", variation: {}, quantity: 0}]);
     }
   }
 
@@ -95,9 +96,13 @@ function AllocateForm({ navigation }) {
     setAllocations(newAllocations);
   };
 
-  const handleProductIdChange = (index, productId) => {
+  const handleProductIdChange = (index, variation) => {
     const updatedAllocations = [...allocations];
-    updatedAllocations[index].productId = productId;
+    updatedAllocations[index].variation = variation;
+
+    const getProduct = products.filter(prod => prod._id === variation["value"])[0];
+    updatedAllocations[index].productId = getProduct.productId._id;
+
     setAllocations(updatedAllocations);
   };
 
@@ -144,7 +149,7 @@ function AllocateForm({ navigation }) {
                     onSelectItem={(value)=>{
                       handleProductIdChange(index,value);
                     }}
-                    value={allocation.productId}
+                    value={allocation.variation}
                   />
                   <AppFormFieldCustom
                     autoCapitalize="none"
@@ -167,7 +172,7 @@ function AllocateForm({ navigation }) {
               })
             }
             <TouchableOpacity onPress={()=>{
-              setAllocations([...allocations, {productId: {}, quantity: 0}]);
+              setAllocations([...allocations, {productId: "", variation: {}, quantity: 0}]);
             }} 
               disabled={products.length === 0}
             >

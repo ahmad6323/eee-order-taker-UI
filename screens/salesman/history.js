@@ -54,11 +54,11 @@ const History = () => {
           >
             <View style={styles.itemDetails}>
               {
-                item.products.map((product,index)=>{
+                item.items.map((product,index)=>{
                   return <View key={index}>
                     <View>
                       <Text style={styles.itemName}>{product.name}</Text>
-                      <Text style={styles.quantity}>{formatPrice(product.price)} /- </Text>
+                      <Text style={styles.quantity}>{formatPrice(product.pricePerUnit)} /-</Text>
                       {
                         product.variations.map((variation,index2)=>{
                           return (
@@ -70,7 +70,7 @@ const History = () => {
                   </View>
                 })
               }
-              <Text style={styles.price}>Price: {formatPrice(item.totalBill)} /-</Text> 
+              <Text style={styles.price}>Price: {item.totalPrice} /-</Text> 
               <View style={styles.line} /> 
             </View>
           </TouchableOpacity>

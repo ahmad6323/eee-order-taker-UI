@@ -15,8 +15,6 @@ import AppText from "../../components/AppText";
 import { getAllocationsForSalesman } from "../../utilty/allocationUtility";
 import { UserContext } from "../../UserContext";
 import ImageSlider from "../../components/ImageSlider";
-import config from "../../config.json"
-const pictureEndpoint = config.pictureUrl;
 
 const ProductsList = ({ navigation }) => {
   const { user } = useContext(UserContext);
@@ -60,22 +58,22 @@ const ProductsList = ({ navigation }) => {
           </View>
           {allocations && allocations.map((allocation, index) => (
             <TouchableOpacity
-              onPress={() => handleProductPress(allocation.productDetails._id)}
+              onPress={() => handleProductPress(allocation._id)}
               style={styles.productContainer}
               key={index}
             >
-              <ImageSlider images={allocation.productDetails.imageUrl} style={styles.image}/>
+              <ImageSlider images={allocation.productId.imageUrl} style={styles.image}/>
               <View style={styles.card}>
                 <View style={styles.detailsContainer}>
-                  <Text style={styles.name}>{allocation.productDetails.name}</Text>
-                  <Text style={styles.description}>{allocation.productDetails.description}</Text>
+                  <Text style={styles.name}>{allocation.productId.name}</Text>
+                  <Text style={styles.description}>{allocation.productId.description}</Text>
                   <Text style={styles.titleVariation}>Variation, Allocated, Remaining</Text>
                   <Text style={styles.variationIds}>
-                    {allocation.variations.map(variation => `${variation.size.size.trim()} - ${variation.color.color.trim()} - ${variation.quantity} - ${variation.remaining}`).join('\n')}
+                    {allocation.products.map(variation => `${variation.variation.size.size.trim()} - ${variation.variation.color.color.trim()} - ${variation.quantity} - ${variation.remaining}`).join('\n')}
                   </Text>
                 </View>
                 <View style={styles.actionsContainer}>
-                  <Text style={styles.price}>{allocation.productDetails.price} PKR</Text>
+                  <Text style={styles.price}>{allocation.productId.price} PKR</Text>
                 </View>
               </View>
             </TouchableOpacity>
