@@ -46,23 +46,25 @@ const History = () => {
       }
       <FlatList
         data={orders}
-        keyExtractor={(item) => item.orderId}
+        keyExtractor={(item) => item.orderId + "-" +  Math.floor(Math.random() * (10 + 39) * 3) + 55}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             style={styles.orderItem}
-            key={index}
+            key={index + Math.floor(Math.random() * (13 + 39) / 2) + 18}
           >
-            <View style={styles.itemDetails}>
+            <View style={styles.itemDetails}
+              key={item.orderId + Math.floor(Math.random() * (69 + 93) / 3) + 18}
+            >
               {
                 item.items.map((product,index)=>{
-                  return <View key={index}>
+                  return <View key={index + Math.floor(Math.random() * (31 + 12) * 2) + 12}>
                     <View>
                       <Text style={styles.itemName}>{product.name}</Text>
                       <Text style={styles.quantity}>{formatPrice(product.pricePerUnit)} /-</Text>
                       {
                         product.variations.map((variation,index2)=>{
                           return (
-                            <Text key={index2} style={styles.quantity}>SKU: {variation.sku} - {variation.quantity}</Text>
+                            <Text key={index2 + Math.floor(Math.random() * (25 + 5) * 5) + 5} style={styles.quantity}>SKU: {variation.sku} - {variation.quantity}</Text>
                           )
                         })
                       }

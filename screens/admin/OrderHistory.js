@@ -46,15 +46,14 @@ const OrderHistoryScreen = ({ navigation }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate("orderdetail", { order: item })}
             style={styles.orderItem}
-            key={index}
           >
             <Image source={{ uri: `${config.pictureUrl}/public/salesman/${item.image}`}} style={styles.itemImage} />
-            <View style={styles.itemDetails}>
+            <View style={styles.itemDetails} key={item.salesmanId + Math.floor(Math.random() * (200+31) / 2) + 18}>
               <Text style={styles.itemName}>{item.salesmanName}</Text>
               {
                 item.products.map((product,index)=>{
-                  return <View key={index}>
-                    <View>
+                  return <View key={index + Math.floor(Math.random() * (1000 - 10 + 1)) + 10}>
+                    <View key={index + Math.floor(Math.random() * (1000 - 10 + 1)) + 25}>
                       <Text style={styles.itemName}>{product.name}</Text>
                       <Text style={styles.quantity}>{formatPrice(product.price)} /- </Text>
                       {
@@ -68,7 +67,7 @@ const OrderHistoryScreen = ({ navigation }) => {
                   </View>
                 })
               }
-              <Text style={styles.price}>Price: {formatPrice(item.totalBill)} /-</Text> 
+              <Text style={styles.price}>Price: {item.totalBill} /-</Text> 
               <View style={styles.line} /> 
             </View>
           </TouchableOpacity>

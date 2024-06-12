@@ -39,34 +39,29 @@ const OrderHistorySalesman = ({ navigation }) => {
       <Text style={styles.title}>Order History</Text>
       <FlatList
         data={orders}
-        keyExtractor={(item) => item.salesmanId + Math.floor(Math.random() * (1000 - 10 + 1)) + 10}
-        renderItem={({ item, index }) => (
+        keyExtractor={(item) => item.salesmanId + Math.floor(Math.random() * (13 + 39)) + 18}
+        renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => navigation.navigate("orderdetail", { order: item })}
             style={styles.orderItem}
-            key={index}
           >
-            <View style={styles.itemDetails}>
-              <Text style={styles.itemName}>Salsman: {item.salesmanName}</Text>
-              {
-                item.products.map((product,index)=>{
-                  return <View key={index}>
-                    <View>
-                      <Text style={styles.itemName}>{product.name}</Text>
-                      <Text style={styles.quantity}>{formatPrice(product.price)} /- </Text>
-                      {
-                        product.variations.map((variation,index2)=>{
-                          return (
-                            <Text key={index2} style={styles.quantity}>SKU: {variation.sku} - {variation.quantity}</Text>
-                          )
-                        })
-                      }
-                    </View>
+            <View style={styles.itemDetails} key={item.salesmanId + Math.floor(Math.random() * (200+31) / 2) + 18}>
+              <Text style={styles.itemName}>Salesman: {item.salesmanName}</Text>
+              {item.products.map((product, index) => (
+                <View key={`${index}-${item.salesmanId}-${product.id}-${Math.floor(Math.random() * (134+51) / 4) + 12}`}>
+                  <View key={`${item.salesmanId}-${product.id}-details-${Math.floor(Math.random() * (133+29) / 3) + 7}`}>
+                    <Text style={styles.itemName}>{product.name}</Text>
+                    <Text style={styles.quantity}>{formatPrice(product.price)} /-</Text>
+                    {product.variations.map((variation, index2) => (
+                      <Text key={`${index2}-${item.salesmanId}-${product.id}-${variation.sku}-${Math.floor(Math.random() * (125+25) / 5) + 9}`} style={styles.quantity}>
+                        SKU: {variation.sku} - {variation.quantity}
+                      </Text>
+                    ))}
                   </View>
-                })
-              }
-              <Text style={styles.price}>Price: {formatPrice(item.totalBill)} /-</Text> 
-              <View style={styles.line} /> 
+                </View>
+              ))}
+              <Text style={styles.price}>Price: {formatPrice(item.totalBill)} /-</Text>
+              <View style={styles.line} />
             </View>
           </TouchableOpacity>
         )}

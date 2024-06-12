@@ -37,7 +37,7 @@ const ProductListDetail = ({ route, navigation }) => {
           image: data.productId.imageUrl[0],
           pricePerUnit: data.productId.price,
           variations: data.products.map(variation => ({
-            variationId: variation.variation.variationId,
+            variationId: variation.variation._id,
             sku: variation.variation.SKU,
             quantity: 0,
             maxQuantity: variation.remaining
