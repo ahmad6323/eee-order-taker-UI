@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import SubmitButton from "../components/forms/SubmitButton";
 import { TouchableOpacity } from "react-native";
 import colors from "../config/colors";
@@ -11,6 +11,11 @@ function RoleScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Image
+        source={require("../assets/role.png")}
+        style={{ width: 350, height: 450, borderRadius: 20 }}
+      />
+
       <View style={styles.innerContainer}>
         <View style={styles.logoContainer}>
           <AppText style={styles.logo}>Log In</AppText>
@@ -36,6 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    resizeMode: "cover",
   },
   innerContainer: {
     width: "80%",
