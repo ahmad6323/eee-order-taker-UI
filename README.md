@@ -1,17 +1,22 @@
 
-# Eee Order Taker UI
+                                                                 # Eee Order Taker UI
 # 🔍 Project Overview:
 
 Eee Order Taker is a mobile application that provides a platform to the salesmen of the textile industries to take orders digitally, fetching the location of the salesmen, and a centralized system to manage the various aspects related to the order-taking process.
 
 # 💡 Key Highlights:
 
-stock Keeping unit Generation (SKU):
-3-Layer Product Architecture:
-Flexible product management:
-Real-Time Location Updates:
-Offline Order Management:
-Easy Product Allocation.
+stock Keeping unit Generation (SKU)
+
+3-Layer Product Architecture
+
+Flexible product management
+
+Real-Time Location Updates
+
+Offline Order Management
+
+Easy Product Allocation
 
 
 # ADMIN 
