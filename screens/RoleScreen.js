@@ -15,7 +15,6 @@ function RoleScreen({ navigation }) {
         source={require("../assets/role.png")}
         style={{ width: 350, height: 450, borderRadius: 20 }}
       />
-
       <View style={styles.innerContainer}>
         <View style={styles.logoContainer}>
           <AppText style={styles.logo}>Log In</AppText>
