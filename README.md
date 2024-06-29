@@ -6,12 +6,12 @@ Eee Order Taker is a mobile application that provides a platform to the salesmen
 
 # 💡 Key Highlights:
 
-stock Keeping unit Generation (SKU)
-3-Layer Product Architecture
-Flexible product management
-Real-Time Location Updates
-Offline Order Management
-Easy Product Allocation
+stock Keeping unit Generation (SKU):
+3-Layer Product Architecture:
+Flexible product management:
+Real-Time Location Updates:
+Offline Order Management:
+Easy Product Allocation.
 
 
 # ADMIN 
