@@ -54,7 +54,10 @@ Easy Product Allocation
   
   4:npx expo start
   
+
+  # Backend of this project
   
+  https://github.com/ahmad6323/eee-order-taker-backend
 
 
 
